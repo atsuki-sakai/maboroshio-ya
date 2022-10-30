@@ -18,10 +18,10 @@
     @apply fixed top-14 md:top-20 left-4 md:left-auto md:right-10 z-30;
 }
 .title_wrapper {
-    @apply bg-gradient-to-tl to-gray-800 from-cyan-900 py-6 md:py-12 lg:py-16 px-2 md:px-4 lg:px-6 shadow-md;
+    @apply bg-gradient-to-tl to-gray-800 from-cyan-900 py-6 md:py-12 lg:py-16 px-6 md:px-4 lg:px-6 shadow-md  flex justify-center;
 }
 .title {
-    @apply text-xl md:text-3xl lg:text-5xl font-bold text-white;
+    @apply text-xl md:text-3xl lg:text-5xl font-bold text-white text-center;
     writing-mode: vertical-rl;
 }
 .mobile_menu_container {
