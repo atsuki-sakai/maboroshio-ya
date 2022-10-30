@@ -61,13 +61,16 @@ const Header = () => {
             <div className={style.mobile_menu_container}>
                 <div className={style.menu}>
                     <button onClick={onDrawerOpen}>
-                        <Menu className={style.icon}/>
+                        {/* <Menu className={style.icon}/> */}
+                        目次
                     </button>
                     <button onClick={onCartOpen}>
-                        <Cart className={style.icon}/>
+                        {/* <Cart className={style.icon}/> */}
+                        <p className='break-word'>カート</p>
                     </button>
                     <button onClick={() => window.location.href = "/account/login"}>
-                        <Person className={style.icon}/>
+                        {/* <Person className={style.icon}/> */}
+                        会員登録
                     </button>
                 </div>
             </div>

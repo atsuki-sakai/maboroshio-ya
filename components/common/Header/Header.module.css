@@ -26,10 +26,13 @@
     writing-mode: vertical-rl;
 }
 .mobile_menu_container {
-    @apply md:hidden fixed bottom-4 left-1/4 z-30 bg-gradient-to-tr to-teal-900 from-gray-900 py-2 px-6 rounded-full shadow-md;
+    @apply md:hidden fixed bottom-4 left-0 right-0 z-30 shadow-md;
 }
 .menu {
-    @apply flex space-x-6 items-center;
+    @apply flex space-x-8 py-3 px-8  items-center justify-around bg-gradient-to-tr to-teal-900 from-gray-900;
+    & > button {
+        @apply text-white font-thin;
+    }
 }
 
 .icon {
