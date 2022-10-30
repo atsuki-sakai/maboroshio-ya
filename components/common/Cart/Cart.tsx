@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { useUI } from '@components/context'
 import { motion } from 'framer-motion';
 import { Close } from '@components/icon';
+import style from "./Cart.module.css"
 
 const Cart = () => {
 
@@ -34,14 +35,14 @@ const Cart = () => {
             >
                 <div className='w-screen h-screen'>
                     <div className='flex'>
-                        <div className='flex-1 bg-black bg-opacity-50 h-screen' onClick={onCartClose}>
+                        <div className='flex-1 bg-black bg-opacity-50 h-screen'>
+                        <div className='flex justify-center h-full items-center'>
+                                <p onClick={onCartClose} className={style.close_text}>カートを閉じる</p>
+                            </div>
                         </div>
                         <div className='flex-1 bg-white rounded-tl-md rounded-bl-md p-5'>
                             <div className='flex items-center justify-between'>
-                                <p>カート</p>
-                                <button onClick={onCartClose}>
-                                    <Close className='h-6 w-6'/>
-                                </button>
+                                <h3 className='font-serif'>カート</h3>
                             </div>
                         </div>
                     </div>

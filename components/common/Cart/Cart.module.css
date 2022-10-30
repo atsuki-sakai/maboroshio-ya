@@ -1,0 +1,4 @@
+.close_text {
+    @apply text-white font-serif;
+    writing-mode: vertical-rl;
+}

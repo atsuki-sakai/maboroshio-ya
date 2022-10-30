@@ -34,7 +34,7 @@ const Home = ({products}: InferGetStaticPropsType<typeof getStaticProps>) => {
             mp4={"https://res.cloudinary.com/fdsfmsadlfmaslkdmfalksk/video/upload/v1659753868/bg-particel_vqwbgl.mp4"}
           />
         </div>
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 items-center justify-center'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 items-center justify-center px-8 py-12'>
           {
             products.map((product: Product) => {
               return <ProductCard key={product.id} product={product} />
