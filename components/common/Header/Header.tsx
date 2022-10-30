@@ -72,6 +72,9 @@ const Header = () => {
                         {/* <Person className={style.icon}/> */}
                         会員登録
                     </button>
+                    <button>
+                        <p className='invisible'>ダミ-</p>
+                    </button>
                 </div>
             </div>
         </header>
