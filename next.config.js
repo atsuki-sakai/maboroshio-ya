@@ -6,11 +6,11 @@ module.exports = {
   swcMinify: true,
   images:{
     domains: [ "cdn.shopify.com"]
-  },
-  i18n: {
-    locales: projectLocale,
-    defaultLocale: projectLocale[0]
   }
+  // i18n: {
+  //   locales: projectLocale,
+  //   defaultLocale: projectLocale[0]
+  // }
 }
 
 
