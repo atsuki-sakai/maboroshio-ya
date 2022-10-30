@@ -6,9 +6,7 @@ import style from "./Drawer.module.css"
 
 
 const Drawer = () => {
-
     const { isDrawerOpen, onDrawerClose } = useUI();
-
 
     const handle = (e: any) => {
         e.preventDefault();
@@ -18,12 +16,12 @@ const Drawer = () => {
             document.addEventListener('touchmove', handle, { passive: false })
             document.addEventListener('wheel', handle, { passive: false })
         }
-        return () => {
+        return (() => {
             if(isDrawerOpen){
                 document.removeEventListener('touch', handle)
                 document.removeEventListener('wheel', handle)
             }
-        }
+        })
     }, [isDrawerOpen])
 
     return (

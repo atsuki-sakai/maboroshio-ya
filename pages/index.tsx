@@ -28,7 +28,7 @@ const Home = ({products}: InferGetStaticPropsType<typeof getStaticProps>) => {
     <>
       <MetaHead/>
       <Container>
-        <div className='relative h-screen w-full -z-10'>
+        <div className='relative h-screen w-full'>
           <VideoPlayer
             webm={"https://res.cloudinary.com/fdsfmsadlfmaslkdmfalksk/video/upload/v1659753884/bg-particel_yb8as0.webm"}
             mp4={"https://res.cloudinary.com/fdsfmsadlfmaslkdmfalksk/video/upload/v1659753868/bg-particel_vqwbgl.mp4"}

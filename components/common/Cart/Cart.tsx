@@ -17,12 +17,12 @@ const Cart = () => {
             document.addEventListener('touchmove', handle, { passive: false })
             document.addEventListener('wheel', handle, { passive: false })
         }
-        return () => {
+        return (() => {
             if(isCartOpen){
                 document.removeEventListener('touch', handle)
                 document.removeEventListener('wheel', handle)
             }
-        }
+        })
     }, [isCartOpen])
 
     return (
