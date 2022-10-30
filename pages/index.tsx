@@ -1,9 +1,14 @@
 
+
+import React from 'react'
+import Image from 'next/image'
+import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import { getAllProducts } from '@shopify/products'
 import { getConfig } from "@shopify/api/config"
-import React from 'react'
-import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import { Product } from '@shopify/types/product'
+import { ProductCard, Container, VideoPlayer } from '@components/ui'
+import { MetaHead } from '@components/common'
+
 
 export const getStaticProps: GetStaticProps = async() =>  {
 
@@ -20,21 +25,24 @@ export const getStaticProps: GetStaticProps = async() =>  {
 
 const Home = ({products}: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
-    <div className='flex items-center justify-center  px-6 py-12 space-x-12'>
-      {
-        products.map((product: Product, index: number) => {
-          return (
-            <div key={index}>
-              <h4 className='font-bold text-2xl '>
-                { product.name }
-              </h4>
-              <span className='text-sm text-red-500'>{product.vendor}</span>
-              <p className='font-thin text-gray-500'>{ product.description }</p>
-            </div>
-          )
-        })
-      }
-    </div>
+    <>
+      <MetaHead/>
+      <Container>
+        <div className='relative h-screen w-full'>
+          <VideoPlayer
+            webm={"https://res.cloudinary.com/fdsfmsadlfmaslkdmfalksk/video/upload/v1659753884/bg-particel_yb8as0.webm"}
+            mp4={"https://res.cloudinary.com/fdsfmsadlfmaslkdmfalksk/video/upload/v1659753868/bg-particel_vqwbgl.mp4"}
+          />
+        </div>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 items-center justify-center'>
+          {
+            products.map((product: Product) => {
+              return <ProductCard key={product.id} product={product} />
+            })
+          }
+        </div>
+      </Container>
+    </>
   )
 }
 

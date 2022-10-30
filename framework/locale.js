@@ -1,3 +1,3 @@
-const projectLocale = ["en", "ja"] // ””が"/"ルートドメインに対応
+const projectLocale = ["ja","en"] // 先頭がDefaultのLocaleになる
 
 module.exports = { projectLocale }

@@ -1,0 +1,12 @@
+
+.root {
+    @apply w-screen h-screen;
+}
+
+.drawer_title {
+    @apply font-serif;
+}
+.close_text {
+    @apply text-white font-serif;
+    writing-mode: vertical-rl;
+}

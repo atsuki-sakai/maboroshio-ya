@@ -4,7 +4,7 @@ import { Product ,ProductPrice } from "@shopify/types/product";
 
 
 const normalizeProductImages = ({edges}: {edges: Array<ImageEdge>}): any => {
-    return edges.map(({node: { originalSrc: url, ...rest }}) => ({ url: `/images/${url}`, ...rest }))
+    return edges.map(({node: { originalSrc: url, ...rest }}) => ({ url: `${url}`, ...rest }))
 }
 
 const normarizeProductPrice= ({currencyCode, amount}: MoneyV2) => ({
