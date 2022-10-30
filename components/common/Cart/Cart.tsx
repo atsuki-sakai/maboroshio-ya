@@ -19,7 +19,7 @@ const Cart = () => {
         }
         return (() => {
             if(isCartOpen){
-                document.removeEventListener('touch', handle)
+                document.removeEventListener('touchmove', handle)
                 document.removeEventListener('wheel', handle)
             }
         })

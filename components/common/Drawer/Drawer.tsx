@@ -18,7 +18,7 @@ const Drawer = () => {
         }
         return (() => {
             if(isDrawerOpen){
-                document.removeEventListener('touch', handle)
+                document.removeEventListener('touchmove', handle)
                 document.removeEventListener('wheel', handle)
             }
         })
