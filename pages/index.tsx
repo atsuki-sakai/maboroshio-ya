@@ -39,9 +39,9 @@ const Home = ({products}: InferGetStaticPropsType<typeof getStaticProps>) => {
           <div className='absolute top-0 left-0 w-full h-full z-10'>
             <div className='w-1/2 h-3/5 translate-x-1/2 translate-y-1/2'>
               <div className='flex justify-center items-center w-full h-full'>
-                <div>
-                  <p className='text-white font-bold text-xl font-serif'>丹波篠山産黒枝豆</p>
-                  <p className='text-white text-sm mt-3 font-serif'>こだわりの農法で栽培した<br />特選品をお届け</p>
+                <div className='whitespace-pre'>
+                  <p className='text-white font-bold text-3xl wraps md:text-4xl lg:text-5xl font-serif' >丹波篠山産黒枝豆</p>
+                  <p className='text-white text-base md:text-xl lg:text-2xl mt-3 font-serif '>こだわりの農法で栽培した<br />特選品をお届け</p>
                 </div>
               </div>
             </div>

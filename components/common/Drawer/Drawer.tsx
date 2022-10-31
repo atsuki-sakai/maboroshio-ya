@@ -1,5 +1,6 @@
 
 import React, { useEffect } from 'react'
+import Image from 'next/image';
 import { useUI } from '@components/context'
 import { motion } from 'framer-motion';
 import style from "./Drawer.module.css"
@@ -33,7 +34,7 @@ const Drawer = () => {
             >
                 <div className={style.root}>
                     <div className='grid grid-cols-5'>
-                        <div className='col-span-3 bg-white rounded-tr-md rounded-br-md p-5'>
+                        <div className='col-span-3 bg-transparent overflow-hidden rounded-tr-md rounded-br-md relative p-5 border'>
                             <h3 className={style.drawer_title}>目次</h3>
                             <div className='w-2/3 mx-auto bg-gray-300 h-[2px] my-3'></div>
                             <div className='my-6 font-serif space-y-3'>
@@ -49,6 +50,9 @@ const Drawer = () => {
                                 <div>
                                     黒豆のレシピ集
                                 </div>
+                            </div>
+                            <div className='absolute left-0 right-0 top-0 -z-10 w-full h-full'>
+                                <Image src={"/images/wasi.png"} layout="fill" width="100%" height="100%" alt={"background image"} />
                             </div>
                         </div>
                         <div className='col-span-2 bg-black bg-opacity-50 h-screen'>

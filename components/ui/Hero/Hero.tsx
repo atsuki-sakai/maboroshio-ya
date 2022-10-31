@@ -19,7 +19,7 @@ const Hero = ({text,subTitle, subText, imageUrl}: Props) => {
                     <Image src={imageUrl} width={50} height={50} layout="responsive" alt={"test"}></Image>
                 </div>
             </div>
-            <div className='w-full h-full px-12 flex-1'>
+            <div className='w-full h-full py-6 md:px-12 flex-1'>
                 <h3 className={style.subTitle}>{subTitle}</h3>
                 <p className={style.subText}>{subText}</p>
             </div>

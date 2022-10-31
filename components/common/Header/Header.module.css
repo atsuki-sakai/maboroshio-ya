@@ -18,7 +18,7 @@
     @apply fixed top-14 md:top-20 left-4 md:left-auto md:right-10 z-30;
 }
 .title_wrapper {
-    @apply bg-gradient-to-tl to-gray-800 from-teal-900 py-6 md:py-12 lg:py-16 px-2 md:px-4 lg:px-6 shadow-md flex justify-center transform duration-300 ease-in-out;
+    @apply relative bg-gray-900 py-6 md:py-12 lg:py-16 px-2 md:px-4 lg:px-6 shadow-md flex justify-center transform duration-300 ease-in-out overflow-hidden;
     width: fit-content;
 }
 .title {
@@ -29,7 +29,7 @@
     @apply md:hidden fixed bottom-4 left-0 right-0 z-30 shadow-md;
 }
 .menu {
-    @apply flex space-x-8 py-3 px-8  items-center justify-around bg-gradient-to-tr to-teal-900 from-gray-900;
+    @apply flex relative ml-8 py-3 px-3  items-center justify-around bg-transparent;
     & > button {
         @apply text-white font-thin;
     }

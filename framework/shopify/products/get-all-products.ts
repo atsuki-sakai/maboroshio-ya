@@ -3,6 +3,7 @@ import { ProductConnection } from "@shopify/shema"
 import { ApiConfig } from "@shopify/types/api"
 import { Product } from "@shopify/types/product"
 import { normalizeProduct, getAllProductsQuery } from "@shopify/utils"
+
 type ReturnType = {
     products: ProductConnection
 }
