@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Marquee } from '@components/ui'
 import { useUI, useScrollY } from '@components/context'
-import { Cart, Menu, Person } from "@components/icon"
 import style from "./Header.module.css"
 import cn from "classnames"
 
@@ -11,8 +10,13 @@ const Header = () => {
 
     const { onDrawerOpen, onCartOpen} = useUI()
     const scrollY = useScrollY()
-    const changeBgColorY = 800;
+    const changeBgColorY = 700;
     const [ changeBgolor, setChangeBgColor ] = useState(false)
+
+    const titleWrapperClassNames = cn(style.title_wrapper,{
+        [style.hide]: changeBgolor,
+        [style.show]: !changeBgolor
+    })
 
 
     const switchBgColor = (y: number) => {
@@ -32,15 +36,15 @@ const Header = () => {
             <div className={style.marquee}>
                 <Marquee>
                     <div className={style.marquee_container}>
-                        <p>丹波篠山の特産を買うなら”まぼろし屋”で！！</p>
-                        <p>5000円以上お買い上げで送料無料</p>
+                        <p>丹波篠山の特産品を買うならまぼろし屋！</p>
+                        <p>8000円以上お買い上げで送料無料</p>
                     </div>
                 </Marquee>
             </div>
             <div className={style.title_container}>
                 <Link href={"/"} passHref>
                     <a>
-                        <div className={style.title_wrapper}>
+                        <div className={titleWrapperClassNames}>
                             <h1 className={style.title}>
                                 まぼろし屋
                             </h1>

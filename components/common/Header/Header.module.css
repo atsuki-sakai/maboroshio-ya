@@ -8,9 +8,9 @@
 }
 
 .marquee_container {
-    @apply flex items-center justify-around w-full bg-gray-900 py-2 px-8 md:py-3;
+    @apply flex items-center justify-around w-full bg-gray-800 py-2 px-8 ;
     & > p {
-        @apply text-white text-sm md:text-lg lg:text-xl;
+        @apply text-white text-sm md:text-lg ;
     }
 }
 
@@ -18,7 +18,7 @@
     @apply fixed top-14 md:top-20 left-4 md:left-auto md:right-10 z-30;
 }
 .title_wrapper {
-    @apply bg-gradient-to-tl to-gray-800 from-teal-900 py-6 md:py-12 lg:py-16 px-2 md:px-4 lg:px-6 shadow-md flex justify-center;
+    @apply bg-gradient-to-tl to-gray-800 from-teal-900 py-6 md:py-12 lg:py-16 px-2 md:px-4 lg:px-6 shadow-md flex justify-center transform duration-300 ease-in-out;
     width: fit-content;
 }
 .title {
@@ -37,4 +37,12 @@
 
 .icon {
     @apply h-6 w-6 md:h-8 md:w-8 text-white;
+}
+
+.hide {
+    @apply opacity-0;
+}
+
+.show {
+    @apply opacity-100;
 }

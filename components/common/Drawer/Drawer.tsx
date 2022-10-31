@@ -32,13 +32,26 @@ const Drawer = () => {
                 className="fixed top-0 left-0 z-50"
             >
                 <div className={style.root}>
-                    <div className='flex'>
-                        <div className='flex-1 bg-white rounded-tr-md rounded-br-md p-5'>
-                            <div className='flex items-center justify-between'>
-                                <h3 className={style.drawer_title}>目次</h3>
+                    <div className='grid grid-cols-5'>
+                        <div className='col-span-3 bg-white rounded-tr-md rounded-br-md p-5'>
+                            <h3 className={style.drawer_title}>目次</h3>
+                            <div className='w-2/3 mx-auto bg-gray-300 h-[2px] my-3'></div>
+                            <div className='my-6 font-serif space-y-3'>
+                                <div>
+                                    黒枝豆について
+                                </div>
+                                <div>
+                                    商品一覧
+                                </div>
+                                <div>
+                                    まぼろし屋について
+                                </div>
+                                <div>
+                                    黒豆のレシピ集
+                                </div>
                             </div>
                         </div>
-                        <div className='flex-1 bg-black bg-opacity-50 h-screen'>
+                        <div className='col-span-2 bg-black bg-opacity-50 h-screen'>
                             <div className='flex justify-center h-full items-center'>
                                 <p onClick={onDrawerClose} className={style.close_text}>目次を閉じる</p>
                             </div>

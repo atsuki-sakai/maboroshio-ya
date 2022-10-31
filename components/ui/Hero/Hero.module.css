@@ -1,8 +1,11 @@
 .text {
-    @apply absolute top-0  left-0 z-10 text-white py-5 px-12 font-bold font-serif text-3xl;
+    @apply absolute top-8 left-20 z-10 text-white font-bold font-serif text-3xl;
     writing-mode: vertical-rl;
 }
 
+.subTitle {
+    @apply text-2xl font-serif font-bold mb-4;
+}
 .subText {
-    @apply text-sm font-serif text-gray-600
+    @apply text-sm md:text-base lg:text-xl tracking-wider font-serif text-gray-600
 }

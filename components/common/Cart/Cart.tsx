@@ -33,16 +33,18 @@ const Cart = () => {
                 transition={{ duration:"0.6" }}
                 className="fixed top-0 left-0 z-50"
             >
-                <div className='w-screen h-screen'>
-                    <div className='flex'>
-                        <div className='flex-1 bg-black bg-opacity-50 h-screen'>
+                <div className='w-screen h-full'>
+                    <div className='grid grid-cols-5'>
+                        <div className='col-span-2 bg-black bg-opacity-50 h-screen'>
                         <div className='flex justify-center h-full items-center'>
                                 <p onClick={onCartClose} className={style.close_text}>カートを閉じる</p>
                             </div>
                         </div>
-                        <div className='flex-1 bg-white rounded-tl-md rounded-bl-md p-5'>
-                            <div className='flex items-center justify-between'>
-                                <h3 className='font-serif'>カート</h3>
+                        <div className='col-span-3 bg-white border rounded-tl-md rounded-bl-md p-5'>
+                            <h3 className='font-serif text-xl font-bold'>お客様のカート</h3>
+                            <div className="w-2/3 mx-auto bg-gray-300 h-[2px] mt-2 rounded-full"></div>
+                            <div className='flex h-full w-full justify-center items-center'>
+                                <p className={style.empty_text}>現在カート内に商品はございません。</p>
                             </div>
                         </div>
                     </div>

@@ -2,3 +2,8 @@
     @apply text-white font-serif;
     writing-mode: vertical-rl;
 }
+
+.empty_text {
+    @apply text-gray-500 font-bold text-lg font-serif;
+    writing-mode: vertical-rl;
+}
