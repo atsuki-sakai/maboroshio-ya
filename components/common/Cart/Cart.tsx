@@ -40,7 +40,7 @@ const Cart = () => {
                                 <p onClick={onCartClose} className={style.close_text}>カートを閉じる</p>
                             </div>
                         </div>
-                        <div className='col-span-3 bg-transparent border rounded-tl-md rounded-bl-md p-5 overflow-hidden relative'>
+                        <div className='col-span-3 bg-transparent rounded-tl-md rounded-bl-md p-5 overflow-hidden relative'>
                             <h3 className='font-serif text-xl font-bold'>お客様のカート</h3>
                             <div className="w-2/3 mx-auto bg-gray-300 h-[2px] mt-2 rounded-full"></div>
                             <div className='flex h-full w-full justify-center items-center'>

@@ -12,11 +12,13 @@ const Layout: FC<LayoutProps> = ({ children }: LayoutProps) => {
 
     const { isLoaded } = useLoaded()
 
+
     const handle = (e: any) => {
         e.preventDefault();
     }
+
     useEffect(() => {
-        if(!isLoaded) {
+        if(!isLoaded){
             document.addEventListener('touchmove', handle, { passive: false })
             document.addEventListener('wheel', handle, { passive: false })
         }
@@ -27,6 +29,7 @@ const Layout: FC<LayoutProps> = ({ children }: LayoutProps) => {
             }
         })
     }, [isLoaded])
+
 
     return (
         <div className='relative'>
