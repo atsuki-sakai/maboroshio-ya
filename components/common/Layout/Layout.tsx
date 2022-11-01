@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect } from 'react'
+import React, { FC, ReactNode } from 'react'
 import { Cart, Drawer, Footer, Header } from '@components/common'
 import { SplashScreen } from '@components/ui'
 
@@ -11,13 +11,13 @@ const Layout: FC<LayoutProps> = ({ children }: LayoutProps) => {
 
     return (
         <>
-            <Drawer/>
-            <Cart/>
             <Header/>
             <main>
                 { children }
             </main>
             <Footer/>
+            <Drawer/>
+            <Cart/>
             <SplashScreen />
         </>
     )

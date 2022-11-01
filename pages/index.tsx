@@ -5,8 +5,7 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import { getAllProducts } from '@shopify/products'
 import { getConfig } from "@shopify/api/config"
 import { Product } from '@shopify/types/product'
-import { ProductCard, Container, VideoPlayer, Hero } from '@components/ui'
-import { useLoaded } from '@components/context'
+import { ProductCard, Container, Hero } from '@components/ui'
 import { MetaHead } from '@components/common'
 
 
@@ -25,7 +24,6 @@ export const getStaticProps: GetStaticProps = async() =>  {
 
 const Home = ({products}: InferGetStaticPropsType<typeof getStaticProps>) => {
 
-  const { onLoaded } = useLoaded()
   return (
     <>
       <MetaHead/>

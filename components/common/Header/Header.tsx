@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { Marquee } from '@components/ui'
 import { useUI, useScrollY } from '@components/context'
 import style from "./Header.module.css"
