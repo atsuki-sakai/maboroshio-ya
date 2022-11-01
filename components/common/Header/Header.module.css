@@ -9,11 +9,11 @@
     @apply flex items-center justify-around py-1 px-4 text-white text-sm md:text-base lg:text-lg ;
 }
 .mobile_container {
-    @apply md:hidden flex items-center justify-around px-4 pt-1 bg-white shadow-md;
+    @apply md:hidden flex items-center justify-between px-4 pt-1 bg-white shadow-md;
 }
 
 .mobile_menu {
-    @apply flex items-center justify-end space-x-3;
+    @apply flex items-center justify-end space-x-5;
 }
 
 .desktop_container {
