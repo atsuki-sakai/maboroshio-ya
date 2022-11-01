@@ -1,10 +1,10 @@
 import { ImageEdge, Product as ShopifyProduct, ProductOption, ProductVariantConnection, SelectedOption } from '../shema';
 import { Product } from "@shopify/types/product";
 
-
+//TODO: -  ShopifyProductにPriceRangeV2がない
 
 const normalizeProductImages = ({edges}: {edges: Array<ImageEdge>}): any => {
-    return edges.map(({node: { originalSrc: url, ...rest }}) => ({ url: `${url}`, ...rest }))
+    return edges.map(({node: { url: url, ...rest }}) => ({ url: `${url}`, ...rest }))
 }
 
 const normarizeProductOption = ({ id, name: displayName, values }: ProductOption) =>  {
@@ -50,7 +50,7 @@ const normarizedProductVariants = ({ edges }: ProductVariantConnection) => {
 }
 
 
-export function normalizeProduct(productNode: ShopifyProduct): Product {
+export function normalizeProduct(productNode: any): Product {
     const {
         id,
         title: name,
@@ -58,23 +58,25 @@ export function normalizeProduct(productNode: ShopifyProduct): Product {
         vendor,
         description,
         images: imageConnection,
-        priceRange,
+        priceRangeV2,
         options,
         variants,
+        totalInventory,
         ...rest
     } = productNode;
-
+    console.log(JSON.stringify(productNode, null, 2))
     const product: Product = {
         id,
         name,
         vendor,
+        totalInventory,
         description,
         images: normalizeProductImages(imageConnection),
         path: `/${handle}`,
+        priceRangeV2,
         slug: handle.replace(/^\/+|\/+$/g,""),
-        price: 900,
         options: options ?
-            options.filter((o) => o.name !== "Title").map((o) => normarizeProductOption(o)):
+            options.filter((o: any) => o.name !== "Title").map((o: any) => normarizeProductOption(o)):
             [],
         variants: variants ? normarizedProductVariants(variants) : [],
         ...rest

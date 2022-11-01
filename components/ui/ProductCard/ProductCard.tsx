@@ -18,7 +18,7 @@ const ProductCard = ({product} : Props) => {
                         { product.name }
                     </h4>
                     {
-                        product.images && <div className='shadow-md rounded-md'>
+                        product.images && <div className='shadow-md rounded-md relative'>
                                             <Image
                                                 alt={product.name ?? "Product Image"}
                                                 src={product.images[0]?.url ?? placeholderImage}
@@ -28,9 +28,18 @@ const ProductCard = ({product} : Props) => {
                                                 layout='responsive'
                                                 className='rounded-md transform duration-1000 ease-in-out hover:scale-105'
                                             />
+                                            {
+                                                product.totalInventory === 0 ?
+                                                <div className='absolute top-0 left-0'>
+                                                    <div className='px-3 py-1 bg-gray-600 rounded-tl-md rounded-br-md'>
+                                                        <p className='text-white text-xs'>売り切れ</p>
+                                                    </div>
+                                                </div>
+                                                : <></>
+                                            }
                                         </div>
                     }
-                    <p className='text-center text-red-500 text-xs font-thin'><span className='text-base font-medium'>¥ { product.price}</span> 税込</p>
+                    <p className='text-center text-red-500 text-xs font-thin'><span className='text-base font-medium '>¥ { Number(product.priceRangeV2.minVariantPrice.amount) }</span> 税込</p>
                 </a>
             </Link>
         </div>

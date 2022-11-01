@@ -8,6 +8,7 @@ query productById($slug: String!) {
         vendor
         description
         descriptionHtml
+        totalInventory
         options {
             id
             name
@@ -18,12 +19,8 @@ query productById($slug: String!) {
                 amount
                 currencyCode
             }
-            maxVariantPrice {
-                amount
-                currencyCode
-            }
         }
-        variants(first: 250) {
+        variants(first: 10) {
             pageInfo {
                 hasNextPage
                 hasPreviousPage
@@ -42,7 +39,7 @@ query productById($slug: String!) {
                 }
             }
         }
-        images(first: 250) {
+        images(first: 10) {
             pageInfo {
                 hasNextPage
                 hasPreviousPage

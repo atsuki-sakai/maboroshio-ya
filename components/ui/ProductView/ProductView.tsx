@@ -15,20 +15,15 @@ const ProductView: FC<Props> = ({ product }) => {
     return (
         <>
             <Container>
-                <div className='mx-8'>
-                    <h1 className='pl-8 py-2 font-bold text-2xl font-serif'>{product.name}</h1>
+                <div className='px-8 relative'>
                     <Splide
-                        aria-label="商品画像　一覧"
-                        options={{
-                            autoplay: true, // 自動再生を有効
-                            interval: 4000, // 自動再生の間隔を4秒に設定
-                        }}
+                        aria-label={`${product.name} 商品画像`}
                     >
                         {
                             product.images.map((image, index) => {
                                 return (
                                     <SplideSlide key={index}>
-                                        <div className='flex items-center justify-center bg-gray-100'>
+                                        <div className='flex items-center justify-center bg-gray-100 rounded-md overflow-hidden shadow-md'>
                                             <Image className='block w-full h-full object-cover' src={image.url} width={image.width} height={image.height} alt={image.altText} />
                                         </div>
                                     </SplideSlide>
@@ -36,8 +31,27 @@ const ProductView: FC<Props> = ({ product }) => {
                             })
                         }
                     </Splide>
-                    <div className=''>
-                        <p className='text-gray-500 p-3'>{product.description}</p>
+                    <div className='font-serif'>
+                        <div className='w-full'>
+                            <p>{product.vendor}</p>
+                        </div>
+                        <h1 className='py-2 font-bold text-2xl'>{product.name}</h1>
+                        <div className='flex items-center justify-start space-x-12'>
+                            <p className='text-base text-red-500'>¥ <span className={`text-2xl font-sans font-bold ${product.totalInventory === 0 ? "line-through" : "" }`}>{Number(product.priceRangeV2.minVariantPrice.amount)}</span> 税込</p>
+                            {
+                                product.totalInventory === 0 ? <p className='bg-gray-600 text-white px-4 py-0.5'>売り切れ</p> : ""
+                            }
+                        </div>
+                        <div className="p-3">
+                            <p className='text-gray-500'>{product.description}</p>
+                        </div>
+                    </div>
+                    <div className='fixed bottom-0 left-0 bg-orange-600 w-1/2 rounded-tr-md z-50'>
+                        <div className='text-center py-3'>
+                            <button>
+                                <p className='text-white font-bold'>カートへ追加</p>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </Container>

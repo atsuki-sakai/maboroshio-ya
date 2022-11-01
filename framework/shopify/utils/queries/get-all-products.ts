@@ -11,7 +11,8 @@ edges {
         vendor
         handle
         description
-        priceRange {
+        totalInventory
+        priceRangeV2 {
             minVariantPrice {
                 amount
                 currencyCode
@@ -24,7 +25,7 @@ edges {
             }
             edges {
                 node {
-                    originalSrc
+                    url
                     altText
                     width
                     height
