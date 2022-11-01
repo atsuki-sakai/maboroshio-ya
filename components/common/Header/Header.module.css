@@ -2,47 +2,37 @@
 .root {
     @apply relative font-serif;
 }
-
+.wrapper {
+    @apply fixed top-0 left-0 z-30 w-full transform duration-300 ease-in-out;
+}
 .marquee {
-    @apply fixed top-0 right-0 left-0 z-30;
+    @apply flex items-center justify-around py-1 px-4 text-white text-sm md:text-base lg:text-lg ;
+}
+.mobile_container {
+    @apply md:hidden flex items-center justify-around px-4 pt-1 bg-white shadow-md;
 }
 
-.marquee_container {
-    @apply flex items-center justify-around w-full bg-gray-800 py-2 px-8 ;
-    & > p {
-        @apply text-white text-sm md:text-lg ;
-    }
+.mobile_menu {
+    @apply flex items-center justify-end space-x-3;
 }
 
-.title_container {
-    @apply fixed top-14 md:top-20 left-4 md:left-auto md:right-10 z-30;
-}
-.title_wrapper {
-    @apply relative bg-gray-900 py-6 md:py-12 lg:py-16 px-2 md:px-4 lg:px-6 shadow-md flex justify-center transform duration-300 ease-in-out overflow-hidden;
-    width: fit-content;
-}
-.title {
-    @apply text-xl md:text-3xl lg:text-5xl font-bold text-white;
-    writing-mode: vertical-rl;
-}
-.mobile_menu_container {
-    @apply md:hidden fixed bottom-4 left-0 right-0 z-30 shadow-md;
-}
-.menu {
-    @apply flex relative ml-8 py-3 px-3  items-center justify-around bg-transparent;
-    & > button {
-        @apply text-white font-thin;
-    }
+.desktop_container {
+    @apply hidden md:block;
 }
 
-.icon {
-    @apply h-6 w-6 md:h-8 md:w-8 text-white;
+.desktop_menu_wrapper {
+    @apply flex items-center justify-between px-4 py-3;
 }
 
-.hide {
-    @apply opacity-0;
+.desktop_menu {
+    @apply flex items-center justify-end space-x-6 text-lg lg:text-xl;
 }
 
 .show {
+    @apply opacity-0;
+    pointer-events: none;
+}
+
+.hide {
     @apply opacity-100;
 }

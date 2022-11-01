@@ -13,7 +13,7 @@ interface Props {
 const Hero = ({text,subTitle, subText, imageUrl}: Props) => {
     return (
         <div className='md:flex items-center justify-center w-full py-6 md:py-12 max-w-7xl mx-auto'>
-            <div className='w-full h-full relative flex-1'>
+            <div className='w-full h-full relative flex-1 z-0'>
                 <h3 className={style.text}>{text}</h3>
                 <div className='relative h-42 w-42 '>
                     <Image src={imageUrl} width={50} height={50} layout="responsive" alt={"test"}></Image>

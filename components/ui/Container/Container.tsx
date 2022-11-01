@@ -7,7 +7,7 @@ interface Props {
 
 const Container = ({ children }: Props) => {
     return (
-        <div className='overflow-hidden'>
+        <div className='pt-24 md:pt-40 lg:pt-48'>
             { children }
         </div>
     )

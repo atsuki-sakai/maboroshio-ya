@@ -4228,7 +4228,7 @@ export type ProductVariant = Node &
          */
         compareAtPrice?: Maybe<Scalars['Money']>
         /** The compare at price of the variant. This can be used to mark a variant as on sale, when `compareAtPriceV2` is higher than `priceV2`. */
-        compareAtPriceV2?: Maybe<MoneyV2>
+        compareAtPrice?: Maybe<Money>
         /** Whether a product is out of stock but still available for purchase (used for backorders). */
         currentlyNotInStock: Scalars['Boolean']
         /** Globally unique identifier. */
@@ -4249,7 +4249,7 @@ export type ProductVariant = Node &
          */
         price: Scalars['Money']
         /** The product variant’s price. */
-        priceV2: MoneyV2
+        price: Money
         /** The product object that the product variant belongs to. */
         product: Product
         /** The total sellable quantity of the variant for online sales channels. */

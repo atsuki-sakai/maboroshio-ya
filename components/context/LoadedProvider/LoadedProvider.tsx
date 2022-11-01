@@ -20,8 +20,7 @@ interface Props {
     children: ReactNode | ReactNode[]
 }
 
-
-const initialLoad: LoadState = { isLoaded: false }
+const initialLoad: LoadState = { isLoaded: true }
 const initialModifiers: LoadModifiers = { onLoaded: () => {}, onLoading: () => {} }
 const initialState:State = { ...initialLoad, ...initialModifiers }
 const LoadedContext = createContext<State>(initialState);

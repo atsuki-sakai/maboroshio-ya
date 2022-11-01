@@ -2,6 +2,8 @@
 export interface ProductImage {
     url: string
     altText?: string
+    width: number
+    height: number
 }
 
 export interface ProductPrice {
@@ -39,7 +41,7 @@ export interface Product {
     slug: string
     path: string
     images: ProductImage[]
-    price: ProductPrice
+    price: number
     options: ProductOption[]
     variants: ProductVariant[]
 

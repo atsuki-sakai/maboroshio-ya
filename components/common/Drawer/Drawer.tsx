@@ -36,8 +36,7 @@ const Drawer = () => {
                     <div className='grid grid-cols-5'>
                         <div className='col-span-3 bg-transparent overflow-hidden rounded-tr-md rounded-br-md relative p-5'>
                             <h3 className={style.drawer_title}>目次</h3>
-                            <div className='w-2/3 mx-auto bg-gray-300 h-[2px] my-3'></div>
-                            <div className='my-6 font-serif space-y-3'>
+                            <div className='my-6 font-serif text-sm font-bold space-y-5'>
                                 <div>
                                     黒枝豆について
                                 </div>

@@ -6,17 +6,19 @@ import { Marquee } from '@components/ui'
 import { useUI, useScrollY } from '@components/context'
 import style from "./Header.module.css"
 import cn from "classnames"
+import { Cart, Menu, Person } from '@components/icon'
+import Search from '@components/icon/Search'
 
 const Header = () => {
 
     const { onDrawerOpen, onCartOpen} = useUI()
     const scrollY = useScrollY()
-    const changeBgColorY = 700;
+    const changeBgColorY = 800;
     const [ changeBgolor, setChangeBgColor ] = useState(false)
 
-    const titleWrapperClassNames = cn(style.title_wrapper,{
-        [style.hide]: changeBgolor,
-        [style.show]: !changeBgolor
+    const headerClassName = cn(style.wrapper, {
+        [style.hide]: !changeBgolor,
+        [style.show]: changeBgolor
     })
 
 
@@ -34,60 +36,77 @@ const Header = () => {
 
     return (
         <header className={style.root}>
-            <div className={style.marquee}>
-                <Marquee>
-                    <div className={style.marquee_container}>
-                        <p>丹波篠山の特産品を買うならまぼろし屋！</p>
-                        <p>8000円以上お買い上げで送料無料</p>
+            <div className={headerClassName}>
+                {/* MARQUEE */}
+                <div className="bg-green-900">
+                    <Marquee>
+                        <div className={style.marquee}>
+                            <p>丹波篠山の特産品を買うならまぼろし屋！</p>
+                            <p>8000円以上お買い上げで送料無料</p>
+                        </div>
+                    </Marquee>
+                </div>
+                {/* MOBIEL HEADER */}
+                <div className={style.mobile_container}>
+                    <div className="-translate-x-2">
+                        <Link href={"/"} passHref>
+                            <a>
+                                <h1 className='text-lg font-bold pl-[11px]'>まぼろし屋</h1>
+                                <p className='text-[10px] scale-75 -translate-y-1'>丹波篠山の食料品卸の店</p>
+                            </a>
+                        </Link>
                     </div>
-                </Marquee>
-            </div>
-            <div className={style.title_container}>
-                <Link href={"/"} passHref>
-                    <a>
-                        <div className={titleWrapperClassNames}>
-                            <h1 className={style.title}>
-                                まぼろし屋
-                            </h1>
-                            <div className='absolute left-0 right-0 bottom-0 -z-10'>
-                                <Image src={"/images/gouka.png"}  width="100%" height="100%" alt={"background image"} />
+                    <div className={style.mobile_menu}>
+                        <button>
+                            <Person/>
+                        </button>
+                        <button onClick={onCartOpen}>
+                            <Cart/>
+                        </button>
+                        <button onClick={onDrawerOpen}>
+                            <Menu/>
+                        </button>
+                    </div>
+                </div>
+                {/* DESKTOP HEADER */}
+                <div className={style.desktop_container}>
+                    <div className='bg-white'>
+                        <div className={style.desktop_menu_wrapper}>
+                            <div>
+                                <Link href={"/"} passHref>
+                                    <a>
+                                        <h1 className='text-2xl lg:text-4xl text-left'>まぼろし屋</h1>
+                                        <p className='text-xs lg:text-sm text-left pl-1'>丹波篠山の食料品卸の店</p>
+                                    </a>
+                                </Link>
                             </div>
-                            <div className='absolute left-0 right-0 top-0 -z-10'>
-                                <Image className='rotate-180' src={"/images/gouka.png"}  width="100%" height="100%" alt={"background image"} />
+                            <div className={style.desktop_menu}>
+                                <button>
+                                    商品一覧
+                                </button>
+                                <button onClick={onCartOpen}>
+                                    料理レシピ
+                                </button>
+                                <button onClick={onCartOpen}>
+                                    まぼろし屋について
+                                </button>
+                                <button onClick={onDrawerOpen}>
+                                    会員登録
+                                </button>
+                                <button onClick={onCartOpen}>
+                                    お問い合わせ
+                                </button>
                             </div>
                         </div>
-                    </a>
-                </Link>
-            </div>
-            <div className="hidden md:block fixed bottom-12 left-8 z-30">
-                <div className='flex items-center space-x-6 bg-transparent px-12 py-4 text-white relative overflow-hidden border rounded-md'>
-                    <button>まぼろし屋について</button>
-                    <button>レシピ一覧</button>
-                    <button>商品一覧</button>
-                    <button>黒枝豆について</button>
-                    <button onClick={() => window.location.href = "/account/login" }>会員登録</button>
-                    <button>カート</button>
-                </div>
-                <div className='absolute left-0 right-0 top-0 -z-10 w-full h-full'>
-                    <Image src={"/images/menu-bg.png"} className="rounded-md" layout="fill" width="100%" height="100%" alt={"background image"} />
-                </div>
-            </div>
-            <div className={style.mobile_menu_container}>
-                <div className={style.menu}>
-                    <button onClick={onDrawerOpen}>
-                        目次
-                    </button>
-                    <button onClick={onCartOpen}>
-                        <p className='break-word'>カート</p>
-                    </button>
-                    <button onClick={() => window.location.href = "/account/login"}>
-                        会員登録
-                    </button>
-                    <button>
-                        <p className='invisible'>ダミ-</p>
-                    </button>
-                    <div className='absolute left-0 right-0 top-0 -z-10 w-full h-full'>
-                        <Image src={"/images/menu-bg.png"} className="rounded-tl-md rounded-bl-md" layout="fill" width="100%" height="100%" alt={"background image"} />
+                        <div className='pb-2 w-full shadow-md'>
+                            <div className='flex items-center justify-end px-8'>
+                                <div className='flex items-center space-x-3 mt-1 text-lg lg:text-xl'>
+                                    <p>商品検索</p>
+                                    <input className=' ml-2 bg-gray-100 rounded-md' type="text" />
+                                    <Search/>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

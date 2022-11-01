@@ -1,16 +1,11 @@
-import { ImageEdge, MoneyV2, Product as ShopifyProduct, ProductOption, ProductVariantConnection, SelectedOption } from '../shema';
-import { Product ,ProductPrice } from "@shopify/types/product";
+import { ImageEdge, Product as ShopifyProduct, ProductOption, ProductVariantConnection, SelectedOption } from '../shema';
+import { Product } from "@shopify/types/product";
 
 
 
 const normalizeProductImages = ({edges}: {edges: Array<ImageEdge>}): any => {
     return edges.map(({node: { originalSrc: url, ...rest }}) => ({ url: `${url}`, ...rest }))
 }
-
-const normarizeProductPrice= ({currencyCode, amount}: MoneyV2) => ({
-    value: +amount,
-    currencyCode
-})
 
 const normarizeProductOption = ({ id, name: displayName, values }: ProductOption) =>  {
     const normarized = {
@@ -33,15 +28,14 @@ const normarizeProductOption = ({ id, name: displayName, values }: ProductOption
 }
 
 const normarizedProductVariants = ({ edges }: ProductVariantConnection) => {
-
     return edges.map(({node}) => {
-        const { id, selectedOptions, sku, title, priceV2, compareAtPriceV2 } = node
+        const { id, selectedOptions, sku, title, price, compareAtPrice } = node
         return {
             id,
             sku: sku || id,
             name: title,
-            price: +priceV2.amount,
-            listPrice: compareAtPriceV2?.amount,
+            price: price,
+            listPrice: compareAtPrice,
             requiresShipping: true,
             options: selectedOptions.map(({name, value}: SelectedOption) => {
                 const option = normarizeProductOption({
@@ -78,7 +72,7 @@ export function normalizeProduct(productNode: ShopifyProduct): Product {
         images: normalizeProductImages(imageConnection),
         path: `/${handle}`,
         slug: handle.replace(/^\/+|\/+$/g,""),
-        price: normarizeProductPrice(priceRange.minVariantPrice) as ProductPrice,
+        price: 900,
         options: options ?
             options.filter((o) => o.name !== "Title").map((o) => normarizeProductOption(o)):
             [],

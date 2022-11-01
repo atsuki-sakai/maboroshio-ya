@@ -1,5 +1,5 @@
 .text {
-    @apply absolute top-8 left-20 z-10 text-white font-bold font-serif text-3xl md:text-4xl lg:text-5xl;
+    @apply absolute top-8 left-20 z-10 text-white font-bold font-serif text-3xl lg:text-5xl;
     writing-mode: vertical-rl;
 }
 

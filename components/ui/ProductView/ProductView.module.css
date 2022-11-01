@@ -1,0 +1,57 @@
+.root {
+    @apply relative grid items-start gap-8 grid-cols-1 lg:grid-cols-12 overflow-x-hidden;
+}
+
+.productDisplay {
+    @apply relative flex px-0 pb-0 box-border col-span-1 min-h-[600px] md:min-h-[700px] bg-gray-300 rounded-md lg:-mr-1 lg:-ml-1 lg:mx-0 lg:col-span-6 lg:min-h-full lg:h-full ;
+}
+
+.squareBg {
+    @apply absolute inset-0 bg-purple-600 z-0 h-full;
+}
+
+.nameBox {
+    @apply absolute top-6 left-0 z-20 pr-16 lg:left-6 lg:pr-16;
+
+    & .name {
+        @apply px-6 py-2 bg-purple-600 text-white font-bold lg:bg-purple-600 lg:text-white;
+        font-size: 2rem;
+        letter-spacing: 0.4px;
+    }
+
+    & .price {
+        @apply px-6 py-2 pb-4 bg-purple-600 text-white font-bold inline-block tracking-wide lg:bg-purple-600 lg:text-white;
+    }
+}
+
+.sidebar {
+    @apply flex flex-col col-span-1 mx-auto max-w-7xl px-6 w-full h-full lg:col-span-6 lg:py-24 lg:justify-between;
+}
+
+.sliderContainer {
+    @apply absolute z-10 inset-0 flex items-center justify-center overflow-x-hidden;
+}
+
+.imageContainer {
+    & > div {
+        @apply h-full;
+        & > div {
+        @apply h-full;
+        }
+    }
+}
+
+.img {
+    @apply w-full h-auto max-h-full object-cover;
+}
+
+.button {
+    text-align: center;
+    width: 100%;
+    max-width: 300px;
+    @apply sm:min-w-[300px]
+}
+
+.wishlistButton {
+    @apply absolute z-30 top-6 right-0 bg-black text-white w-10 h-10 flex items-center justify-center font-semibold leading-6 cursor-pointer lg:right-12 lg:text-white lg:bg-purple-400;
+}

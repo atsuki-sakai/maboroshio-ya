@@ -1,21 +1,37 @@
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import style from "./SplashScreen.module.css"
+import { useLoaded } from '@components/context'
 
-interface Props {
-    loaded: boolean
-}
 
-const SplashScreen = ({loaded}: Props) => {
+const SplashScreen = () => {
+
+    const { isLoaded, onLoaded } = useLoaded();
+    const handle = (e: any) => {
+        e.preventDefault();
+    }
+
+    useEffect(() => {
+        if(window.location.pathname !== "/"){
+            onLoaded()
+        }
+        if(!isLoaded){
+            document.addEventListener('touchmove', handle, { passive: false })
+            document.addEventListener('wheel', handle, { passive: false })
+        }
+        return (() => {
+            if(!isLoaded){
+                document.removeEventListener('touchmove', handle)
+                document.removeEventListener('wheel', handle)
+            }
+        })
+    }, [isLoaded])
     return (
-        <motion.div initial={{ x:"0%", opacity:1 }} animate={{ x: loaded ? "-100%" : "0%", opacity: loaded ? 0 : 1 }} transition={{ duration: 1.2, ease:"easeInOut" }} className='absolute top-0 left-0 right-0 h-screen w-screen z-50'>
+        <motion.div initial={{ y:"0%", opacity:1 }} animate={{ y: isLoaded ? "-100%" : "0%", opacity: isLoaded ? 0 : 1 }} transition={{ duration: 0.8, ease:"easeInOut", delay: 0.2 }} className='absolute top-0 left-0 right-0 h-screen w-screen z-50'>
             <div className='flex justify-center items-center h-full w-full bg-white'>
-                <div className='absolute left-0 right-0 bottom-0 w-full z-10'>
-                    <Image src={"/images/kousi-2.png"} layout="responsive" width="100%" priority={true} height="100%" alt={"background image"} />
-                </div>
-                <div className='z-20 absolute top-0 left-0 right-0 bottom-0'>
+                <div className='z-10 absolute top-0 left-0 right-0 bottom-0'>
                     <div className='h-full w-full flex justify-center items-center'>
                         <p className={style.sub_title}>丹波篠山</p>
                         <p className={style.title} >まぼろし屋</p>
