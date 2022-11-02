@@ -5,13 +5,27 @@ import Image from 'next/image';
 import { Product } from '@shopify/types/product'
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import '@splidejs/splide/css'; 
-import { Container } from "@components/ui"
+import { Container } from "@components/ui";
+import { checkoutCreateMutation } from '@shopify/utils/mutations';
+import { getConfig } from '@shopify/api/config';
+import { createCheckout } from '@shopify/utils';
+import { CheckoutCreatePayload } from '@shopify/shema';
+import { ADMIN_ACCESS_TOKEN, API_URL } from '@shopify/const';
+
 
 
 interface Props {
     product: Product
 }
+
+
 const ProductView: FC<Props> = ({ product }) => {
+
+    const createCart = async () => {
+        console.log("API_URL :",API_URL)
+        console.log('ADMIN :',ADMIN_ACCESS_TOKEN, )
+
+    }
     return (
         <>
             <Container>
@@ -47,11 +61,11 @@ const ProductView: FC<Props> = ({ product }) => {
                         </div>
                     </div>
                     <div className='fixed bottom-0 left-0 bg-orange-600 w-1/2 rounded-tr-md z-50'>
-                        <div className='text-center py-3'>
-                            <button>
+                        <button onClick={createCart} className='w-full h-full'>
+                            <div className='text-center py-3'>
                                 <p className='text-white font-bold'>カートへ追加</p>
-                            </button>
-                        </div>
+                            </div>
+                        </button>
                     </div>
                 </div>
             </Container>
