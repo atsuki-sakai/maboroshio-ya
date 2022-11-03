@@ -10,6 +10,7 @@ const createCustomer = async (
         lastName: string,
         phone: string
     ): Promise<any> => {
+
     const createCustomerApiUrl = generateAdminApiPath({type:"CREATE_CUSTOMER"})!
     const  response = await fetch(createCustomerApiUrl, {
         method: "POST",

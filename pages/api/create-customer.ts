@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { AdminApiHeaders } from '@shopify/api/AdminApiHeaders';
+import { AdminApiHeaders, StorefrontApiHeaders } from '@shopify/api/AdminApiHeaders';
 import { API_URL } from '@shopify/const'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { createCustomerMutation } from '@shopify/utils/mutations';
@@ -23,7 +23,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         {
         method: 'POST',
         mode: "no-cors",
-        headers: AdminApiHeaders,
+        headers: StorefrontApiHeaders,
         body: JSON.stringify({
             query: createCustomerMutation,
             variables: {
