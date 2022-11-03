@@ -2,7 +2,7 @@
 import { generateAdminApiPath } from "@shopify/utils/generate-admin-api-path"
 
 const createCustomer = async (email: string) => {
-    console.log("create customer api: ",)
+    console.log("create customer api @shopfy/auth ",)
     const createCustomerApiUrl = generateAdminApiPath({type:"CREATE_CUSTOMER"})!
     const  response = await fetch(createCustomerApiUrl, {
         method: "POST",

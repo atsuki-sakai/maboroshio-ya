@@ -2,18 +2,29 @@
 import { AdminApiHeaders } from '@shopify/api/AdminApiHeaders';
 import { API_URL } from '@shopify/const'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { createCustomerMutation } from '@shopify/utils/mutations';
 
-
-type CreateCutomerInputType = {
-    email: string
-}
 
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
 
     if(req.method !== "POST") throw Error("request is GET? this api is only POST!!!");
 
-    const body = await JSON.parse(req.body) as CreateCutomerInputType
+    const body = await JSON.parse(req.body) as {
+        email: string
+    }
+
+    const query = `
+        mutation customerCreate($input: CustomerInput!){
+            customerCreate(input: $input) {
+                customer {
+                    email
+                }
+                userErrors {
+                    message
+                }
+            }
+        }
+    `
+
     const response = await fetch(
         API_URL!,
         {
@@ -21,7 +32,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         mode: "no-cors",
         headers: AdminApiHeaders,
         body: JSON.stringify({
-            createCustomerMutation,
+            query,
             variables: {
                 input: {
                     email: body.email
