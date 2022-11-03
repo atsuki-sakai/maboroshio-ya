@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { API_URL, ADMIN_ACCESS_TOKEN, ADMIN_API_KEY, ADMIN_API_SECLET_KEY } from '@shopify/const'
+import { SHOPIFY_ADMIN_API_URL, SHOPIFY_ADMIN_ACCESS_TOKEN, SHOPIFY_ADMIN_API_KEY, SHOPIFY_ADMIN_API_SECLET_KEY } from '@shopify/const'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type Data = {
@@ -9,8 +9,8 @@ type Data = {
 export default async function handler( req: NextApiRequest, res: NextApiResponse<Data>) {
 
     const headers = {
-        Authorization: 'Basic ' + Buffer.from( ADMIN_API_KEY! + ':' + ADMIN_API_SECLET_KEY!).toString('base64'),
-        'X-Shopify-Access-Token': ADMIN_ACCESS_TOKEN!,
+        Authorization: 'Basic ' + Buffer.from( SHOPIFY_ADMIN_API_KEY! + ':' + SHOPIFY_ADMIN_API_SECLET_KEY!).toString('base64'),
+        'X-Shopify-Access-Token': SHOPIFY_ADMIN_ACCESS_TOKEN!,
         'Content-Type': 'application/json',
         Accept: 'application/json',
         'Access-Control-Allow-Origin': '*'
@@ -86,7 +86,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
     }
     `
 
-    const response = await fetch(API_URL!,{
+    const response = await fetch(SHOPIFY_ADMIN_API_URL!,{
         mode: "no-cors",
         method: 'POST',
         headers,
