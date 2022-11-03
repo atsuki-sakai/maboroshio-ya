@@ -15,19 +15,6 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 
     const body = await JSON.parse(req.body) as CustomerCreateInput
 
-    const query = `
-        mutation customerCreate($input: CustomerInput!){
-            customerCreate(input: $input) {
-                customer {
-                    email
-                }
-                userErrors {
-                    message
-                }
-            }
-        }
-    `
-
     const response = await fetch(
         API_URL!,
         {
