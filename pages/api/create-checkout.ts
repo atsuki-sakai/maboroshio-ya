@@ -99,5 +99,4 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
     res.statusCode = 200
     res.setHeader('Content-Type', 'application/json')
     res.end(JSON.stringify(json))
-    res.status(200).json({data})
 }
