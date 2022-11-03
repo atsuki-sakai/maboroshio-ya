@@ -35,7 +35,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         mode: "no-cors",
         headers: AdminApiHeaders,
         body: JSON.stringify({
-            createCustomerMutation,
+            query: createCustomerMutation,
             variables: {
                 input: {
                     email: body.email
