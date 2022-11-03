@@ -23,7 +23,6 @@ const createCustomer = async (
             phone: phone
         })
     })
-    console.log("response: ",response);
     const json = await response.json();
     console.log("data: ",json)
     return json;
