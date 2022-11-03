@@ -6,7 +6,6 @@ import { checkoutCreateMutation } from "@shopify/utils/mutations"
 import Cookies from "js-cookie"
 
 const createCheckout = async (fetch: ApiFeacher<{checkoutCreate: CheckoutCreatePayload}>): Promise<Maybe<Checkout | undefined>> => {
-    console.log("framework/shopify/utils/create-checkout.ts")
     const { data } = await fetch({
         query: checkoutCreateMutation
     })

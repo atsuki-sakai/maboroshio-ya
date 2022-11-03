@@ -14,20 +14,74 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 
     const query = `
         mutation {
-            customerCreate(input: {email: "headless@sample.com"}) {
-            userErrors {
-                field
-                message
-            }
-                customer {
+            checkoutCreate(input: {}) {
+                checkoutUserErrors {
+                    field
+                    message
+                }
+                checkout {
                     id
-                    email
+                    webUrl
+                    subtotalPrice {
+                        amount
+                        currencyCode
+                    }
+                    totalTax {
+                    amount
+                    currencyCode
+                    }
+                    totalPrice {
+                    amount
+                    currencyCode
+                    }
+                    completedAt
+                    createdAt
+                    taxesIncluded
+                    lineItems(first: 250) {
+                    pageInfo {
+                        hasNextPage
+                        hasPreviousPage
+                    }
+                    edges {
+                        node {
+                        id
+                        title
+                        variant {
+                            id
+                            sku
+                            title
+                            selectedOptions {
+                                name
+                                value
+                            }
+                            image {
+                                url
+                                altText
+                                width
+                                height
+                            }
+                            price {
+                                amount
+                                currencyCode
+                            }
+                            compareAtPrice {
+                                amount
+                                currencyCode
+                            }
+                            product {
+                                handle
+                            }
+                        }
+                        quantity
+                        }
+                    }
                 }
             }
         }
+    }
     `
 
-    const r = await fetch(API_URL!,{
+    const response = await fetch(API_URL!,{
         mode: "no-cors",
         method: 'POST',
         headers,
@@ -36,9 +90,9 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         }),
     })
 
-    const json = await r.json()
-
-    res.statusCode = 200
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify(json))
+    const { data, errors } = await response.json()
+    if(errors){
+        throw Error(errors[0]?.message ?? errors?.message)
+    }
+    res.status(200).json({data})
 }
