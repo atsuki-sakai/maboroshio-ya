@@ -11,10 +11,9 @@ interface CustomerCreateInput {
 
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
 
+    // TODO: - mode:"no-cors"
     if(req.method !== "POST") throw Error("request is GET? this api is only POST!!!");
-
     const body = await JSON.parse(req.body) as CustomerCreateInput
-
     const response = await fetch(
         API_URL!,
         {

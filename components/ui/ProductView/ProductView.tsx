@@ -18,12 +18,12 @@ interface Props {
 const ProductView: FC<Props> = ({ product }) => {
 
     const createCart = async () => {
-        const email = "test9@email.com"
+        const email = "yasutomo-sakai420@email.com"
         const { customer, customerUserErrors } = await createCustomer(email);
-        if(customerUserErrors){
-            console.log(customerUserErrors[0]?.message)
+        if(customerUserErrors[0]){
+            console.log(customerUserErrors[0].message)
         }
-        console.log("product view create customer: ", customer)
+        console.log('customer email :', customer?.email)
 
     }
     return (
