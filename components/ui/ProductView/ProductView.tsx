@@ -35,7 +35,7 @@ const ProductView: FC<Props> = ({ product }) => {
             method: "POST",
             mode: "no-cors",
             body: JSON.stringify({
-                email: "input-cuctomer@email.com"
+                email: "product-view@email.com"
             })
         })
 

@@ -5,6 +5,13 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
 
+    if(req.method !== "POST") {
+        throw Error("this createCustomer is only POST not't GET.");
+    }
+
+    const body = JSON.parse(req.body) as {
+        email: string
+    }
     const headers = {
         Authorization:
         'Basic ' +
@@ -21,8 +28,8 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
     } as any
 
     const query = `
-        mutation {
-            customerCreate(input:{ email: "sakai-yasutomo@sample.com"}) {
+        mutation customerCreate($input: CustomerInput!){
+            customerCreate(input: $input) {
                 customer {
                     email
                 }
@@ -33,20 +40,25 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         }
     `
 
-    const r = await fetch(
-        API_URL!,
-        {
-        method: 'POST',
-        mode: "no-cors",
-        headers,
-        body: JSON.stringify({
-            query
-        }),
-    })
-
-    const json = await r.json()
-
-    res.statusCode = 200
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify(json))
+    try{
+        const response = await fetch(
+            API_URL!,
+            {
+            method: 'POST',
+            mode: "no-cors",
+            headers,
+            body: JSON.stringify({
+                query,
+                variables: {
+                    input: {
+                        email: body.email
+                    }
+                }
+            }),
+        })
+        const data = await response.json()
+        res.status(200).json({ data: data })
+    }catch {
+        res.status(500).json({ data: "create customer error." })
+    }
 }
