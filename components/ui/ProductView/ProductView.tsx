@@ -31,17 +31,18 @@ const ProductView: FC<Props> = ({ product }) => {
         //     method: "POST",
         //     mode: "no-cors"
         // })
-        const  _data = await fetch("https://maboroshio-ya.vercel.app/api/create-customer", {
+        const  response = await fetch("https://maboroshio-ya.vercel.app/api/create-customer", {
             method: "POST",
             mode: "no-cors",
             body: JSON.stringify({
-                email: "product-view@email.com"
+                email: "product-view2@email.com"
             })
         })
 
+        const { data, errors } = await response.json()
         console.log('create checkout')
         // console.log("checkout: ",JSON.stringify(data, null, 2))
-        console.log("customer: ",JSON.stringify(_data, null, 2))
+        console.log("customer: ", data, errors)
     }
     return (
         <>

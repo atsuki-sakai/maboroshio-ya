@@ -2,7 +2,6 @@
 import { ADMIN_ACCESS_TOKEN, ADMIN_API_KEY, ADMIN_API_SECLET_KEY, API_URL } from '@shopify/const'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
 
     if(req.method !== "POST") {
@@ -40,25 +39,24 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         }
     `
 
-    try{
-        const response = await fetch(
-            API_URL!,
-            {
-            method: 'POST',
-            mode: "no-cors",
-            headers,
-            body: JSON.stringify({
-                query,
-                variables: {
-                    input: {
-                        email: body.email
-                    }
+    const response = await fetch(
+        API_URL!,
+        {
+        method: 'POST',
+        mode: "no-cors",
+        headers,
+        body: JSON.stringify({
+            query,
+            variables: {
+                input: {
+                    email: body.email
                 }
-            }),
-        })
-        const data = await response.json()
-        res.status(200).json({ data: data })
-    }catch {
-        res.status(500).json({ data: "create customer error." })
-    }
+            }
+        }),
+    })
+    const data = await response.json()
+
+    res.statusCode = 200
+    res.setHeader('Content-Type', 'application/json')
+    res.end(JSON.stringify(data))
 }
