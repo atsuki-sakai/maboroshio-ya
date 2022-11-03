@@ -3,7 +3,11 @@ import { API_URL, ADMIN_ACCESS_TOKEN, ADMIN_API_KEY, ADMIN_API_SECLET_KEY } from
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { json } from 'stream/consumers'
 
-export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
+type Data = {
+    data: any
+}
+
+export default async function handler( req: NextApiRequest, res: NextApiResponse<Data>) {
 
     const headers = {
         Authorization: 'Basic ' + Buffer.from( ADMIN_API_KEY! + ':' + ADMIN_API_SECLET_KEY!).toString('base64'),
@@ -13,9 +17,10 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         'Access-Control-Allow-Origin': '*'
     } as any
 
+
     const query = `
-        mutation {
-            checkoutCreate(input: {}) {
+        mutation checkoutCreate($input: CheckoutCreateInput = {}){
+            checkoutCreate(input: $input) {
                 checkoutUserErrors {
                     field
                     message
@@ -95,8 +100,5 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
     if(errors){
         throw Error(errors[0]?.message ?? errors?.message)
     }
-
-    res.statusCode = 200
-    res.setHeader('Content-Type', 'application/json')
-    res.end(JSON.stringify(json))
+    res.status(200).json({data:JSON.stringify(data)})
 }
