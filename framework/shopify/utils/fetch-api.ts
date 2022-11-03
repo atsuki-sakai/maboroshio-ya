@@ -12,7 +12,6 @@ export type ApiFetchOptions = {
 const fetchApi = async<T>({ query, variables }: ApiFetchOptions): Promise<ApiFetchResults<T>> => {
     const res = await fetch(API_URL!, {
         method: "POST",
-        mode: "no-cors",
         headers: {
             "Content-Type": "application/json",
             "X-Shopify-Access-Token": ADMIN_ACCESS_TOKEN!
