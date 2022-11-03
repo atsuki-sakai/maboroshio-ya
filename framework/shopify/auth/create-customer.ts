@@ -11,8 +11,9 @@ const createCustomer = async (email: string): Promise<CustomerCreatePayload> => 
             email: email
         })
     })
-    const { data } = await response.json();
-    const payload = data.customerCreaten as CustomerCreatePayload
+    const json = await response.json();
+    console.log(json.data)
+    const payload = json.data.customerCreaten as CustomerCreatePayload
     console.log("payload: ",payload)
     return payload;
 }
