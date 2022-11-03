@@ -3,7 +3,7 @@ export type ApiPath = {
     type: "CREATE_CUSTOMER" | "CREATE_CHECKOUT"
 }
 
-const hostingUrl = process.env.NEXT_PUBLIC_HOSTING_DOMAIN as string
+const hostingUrl = process.env.NEXT_PUBLIC_HOSTING_URL!
 
 export const generateAdminApiPath = (apiPath: ApiPath) => {
     switch(apiPath.type){
