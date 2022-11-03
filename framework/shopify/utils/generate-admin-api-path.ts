@@ -1,14 +1,14 @@
 
 export type ApiPathType = {
-    type: "CREATE_CHECKOUT"
+    type: "CREATE_CUSTOMER"
 }
 
-const hostingUrl = process.env.NEXT_PUBLIC_HOSTTING_URL
+const hostingUrl = process.env.NEXT_PUBLIC_HOSTING_DOMAIN_URL
 
 export const generateAdminApiPath = (apitype: ApiPathType) => {
     switch(apitype.type){
-        case "CREATE_CHECKOUT": {
-            return hostingUrl + "/api/create-checkout";
+        case "CREATE_CUSTOMER": {
+            return hostingUrl + "/api/create-customer";
         }
     }
 }

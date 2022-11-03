@@ -50,6 +50,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         }),
     })
     const data = await response.json()
+    res.statusCode = 200
     res.setHeader('Content-Type', 'application/json')
-    res.status(200).json(JSON.stringify(data))
+    res.end(JSON.stringify(data))
 }
