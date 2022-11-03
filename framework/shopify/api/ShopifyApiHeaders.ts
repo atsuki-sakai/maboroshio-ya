@@ -29,6 +29,7 @@ const StorefrontApiHeaders = {
 
 
 export const ShopifyApiFeatcher = async (api: ApiType, query: any, input?: Variables) => {
+    console.log('api fetcher')
     const apiUrl = api.type === "ADMIN_API" ? SHOPIFY_ADMIN_API_URL : SHOPIFY_STOREFRONT_API_URL
     const headers = api.type === "ADMIN_API" ? AdminApiHeaders : StorefrontApiHeaders
     const response = await fetch(

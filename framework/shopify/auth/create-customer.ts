@@ -11,7 +11,9 @@ const createCustomer = async (
         phone: string
     ): Promise<any> => {
 
+        console.log('createCustomer. @shopify/auth')
     const createCustomerApiUrl = generateAdminApiPath({type:"CREATE_CUSTOMER"})!
+
     const  response = await fetch(createCustomerApiUrl, {
         method: "POST",
         mode: "no-cors",

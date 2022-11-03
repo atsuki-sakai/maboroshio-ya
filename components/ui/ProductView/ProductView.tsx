@@ -18,14 +18,15 @@ interface Props {
 const ProductView: FC<Props> = ({ product }) => {
 
     const createCart = async () => {
-
+        console.log('create customre')
         const email = "atk721@icloud.com"
         const password = "Heisei50721"
         const acceptsMarketing = true
         const firstName = "sakai"
         const lastName = "atsuki"
         const phone = "+817090308805"
-        console.log('number: ', "+81" + phone.split('0')[1])
+        const _phone = "07090805587"
+        console.log('number: ', "+81" + _phone.split('0')[1])
         const res = await createCustomer(email, password, acceptsMarketing, firstName, lastName, phone);
         console.log('res :', res)
     }
