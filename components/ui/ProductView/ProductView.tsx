@@ -24,7 +24,7 @@ const ProductView: FC<Props> = ({ product }) => {
 
     const createCart = async () => {
         console.log("create customer api: ",generateAdminApiPath({type:"CREATE_CUSTOMER"}))
-        console.log("create customer api: //maboroshio-ya.vercel.app/api/create-customer")
+        console.log("create customer api: https//maboroshio-ya.vercel.app/api/create-customer")
         const  response = await fetch("https://maboroshio-ya.vercel.app/api/create-customer", {
             method: "POST",
             mode: "no-cors",
@@ -33,8 +33,9 @@ const ProductView: FC<Props> = ({ product }) => {
             })
         })
 
-        const data = await response.json();
-        console.log("customer data: ", data)
+        const json  = await response.json();
+        console.log("customer data: ", json.data)
+        console.log(json.data.customer.email)
 
     }
     return (
