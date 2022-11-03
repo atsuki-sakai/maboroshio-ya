@@ -10,7 +10,7 @@ export const AdminApiHeaders = {
 
 export const StorefrontApiHeaders = {
     Authorization: 'Basic ' + Buffer.from(ADMIN_API_KEY! + ':' + ADMIN_API_SECLET_KEY!).toString('base64'),
-    'X-Shopify-Storefront-Access-Token': ADMIN_ACCESS_TOKEN!,
+    'X-Shopify-Access-Token': ADMIN_ACCESS_TOKEN!,
     'Content-Type': 'application/json',
     Accept: 'application/json',
     'Access-Control-Allow-Origin': '*',
