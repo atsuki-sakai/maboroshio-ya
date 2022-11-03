@@ -19,9 +19,9 @@ const ProductView: FC<Props> = ({ product }) => {
 
     const createCart = async () => {
         console.log('tap')
-        const email = "test4@email.com"
+        const email = "test5@email.com"
         const response = await createCustomer(email);
-        console.log("customer response data: ", response.customer)
+        console.log("product view response data: ", response)
 
     }
     return (
