@@ -23,7 +23,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         {
         method: 'POST',
         mode: "no-cors",
-        headers: AdminApiHeaders,
+        headers: StorefrontApiHeaders,
         body: JSON.stringify({
             query: createCustomerMutation,
             variables: {
