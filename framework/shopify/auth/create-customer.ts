@@ -23,10 +23,10 @@ const createCustomer = async (
             phone: phone
         })
     })
-    const { data } = await response.json();
-    console.log("data: ",data)
-    const payload = data.customerCreate as CustomerCreatePayload
-    return payload;
+    const json = await response.json();
+    console.log("json: ",json)
+    console.log('data: ', json.data)
+    return json;
 }
 
 export default createCustomer

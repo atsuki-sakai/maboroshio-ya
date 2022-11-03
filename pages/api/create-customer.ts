@@ -27,13 +27,13 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         body: JSON.stringify({
             query: createCustomerMutation,
             variables: {
-                "input": {
-                    "email": body.email,
-                    "password": body.password,
-                    "acceptsMarketing": body.acceptsMarketing,
-                    "firstName": body.firstName,
-                    "lastName": body.lastName,
-                    "phone": body.phone
+                input: {
+                    email: body.email,
+                    password: body.password,
+                    acceptsMarketing: body.acceptsMarketing,
+                    firstName: body.firstName,
+                    lastName: body.lastName,
+                    phone: body.phone
                 }
             }
         }),
