@@ -7,7 +7,6 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import '@splidejs/splide/css'; 
 import { Container } from "@components/ui";
 import { createCustomer } from "@shopify/auth"
-import { PassThrough } from 'stream';
 
 
 
@@ -26,11 +25,9 @@ const ProductView: FC<Props> = ({ product }) => {
         const firstName = "sakai"
         const lastName = "atsuki"
         const phone = "+817090308805"
-        const { customer, customerUserErrors } = await createCustomer(email, password, acceptsMarketing, firstName, lastName, phone);
-        if(customerUserErrors) {
-            throw new Error(customerUserErrors[0]?.message);
-        }
-        console.log('customer :', customer)
+        const res = await createCustomer(email, password, acceptsMarketing, firstName, lastName, phone);
+       
+        console.log('res :', res)
     }
     return (
         <>

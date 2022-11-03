@@ -24,6 +24,7 @@ const createCustomer = async (
         })
     })
     const { data } = await response.json();
+    console.log("data: ",data)
     const payload = data.customerCreate as CustomerCreatePayload
     return payload;
 }
