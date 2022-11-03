@@ -6,12 +6,7 @@ import { Product } from '@shopify/types/product'
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import '@splidejs/splide/css'; 
 import { Container } from "@components/ui";
-import { ADMIN_ACCESS_TOKEN, ADMIN_API_KEY, ADMIN_API_SECLET_KEY, API_URL } from '@shopify/const';
-import getConfig from 'next/config';
-import { checkoutCreateMutation } from '@shopify/utils/mutations';
-import axios from "axios"
-import { getAllProducts } from '@shopify/products';
-import { generateAdminApiPath } from '@shopify/utils/generate-admin-api-path';
+import { createCustomer } from "@shopify/auth"
 
 
 
@@ -23,18 +18,10 @@ interface Props {
 const ProductView: FC<Props> = ({ product }) => {
 
     const createCart = async () => {
-        console.log("create customer api: ",generateAdminApiPath({type:"CREATE_CUSTOMER"}))
-        console.log("create customer api: https//maboroshio-ya.vercel.app/api/create-customer")
-        const  response = await fetch("https://maboroshio-ya.vercel.app/api/create-customer", {
-            method: "POST",
-            mode: "no-cors",
-            body: JSON.stringify({
-                email: "product-view6@email.com"
-            })
-        })
-
-        const json  = await response.json();
-        console.log("customer data: ", JSON.stringify(json.data))
+        console.log('tap')
+        const email = "test2@email.com"
+        const data = await createCustomer(email);
+        console.log("customer response data: ", data)
 
     }
     return (

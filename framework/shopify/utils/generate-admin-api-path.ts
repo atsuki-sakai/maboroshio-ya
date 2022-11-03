@@ -1,6 +1,6 @@
 
 export type ApiPathType = {
-    type: "CREATE_CUSTOMER"
+    type: "CREATE_CUSTOMER" | "CREATE_CHECKOUT"
 }
 
 const hostingUrl = process.env.NEXT_PUBLIC_HOSTING_DOMAIN as string

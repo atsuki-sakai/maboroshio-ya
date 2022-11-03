@@ -1,38 +1,19 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { ADMIN_ACCESS_TOKEN, ADMIN_API_KEY, ADMIN_API_SECLET_KEY, API_URL } from '@shopify/const'
+import { AdminApiHeaders } from '@shopify/api/AdminApiHeaders';
+import { API_URL } from '@shopify/const'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { createCustomerMutation } from '@shopify/utils/mutations';
 
-export const AdminApiHeaders = {
-    Authorization: 'Basic ' + Buffer.from(ADMIN_API_KEY! + ':' + ADMIN_API_SECLET_KEY!).toString('base64'),
-    'X-Shopify-Access-Token': ADMIN_ACCESS_TOKEN!,
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-    'Access-Control-Allow-Origin': '*',
-} as any
 
+type CreateCutomerInputType = {
+    email: string
+}
 
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
 
-    if(req.method !== "POST") {
-        throw Error("this createCustomer is only POST not't GET.");
-    }
+    if(req.method !== "POST") throw Error("request is GET? this api is only POST!!!");
 
-    const body = await JSON.parse(req.body) as {
-        email: string
-    }
-
-    const query = `
-        mutation customerCreate($input: CustomerInput!){
-            customerCreate(input: $input) {
-                customer {
-                    email
-                }
-                userErrors {
-                    message
-                }
-            }
-        }
-    `
+    const body = await JSON.parse(req.body) as CreateCutomerInputType
 
     const response = await fetch(
         API_URL!,
@@ -41,7 +22,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         mode: "no-cors",
         headers: AdminApiHeaders,
         body: JSON.stringify({
-            query,
+            query: createCustomerMutation,
             variables: {
                 input: {
                     email: body.email
