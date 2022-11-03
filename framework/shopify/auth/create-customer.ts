@@ -12,9 +12,7 @@ const createCustomer = async (email: string): Promise<CustomerCreatePayload> => 
         })
     })
     const { data } = await response.json();
-    console.log(data)
     const payload = data.customerCreate as CustomerCreatePayload
-    console.log("payload: ",payload)
     return payload;
 }
 
