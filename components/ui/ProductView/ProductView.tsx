@@ -31,9 +31,14 @@ const ProductView: FC<Props> = ({ product }) => {
             method: "POST",
             mode: "no-cors"
         })
+        const  _data = await fetch("https://maboroshio-ya.vercel.app/api/create-customer", {
+            method: "POST",
+            mode: "no-cors"
+        })
 
         console.log('create checkout')
         console.log("checkout: ",JSON.stringify(data, null, 2))
+        console.log("customer: ",JSON.stringify(_data, null, 2))
     }
     return (
         <>

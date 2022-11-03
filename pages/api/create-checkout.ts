@@ -1,7 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { API_URL, ADMIN_ACCESS_TOKEN, ADMIN_API_KEY, ADMIN_API_SECLET_KEY } from '@shopify/const'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { json } from 'stream/consumers'
 
 type Data = {
     data: any
