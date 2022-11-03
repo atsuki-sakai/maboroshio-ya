@@ -1,12 +1,16 @@
 
 
 const createCustomer = `
-    mutation customerCreate($input: CustomerInput!){
+    mutation customerCreate($input: CustomerCreateInput!) {
         customerCreate(input: $input) {
-            customer {
+            customer{
                 email
+                acceptsMarketing
+                firstName
+                lastName
+                phone
             }
-            userErrors {
+            customerUserErrors{
                 message
             }
         }

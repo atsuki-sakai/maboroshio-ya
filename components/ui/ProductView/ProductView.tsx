@@ -7,6 +7,7 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import '@splidejs/splide/css'; 
 import { Container } from "@components/ui";
 import { createCustomer } from "@shopify/auth"
+import { PassThrough } from 'stream';
 
 
 
@@ -18,8 +19,14 @@ interface Props {
 const ProductView: FC<Props> = ({ product }) => {
 
     const createCart = async () => {
-        const email = "atk721420@gmail.com"
-        const { customer, customerUserErrors } = await createCustomer(email);
+
+        const email = "atk721@icloud.com"
+        const password = "Heisei50721"
+        const acceptsMarketing = true
+        const firstName = "sakai"
+        const lastName = "atsuki"
+        const phone = "+817090308805"
+        const { customer, customerUserErrors } = await createCustomer(email, password, acceptsMarketing, firstName, lastName, phone);
         if(customerUserErrors) {
             throw new Error(customerUserErrors[0]?.message);
         }

@@ -7,6 +7,11 @@ import { createCustomerMutation } from '@shopify/utils/mutations';
 
 interface CustomerCreateInput {
     email: string
+    password: string
+    acceptsMarketing: boolean
+    firstName: string
+    lastName: string
+    phone: number
 }
 
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
@@ -23,7 +28,12 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
             query: createCustomerMutation,
             variables: {
                 input: {
-                    email: body.email
+                    email: body.email,
+                    password: body.password,
+                    acceptsMarketing: body.acceptsMarketing,
+                    firstName: body.firstName,
+                    lastName: body.lastName,
+                    phone: body.phone
                 }
             }
         }),

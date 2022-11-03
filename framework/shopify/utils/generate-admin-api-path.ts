@@ -10,5 +10,8 @@ export const generateAdminApiPath = (apiPath: ApiPath) => {
         case "CREATE_CUSTOMER": {
             return `${hostingUrl}/api/create-customer`
         }
+        case "CREATE_CHECKOUT": {
+            return `${hostingUrl}/api/create-checkout`
+        }
     }
 }
