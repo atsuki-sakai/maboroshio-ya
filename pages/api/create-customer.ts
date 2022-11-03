@@ -2,6 +2,15 @@
 import { ADMIN_ACCESS_TOKEN, ADMIN_API_KEY, ADMIN_API_SECLET_KEY, API_URL } from '@shopify/const'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+export const AdminApiHeaders = {
+    Authorization: 'Basic ' + Buffer.from(ADMIN_API_KEY! + ':' + ADMIN_API_SECLET_KEY!).toString('base64'),
+    'X-Shopify-Access-Token': ADMIN_ACCESS_TOKEN!,
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    'Access-Control-Allow-Origin': '*',
+} as any
+
+
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
 
     if(req.method !== "POST") {
@@ -11,13 +20,6 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
     const body = JSON.parse(req.body) as {
         email: string
     }
-    const headers = {
-        Authorization: 'Basic ' + Buffer.from(ADMIN_API_KEY! + ':' + ADMIN_API_SECLET_KEY!).toString('base64'),
-        'X-Shopify-Access-Token': ADMIN_ACCESS_TOKEN!,
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        'Access-Control-Allow-Origin': '*',
-    } as any
 
     const query = `
         mutation customerCreate($input: CustomerInput!){
@@ -37,7 +39,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         {
         method: 'POST',
         mode: "no-cors",
-        headers,
+        headers: AdminApiHeaders,
         body: JSON.stringify({
             query,
             variables: {
