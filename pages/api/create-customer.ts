@@ -21,12 +21,14 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
     } as any
 
     const query = `
-        customerCreate(input: {email: "test@email.com"}){
-            customer{
-            email
-            }
-            userErrors{
-            message
+        mutation {
+            customerCreate(input: {email: "yamada-takayuki@email.com"}) {
+                customer {
+                    email
+                }
+                userErrors {
+                    message
+                }
             }
         }
     `
