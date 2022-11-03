@@ -12,15 +12,8 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         email: string
     }
     const headers = {
-        Authorization:
-        'Basic ' +
-        Buffer.from(
-            ADMIN_API_KEY! +
-            ':' +
-            ADMIN_API_SECLET_KEY!
-        ).toString('base64'),
-        'X-Shopify-Access-Token':
-        ADMIN_ACCESS_TOKEN!,
+        Authorization: 'Basic ' + Buffer.from(ADMIN_API_KEY! + ':' + ADMIN_API_SECLET_KEY!).toString('base64'),
+        'X-Shopify-Access-Token': ADMIN_ACCESS_TOKEN!,
         'Content-Type': 'application/json',
         Accept: 'application/json',
         'Access-Control-Allow-Origin': '*',
@@ -55,7 +48,6 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         }),
     })
     const data = await response.json()
-
     res.statusCode = 200
     res.setHeader('Content-Type', 'application/json')
     res.end(JSON.stringify(data))
