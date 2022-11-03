@@ -23,8 +23,8 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
     } as any
 
     const query = `
-        mutation customerCreate($input: CustomerInput = { email: "yamamoto-taka@sample.com"}){
-            customerCreate(input: $input) {
+        mutation {
+            customerCreate(input: { email: "sakai-yasutomo@sample.com" }) {
                 customer {
                     email
                 }
