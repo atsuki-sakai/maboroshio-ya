@@ -13,9 +13,7 @@ const createCustomer = async (email: string): Promise<CustomerCreatePayload> => 
         })
     })
     const json  = await response.json();
-    console.log("json type",typeof json.data)
-    console.log("json data :",json.data)
-    return json
+    return json.data as CustomerCreatePayload
 }
 
 export default createCustomer

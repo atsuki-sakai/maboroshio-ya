@@ -2,6 +2,7 @@
 import { AdminApiHeaders } from '@shopify/api/AdminApiHeaders';
 import { API_URL } from '@shopify/const'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { createCustomerMutation } from '@shopify/utils/mutations';
 
 
 interface CustomerCreateInput {
@@ -34,7 +35,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         mode: "no-cors",
         headers: AdminApiHeaders,
         body: JSON.stringify({
-            query,
+            createCustomerMutation,
             variables: {
                 input: {
                     email: body.email
