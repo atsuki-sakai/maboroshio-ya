@@ -13,7 +13,7 @@ const createCustomer = async (email: string): Promise<CustomerCreatePayload> => 
         })
     })
     const json  = await response.json();
-    return json.data as CustomerCreatePayload
+    return json.data
 }
 
 export default createCustomer
