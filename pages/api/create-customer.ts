@@ -19,7 +19,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
     if(req.method !== "POST") throw Error("request is GET? this api is only POST!!!");
     const body = await JSON.parse(req.body) as CustomerCreateInput
     const response = await fetch(
-        SHOPIFY_STOREFRONT_API_ENDPOINT!,
+        API_URL!,
         {
         method: 'POST',
         mode: "no-cors",
