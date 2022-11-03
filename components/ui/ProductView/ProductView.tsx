@@ -6,7 +6,7 @@ import { Product } from '@shopify/types/product'
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import '@splidejs/splide/css'; 
 import { Container } from "@components/ui";
-import { ADMIN_ACCESS_TOKEN, ADMIN_API_KEY, ADMIN_API_SECLET, API_URL } from '@shopify/const';
+import { ADMIN_ACCESS_TOKEN, ADMIN_API_KEY, ADMIN_API_SECLET_KEY, API_URL } from '@shopify/const';
 import getConfig from 'next/config';
 import { checkoutCreateMutation } from '@shopify/utils/mutations';
 import axios from "axios"
@@ -24,9 +24,9 @@ const ProductView: FC<Props> = ({ product }) => {
     const createCart = async () => {
         console.log("API_URL :",API_URL)
         console.log('ADMIN :',ADMIN_ACCESS_TOKEN )
-        console.log('authorization: ','Basic ' + Buffer.from( ADMIN_API_KEY! + ':' + ADMIN_API_SECLET!).toString('base64'))
+        console.log('authorization: ','Basic ' + Buffer.from( ADMIN_API_KEY! + ':' + ADMIN_API_SECLET_KEY!).toString('base64'))
         console.log(ADMIN_API_KEY)
-        console.log(ADMIN_API_SECLET)
+        console.log(ADMIN_API_SECLET_KEY)
         const  data = await fetch("https://maboroshio-ya.vercel.app/api/create-checkout", {
             method: "POST",
             mode: "no-cors"
