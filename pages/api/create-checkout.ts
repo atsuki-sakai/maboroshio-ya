@@ -99,5 +99,5 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
     if(errors){
         throw Error(errors[0]?.message ?? errors?.message)
     }
-    res.status(200).json({data:JSON.stringify(data)})
+    res.status(200).json({data: data})
 }
