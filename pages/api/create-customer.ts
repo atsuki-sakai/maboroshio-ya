@@ -23,7 +23,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
     } as any
 
     const query = `
-        mutation customerCreate($input: CustomerInput!){
+        mutation customerCreate($input: CustomerInput = { email: "yamamoto-taka@sample.com"}){
             customerCreate(input: $input) {
                 customer {
                     email
@@ -42,11 +42,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         mode: "no-cors",
         headers,
         body: JSON.stringify({
-            query,
-            input: {
-                email: body.email
-
-            }
+            query
         }),
     })
 
