@@ -1,4 +1,4 @@
-import { ADMIN_ACCESS_TOKEN, ADMIN_API_KEY, ADMIN_API_SECLET, API_URL } from "@shopify/const"
+import { ADMIN_ACCESS_TOKEN, ADMIN_API_KEY, ADMIN_API_SECLET_KEY, API_URL } from "@shopify/const"
 
 interface Props {
     query: any,
@@ -7,7 +7,7 @@ interface Props {
 
 export default async function adminGraphqlApi( query: any, input: any){
     const headers = {
-        Authorization: 'Basic ' + Buffer.from( ADMIN_API_KEY! + ':' + ADMIN_API_SECLET!).toString('base64'),
+        Authorization: 'Basic ' + Buffer.from( ADMIN_API_KEY! + ':' + ADMIN_API_SECLET_KEY!).toString('base64'),
         'X-Shopify-Access-Token': ADMIN_ACCESS_TOKEN!,
         'Content-Type': 'application/json',
         Accept: 'application/json',
