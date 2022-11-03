@@ -23,23 +23,19 @@ interface Props {
 const ProductView: FC<Props> = ({ product }) => {
 
     const createCart = async () => {
-        console.log("API_URL :",API_URL)
-        console.log('ADMIN :',ADMIN_ACCESS_TOKEN )
-        console.log('authorization: ','Basic ' + Buffer.from( ADMIN_API_KEY! + ':' + ADMIN_API_SECLET_KEY!).toString('base64'))
-        console.log(ADMIN_API_KEY)
-        console.log(ADMIN_API_SECLET_KEY)
         console.log("create customer api: ",generateAdminApiPath({type:"CREATE_CUSTOMER"}))
         console.log("create customer api: //maboroshio-ya.vercel.app/api/create-customer")
         const  response = await fetch("https://maboroshio-ya.vercel.app/api/create-customer", {
             method: "POST",
             mode: "no-cors",
             body: JSON.stringify({
-                email: "product-view5@email.com"
+                email: "product-view6@email.com"
             })
         })
 
-        console.log('create checkout')
-        console.log("customer: ", response)
+        const data = await response.json();
+        console.log("customer data: ", data)
+
     }
     return (
         <>
