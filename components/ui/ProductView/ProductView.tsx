@@ -19,10 +19,11 @@ const ProductView: FC<Props> = ({ product }) => {
 
     const createCart = async () => {
         const email = "yasutomo-sakai420@email.com"
-        const { customer, customerUserErrors } = await createCustomer(email);
-        console.log("userErrors :",customerUserErrors)
-        console.log('customer email :' ,customer?.email)
-
+        const response = await createCustomer(email);
+        console.log(response);
+        console.log(JSON.stringify(response, null, 2))
+        console.log("userErrors :",response.customerUserErrors ?? "null")
+        console.log('customer email :' ,response.customer ?? "null")
     }
     return (
         <>
