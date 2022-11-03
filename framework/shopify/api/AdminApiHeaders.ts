@@ -9,6 +9,7 @@ export const AdminApiHeaders = {
 } as any
 
 export const StorefrontApiHeaders = {
+    Authorization: 'Basic ' + Buffer.from(ADMIN_API_KEY! + ':' + ADMIN_API_SECLET_KEY!).toString('base64'),
     'X-Shopify-Storefront-Access-Token': STOREFRONT_ACCESS_TOKEN!,
     'Content-Type': 'application/json',
     Accept: 'application/json',
