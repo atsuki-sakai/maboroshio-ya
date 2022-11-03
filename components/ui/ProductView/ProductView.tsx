@@ -27,13 +27,12 @@ const ProductView: FC<Props> = ({ product }) => {
         console.log('authorization: ','Basic ' + Buffer.from( ADMIN_API_KEY! + ':' + ADMIN_API_SECLET!).toString('base64'))
         console.log(ADMIN_API_KEY)
         console.log(ADMIN_API_SECLET)
-        const data = await fetch("https://maboroshio-ya.vercel.app/api/create-checkout", {
+        await fetch("https://maboroshio-ya.vercel.app/api/create-checkout", {
             method: "POST",
-            body: JSON.stringify({
-
-            })
+            mode: "no-cors"
         })
-        console.log('data: ', data)
+
+        console.log('create customer')
     }
     return (
         <>

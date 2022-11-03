@@ -28,15 +28,11 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
     `
 
     const r = await fetch(API_URL!,{
+        mode: "no-cors",
         method: 'POST',
         headers,
         body: JSON.stringify({
-            query,
-            variables: {
-                input: {
-                    email: "headlessapp@email.com"
-                },
-            },
+            query
         }),
     })
 
