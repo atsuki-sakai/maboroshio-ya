@@ -19,9 +19,9 @@ const ProductView: FC<Props> = ({ product }) => {
 
     const createCart = async () => {
         const email = "yasutomo-sakai420@email.com"
-        const res = await createCustomer(email);
-      
-        console.log('customer res :' ,res)
+        const { customer, customerUserErrors } = await createCustomer(email);
+        console.log("userErrors :",customerUserErrors)
+        console.log('customer email :' ,customer?.email)
 
     }
     return (
