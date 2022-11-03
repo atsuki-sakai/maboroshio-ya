@@ -11,6 +11,7 @@ import getConfig from 'next/config';
 import { checkoutCreateMutation } from '@shopify/utils/mutations';
 import axios from "axios"
 import { getAllProducts } from '@shopify/products';
+import { generateAdminApiPath } from '@shopify/utils/generate-admin-api-path';
 
 
 
@@ -27,10 +28,7 @@ const ProductView: FC<Props> = ({ product }) => {
         console.log('authorization: ','Basic ' + Buffer.from( ADMIN_API_KEY! + ':' + ADMIN_API_SECLET_KEY!).toString('base64'))
         console.log(ADMIN_API_KEY)
         console.log(ADMIN_API_SECLET_KEY)
-        // const  data = await fetch("https://maboroshio-ya.vercel.app/api/create-checkout", {
-        //     method: "POST",
-        //     mode: "no-cors"
-        // })
+        console.log("create customer api: ",generateAdminApiPath({type:"CREATE_CHECKOUT"}))
         const  response = await fetch("https://maboroshio-ya.vercel.app/api/create-customer", {
             method: "POST",
             mode: "no-cors",
@@ -39,10 +37,8 @@ const ProductView: FC<Props> = ({ product }) => {
             })
         })
 
-        const { data, errors } = await response.json()
         console.log('create checkout')
-        // console.log("checkout: ",JSON.stringify(data, null, 2))
-        console.log("customer: ", data, errors)
+        console.log("customer: ", response)
     }
     return (
         <>
