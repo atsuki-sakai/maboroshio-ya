@@ -5,6 +5,8 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
 
+    const body = JSON.parse(req.body) as { email: string }
+
     const headers = {
         Authorization:
         'Basic ' +
@@ -21,8 +23,8 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
     } as any
 
     const query = `
-        mutation {
-            customerCreate(input: {email: "yamada-takayuki@email.com"}) {
+        mutation customerCreate($input: CustomerInput!){
+            customerCreate(input: $input) {
                 customer {
                     email
                 }
@@ -40,7 +42,13 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         mode: "no-cors",
         headers,
         body: JSON.stringify({
-            query
+            query,
+            variables: {
+                input: {
+                    email: body.email
+
+                }
+            }
         }),
     })
 
