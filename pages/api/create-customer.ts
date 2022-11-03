@@ -11,7 +11,7 @@ interface CustomerCreateInput {
     acceptsMarketing: boolean
     firstName: string
     lastName: string
-    phone: number
+    phone: string
 }
 
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {

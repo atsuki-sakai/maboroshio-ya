@@ -26,7 +26,6 @@ const ProductView: FC<Props> = ({ product }) => {
         const lastName = "atsuki"
         const phone = "+817090308805"
         const res = await createCustomer(email, password, acceptsMarketing, firstName, lastName, phone);
-       
         console.log('res :', res)
     }
     return (
