@@ -22,8 +22,6 @@ const ProductView: FC<Props> = ({ product }) => {
         const response = await createCustomer(email);
         console.log(response);
         console.log(JSON.stringify(response, null, 2))
-        console.log("userErrors :",response.customerUserErrors ?? "null")
-        console.log('customer email :' ,response.customer ?? "null")
     }
     return (
         <>
