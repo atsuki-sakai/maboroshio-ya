@@ -19,11 +19,11 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
     if(req.method !== "POST") throw Error("request is GET? this api is only POST!!!");
     const body = await JSON.parse(req.body) as CustomerCreateInput
     const response = await fetch(
-        API_URL!,
+        "https://xn-68jwdf5d1604a.myshopify.com/api/2021-07/graphql.json",
         {
         method: 'POST',
         mode: "no-cors",
-        headers: StorefrontApiHeaders,
+        headers: AdminApiHeaders,
         body: JSON.stringify({
             query: createCustomerMutation,
             variables: {
