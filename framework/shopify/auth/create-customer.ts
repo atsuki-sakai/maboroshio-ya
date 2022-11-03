@@ -23,12 +23,9 @@ const createCustomer = async (
             phone: phone
         })
     })
-    const { data, error } = await response.json();
-    if(error){
-        throw Error(error.message)
-    }
-    console.log("data: ",data)
-    return data;
+    const json = await response.json();
+    console.log("data: ",json)
+    return json;
 }
 
 export default createCustomer
