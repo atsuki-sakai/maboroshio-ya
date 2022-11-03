@@ -43,11 +43,9 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         headers,
         body: JSON.stringify({
             query,
-            variables: {
-                input: {
-                    email: body.email
+            input: {
+                email: body.email
 
-                }
             }
         }),
     })
