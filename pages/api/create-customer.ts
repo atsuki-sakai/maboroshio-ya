@@ -17,7 +17,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         throw Error("this createCustomer is only POST not't GET.");
     }
 
-    const body = JSON.parse(req.body) as {
+    const body = await JSON.parse(req.body) as {
         email: string
     }
 

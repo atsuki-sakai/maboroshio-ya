@@ -34,8 +34,7 @@ const ProductView: FC<Props> = ({ product }) => {
         })
 
         const json  = await response.json();
-        console.log("customer data: ", json.data)
-        console.log(json.data.customer.email)
+        console.log("customer data: ", JSON.stringify(json.data))
 
     }
     return (

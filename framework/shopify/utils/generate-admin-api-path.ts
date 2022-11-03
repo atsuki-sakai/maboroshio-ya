@@ -8,7 +8,7 @@ const hostingUrl = process.env.NEXT_PUBLIC_HOSTING_DOMAIN as string
 export const generateAdminApiPath = (apitype: ApiPathType) => {
     switch(apitype.type){
         case "CREATE_CUSTOMER": {
-            return `${hostingUrl} + "/api/create-customer"`
+            return `${hostingUrl}/api/create-customer"`
         }
     }
 }
