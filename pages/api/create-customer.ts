@@ -35,7 +35,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
                 input: {
                     email: body.email,
                     password: body.password,
-                    acceptsMarketinig: body.acceptsMarketing,
+                    acceptsMarketing: body.acceptsMarketing,
                     firstName: body.firstName,
                     lastName: body.lastName,
                     phone: body.phone
