@@ -17,7 +17,18 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 
     if(req.method !== "POST") throw Error("request is GET? this api is only POST!!!");
     const body = await JSON.parse(req.body) as CustomerCreateInput
-    const response = await ShopifyApiFeatcher({type: "STOREFRONT_API"},createCustomerMutation, {input: body})
+
+    const variables = {
+        input: {
+            email: body.email,
+            password: body.password,
+            acceptsMarketinig: body.acceptsMarketing,
+            firstName: body.firstName,
+            lastName: body.lastName,
+            phone: body.phone
+        }
+    }
+    const response = await ShopifyApiFeatcher({type: "STOREFRONT_API"},createCustomerMutation, variables)
     const data = await response.json()
     res.statusCode = 200
     res.setHeader('Content-Type', 'application/json')
