@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { ShopifyApiFeatcher } from '@shopify/api/ShopifyApiHeaders';
+import { ShopifyApiFeatcher } from '@shopify/api/ShopifyApiFetcher';
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { createCustomerMutation } from '@shopify/utils/mutations';
 import { SHOPIFY_STOREFRONT_ACCESS_TOKEN, SHOPIFY_STOREFRONT_API_URL } from '@shopify/const';
@@ -17,7 +17,6 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
     if(req.method !== "POST") throw Error("request is GET? this api is only POST!!!");
 
     const body = await JSON.parse(req.body) as CustomerCreateInput
-
 
     const variables = {
         input: {

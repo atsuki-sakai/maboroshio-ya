@@ -42,6 +42,5 @@ export const ShopifyApiFeatcher = async (api: ApiType, query: string, variables?
             variables: variables
         }),
     })
-    const data = await response.json()
-    return data;
+    return response;
 }
