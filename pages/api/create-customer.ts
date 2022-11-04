@@ -25,22 +25,25 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         'Access-Control-Allow-Origin': '*',
     } as any
 
+
+    const variables = {
+        input: {
+            email: body.email,
+            password: body.password,
+            acceptsMarketing: body.acceptsMarketing,
+            firstName: body.firstName,
+            lastName: body.lastName,
+            phone: body.phone
+        }
+    }
+
     const response = await fetch(SHOPIFY_STOREFRONT_API_URL!,{
         method: 'POST',
         mode: "no-cors",
         headers: StorefrontApiHeaders,
         body: JSON.stringify({
             query: createCustomerMutation,
-            variables: {
-                input: {
-                    email: body.email,
-                    password: body.password,
-                    acceptsMarketing: body.acceptsMarketing,
-                    firstName: body.firstName,
-                    lastName: body.lastName,
-                    phone: body.phone
-                }
-            }
+            variables: variables,
         }),
     })
     const data = await response.json()
