@@ -2,6 +2,7 @@
 import { ShopifyApiFeatcher } from '@shopify/api/ShopifyApiHeaders';
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { createCustomerMutation } from '@shopify/utils/mutations';
+import { SHOPIFY_STOREFRONT_ACCESS_TOKEN, SHOPIFY_STOREFRONT_API_URL } from '@shopify/const';
 interface CustomerCreateInput {
     email: string
     password: string
@@ -16,17 +17,32 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
     if(req.method !== "POST") throw Error("request is GET? this api is only POST!!!");
 
     const body = await JSON.parse(req.body) as CustomerCreateInput
-    const variables = {
-        input: {
-            email: body.email,
-            password: body.password,
-            acceptsMarketinig: body.acceptsMarketing,
-            firstName: body.firstName,
-            lastName: body.lastName,
-            phone: body.phone
-        }
-    }
-    const response = await ShopifyApiFeatcher({type: "STOREFRONT_API"},createCustomerMutation, variables)
+
+    const StorefrontApiHeaders = {
+        'X-Shopify-Storefront-Access-Token': SHOPIFY_STOREFRONT_ACCESS_TOKEN!,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'Access-Control-Allow-Origin': '*',
+    } as any
+
+    const response = await fetch(SHOPIFY_STOREFRONT_API_URL!,{
+        method: 'POST',
+        mode: "no-cors",
+        headers: StorefrontApiHeaders,
+        body: JSON.stringify({
+            query: createCustomerMutation,
+            variables: {
+                input: {
+                    email: body.email,
+                    password: body.password,
+                    acceptsMarketinig: body.acceptsMarketing,
+                    firstName: body.firstName,
+                    lastName: body.lastName,
+                    phone: body.phone
+                }
+            }
+        }),
+    })
     const data = await response.json()
     res.statusCode = 200
     res.setHeader('Content-Type', 'application/json')
