@@ -28,7 +28,7 @@ const StorefrontApiHeaders = {
 } as any
 
 
-export const ShopifyApiFeatcher = async (api: ApiType, query: any, variables?: Variables) => {
+export const ShopifyApiFeatcher = async (api: ApiType, query: string, variables?: Variables) => {
 
     const apiUrl = api.type === "ADMIN_API" ? SHOPIFY_ADMIN_API_URL : SHOPIFY_STOREFRONT_API_URL
     const headers = api.type === "ADMIN_API" ? AdminApiHeaders : StorefrontApiHeaders
@@ -38,8 +38,8 @@ export const ShopifyApiFeatcher = async (api: ApiType, query: any, variables?: V
         mode: "no-cors",
         headers,
         body: JSON.stringify({
-            query: query,
-            variables: variables
+            query,
+            variables
         }),
     })
     const data = await response.json()
