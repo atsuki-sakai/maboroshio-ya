@@ -18,6 +18,11 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 
     const body = await JSON.parse(req.body) as CustomerCreateInput
 
+    //TODO: - "09030204933から +819030204933へ更新
+    if(body.phone.substring(0,1) === "0"){
+        body.phone = `+81 + ${body.phone.slice(1)}`
+    }
+
     const variables = {
         input: {
             email: body.email,
