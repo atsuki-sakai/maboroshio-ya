@@ -11,7 +11,7 @@ const createCustomer = async (
         phone: string
     ): Promise<any> => {
 
-        console.log('createCustomer. @shopify/auth')
+    console.log('createCustomer. @shopify/auth')
     const createCustomerApiUrl = generateAdminApiPath({type:"CREATE_CUSTOMER"})!
 
     const response = await fetch(createCustomerApiUrl, {
@@ -26,7 +26,6 @@ const createCustomer = async (
             phone: phone
         })
     })
-    console.log("response: ",response)
     const json = await response.json();
     console.log("data: ",json)
     return json;
