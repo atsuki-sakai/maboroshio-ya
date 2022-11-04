@@ -16,7 +16,11 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 
     if(req.method !== "POST") throw Error("request is GET? this api is only POST!!!");
 
-    const body = await JSON.parse(req.body) as CustomerCreateInput
+    let body = await JSON.parse(req.body) as CustomerCreateInput
+
+    if(body.phone.length === 11 && body.phone.slice(0,1) === "0"){
+        body.phone = `+81${body.phone.slice(1)}`
+    }
 
     const variables = {
         input: {

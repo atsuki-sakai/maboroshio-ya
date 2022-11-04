@@ -24,16 +24,7 @@ const ProductView: FC<Props> = ({ product }) => {
         const acceptsMarketing = true
         const firstName = "sakai"
         const lastName = "atsuki"
-        const phone = "+817090308805"
-
-        const dammyNumber  ="09092826180"
-        
-        if(dammyNumber.slice(0,1) === "0"){
-            console.log("if")
-        }else{
-            console.log('else')
-        }
-
+        const phone = "07090308805"
         const { data, errors } = await createCustomer(email, password, acceptsMarketing, firstName, lastName, phone);
         console.log('productView :', data, errors)
     }
