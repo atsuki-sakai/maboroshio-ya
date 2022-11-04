@@ -18,13 +18,6 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 
     const body = await JSON.parse(req.body) as CustomerCreateInput
 
-    const StorefrontApiHeaders = {
-        'X-Shopify-Storefront-Access-Token': SHOPIFY_STOREFRONT_ACCESS_TOKEN!,
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        'Access-Control-Allow-Origin': '*',
-    } as any
-
 
     const variables = {
         input: {
@@ -36,16 +29,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
             phone: body.phone
         }
     }
-
-    const response = await fetch(SHOPIFY_STOREFRONT_API_URL!,{
-        method: 'POST',
-        mode: "no-cors",
-        headers: StorefrontApiHeaders,
-        body: JSON.stringify({
-            query: createCustomerMutation,
-            variables: variables,
-        }),
-    })
+    const response = await ShopifyApiFeatcher({type:"STOREFRONT_API"}, createCustomerMutation, variables)
     const data = await response.json()
     res.statusCode = 200
     res.setHeader('Content-Type', 'application/json')

@@ -38,8 +38,8 @@ export const ShopifyApiFeatcher = async (api: ApiType, query: string, variables?
         mode: "no-cors",
         headers,
         body: JSON.stringify({
-            query,
-            variables
+            query: query,
+            variables: variables
         }),
     })
     const data = await response.json()
