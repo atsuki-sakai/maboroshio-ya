@@ -9,11 +9,8 @@ const createCustomer = async (
         firstName: string,
         lastName: string,
         phone: string
-    ): Promise<any> => {
-
-    console.log('createCustomer. @shopify/auth')
+    ): Promise<CustomerCreatePayload> => {
     const createCustomerApiUrl = generateAdminApiPath({type:"CREATE_CUSTOMER"})!
-    console.log(createCustomerApiUrl)
     const response = await fetch(createCustomerApiUrl, {
         method: "POST",
         mode: "no-cors",
@@ -26,10 +23,11 @@ const createCustomer = async (
             phone: phone
         })
     })
-    console.log(response)
-    const json = await response.json();
-    console.log("data: ",json)
-    return json;
+    const { data, errors } = await response.json();
+    if(errors){
+        throw Error(errors[0]?.message)
+    }
+    return data;
 }
 
 export default createCustomer
