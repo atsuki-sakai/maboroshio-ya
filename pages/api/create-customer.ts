@@ -32,8 +32,15 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
             phone: body.phone
         }
     }
-    const response = await ShopifyApiFeatcher({type:"STOREFRONT_API"}, createCustomerMutation, variables)
+    const response = await ShopifyApiFeatcher(
+        {type:"STOREFRONT_API"},
+        createCustomerMutation,
+        variables
+    )
+
     const data = await response.json()
+
+
     res.statusCode = 200
     res.setHeader('Content-Type', 'application/json')
     res.end(JSON.stringify(data))

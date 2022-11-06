@@ -19,7 +19,7 @@ const ProductView: FC<Props> = ({ product }) => {
 
     const createCart = async () => {
         console.log('create customre')
-        const email = "atk721@icloud.com"
+        const email = "atk721420@icloud.com"
         const password = "Heisei50721"
         const acceptsMarketing = true
         const firstName = "sakai"
