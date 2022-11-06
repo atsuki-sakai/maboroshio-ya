@@ -1,7 +1,6 @@
 
-import { CustomerCreatePayload } from "@shopify/shema"
+import { Customer, CustomerCreatePayload } from "@shopify/shema"
 import { generateAdminApiPath } from "@shopify/utils/generate-admin-api-path"
-import { Console } from "console"
 
 const createCustomer = async (
         email: string,
@@ -10,7 +9,7 @@ const createCustomer = async (
         firstName: string,
         lastName: string,
         phone: string
-    ): Promise<any> => {
+    ): Promise<Customer> => {
     const createCustomerApiUrl = generateAdminApiPath({type:"CREATE_CUSTOMER"})!
     const response = await fetch(createCustomerApiUrl, {
         method: "POST",
@@ -24,8 +23,12 @@ const createCustomer = async (
             phone: phone
         })
     })
-    const data = await response.json();
-    return data;
+    const { data, errors } = await response.json()
+
+    if(errors){
+        throw Error(errors[0]?.message ?? errors[0].message)
+    }
+    return data as Customer;
 }
 
 export default createCustomer
