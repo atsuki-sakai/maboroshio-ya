@@ -9,7 +9,8 @@ const createCustomer = async (
         firstName: string,
         lastName: string,
         phone: string
-    ): Promise<Customer> => {
+    ): Promise<CustomerCreatePayload> => {
+
     const createCustomerApiUrl = generateAdminApiPath({type:"CREATE_CUSTOMER"})!
     const response = await fetch(createCustomerApiUrl, {
         method: "POST",
@@ -28,8 +29,7 @@ const createCustomer = async (
     if(errors){
         throw Error(errors[0]?.message ?? errors[0].message)
     }
-    console.log(data)
-    return data as Customer;
+    return data as CustomerCreatePayload;
 }
 
 export default createCustomer
