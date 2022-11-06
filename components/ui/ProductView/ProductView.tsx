@@ -23,7 +23,7 @@ const ProductView: FC<Props> = ({ product }) => {
         const data = await createCheckout();
         console.log("checkout: ", data)
         const { customer,  customerUserErrors } = await createCustomer("sample@email.com", "123456", true, "sakai",  "atsuki", "07092826180");
-        console.log(customer, customerUserErrors)
+        console.log("customer:",customer, customerUserErrors)
     }
     return (
         <>
