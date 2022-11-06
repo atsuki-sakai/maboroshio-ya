@@ -25,8 +25,8 @@ const createCustomer = async (
         })
     })
     const { data, errors } = await response.json()
-    console.log(data)
-    console.log(errors)
+    console.log("data: ",data)
+    console.log("errors: ",errors)
     if(errors){
         throw Error(errors[0]?.message ?? errors[0].message)
     }
