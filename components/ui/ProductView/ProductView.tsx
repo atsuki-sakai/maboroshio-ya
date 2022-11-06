@@ -26,17 +26,8 @@ const ProductView: FC<Props> = ({ product }) => {
         const firstName = "sakai"
         const lastName = "atsuki"
         const phone = "07090308805"
-        try {
-            const data: CustomerCreatePayload = await createCustomer(email, password, acceptsMarketing, firstName, lastName, phone);
-            if(data.customerUserErrors){
-                console.log(data.customerUserErrors[0]?.message)
-                return;
-            }
-            console.log(data.customer?.email)
-
-        } catch (error: any) {
-            console.log(error)
-        }
+        const data = await createCustomer(email, password, acceptsMarketing, firstName, lastName, phone);
+        console.log(data)
     }
     return (
         <>
