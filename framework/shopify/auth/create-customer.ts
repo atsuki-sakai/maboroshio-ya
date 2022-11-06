@@ -30,7 +30,7 @@ const createCustomer = async (
     if(errors){
         throw Error(errors[0]?.message ?? errors[0].message)
     }
-    return data as CustomerCreatePayload;
+    return data.customerCreate as CustomerCreatePayload;
 }
 
 export default createCustomer
