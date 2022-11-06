@@ -1,6 +1,7 @@
+import { CheckoutCreatePayload } from "@shopify/shema"
 import { generateApiUrl } from "@shopify/utils/generate-api-url"
 
-const createCheckout = async (): Promise<any> => {
+const createCheckout = async (): Promise<CheckoutCreatePayload> => {
 
     console.log("create checkout")
 
@@ -16,7 +17,7 @@ const createCheckout = async (): Promise<any> => {
     if(errors){
         throw Error(errors[0]?.message)
     }
-    return data;
+    return data.checkoutCreate as CheckoutCreatePayload;
 }
 
 export default createCheckout

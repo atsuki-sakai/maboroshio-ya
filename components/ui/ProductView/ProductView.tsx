@@ -20,10 +20,8 @@ interface Props {
 const ProductView: FC<Props> = ({ product }) => {
 
     const createCart = async () => {
-        const data = await createCheckout();
-        console.log("checkout: ", data)
-        const { customer,  customerUserErrors } = await createCustomer("sample@email.com", "123456", true, "sakai",  "atsuki", "07092826180");
-        console.log("customer:",customer, customerUserErrors)
+        const { checkout, checkoutUserErrors } = await createCheckout();
+        console.log("checkout: ", checkout)
     }
     return (
         <>
