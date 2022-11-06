@@ -11,8 +11,11 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 
     const response = await ShopifyApiFeatcher(
         {type:"STOREFRONT_API"},
-        checkoutCreateMutation
-    )
+        checkoutCreateMutation,
+        {
+            input: {}
+        }
+        )
 
     const data = await response.json()
     res.statusCode = 200
