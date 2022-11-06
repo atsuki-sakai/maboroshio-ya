@@ -18,6 +18,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 
     let body = await JSON.parse(req.body) as CustomerCreateInput
 
+    // TODO - ここで変換するのは良くない？
     if(body.phone.length === 11 && body.phone.slice(0,1) === "0"){
         body.phone = `+81${body.phone.slice(1)}`
     }

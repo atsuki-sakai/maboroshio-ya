@@ -8,6 +8,7 @@ import '@splidejs/splide/css';
 import { Container } from "@components/ui";
 import { createCustomer } from "@shopify/auth"
 import { CustomerCreatePayload } from '@shopify/shema';
+import { createCheckout } from '@shopify/cart';
 
 
 
@@ -19,19 +20,8 @@ interface Props {
 const ProductView: FC<Props> = ({ product }) => {
 
     const createCart = async () => {
-        console.log('create customre')
-        const email = "atk721420@icloud.com"
-        const password = "Heisei50721"
-        const acceptsMarketing = true
-        const firstName = "sakai"
-        const lastName = "atsuki"
-        const phone = "07090308805"
-        const { customer, customerUserErrors } = await createCustomer(email, password, acceptsMarketing, firstName, lastName, phone);
-        
-        if(customerUserErrors){
-            console.log(customerUserErrors[0].message)
-        }
-        console.log(customer?.id)
+        const checkout = await createCheckout();
+        console.log("checkout: ", checkout)
     }
     return (
         <>
