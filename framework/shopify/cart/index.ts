@@ -1,2 +1,2 @@
 
-export { default as createCheckout } from "./crete-checkout"
+export { default as createCheckout } from "./create-checkout"

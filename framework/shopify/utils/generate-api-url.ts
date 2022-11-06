@@ -5,7 +5,7 @@ export type ApiPath = {
     type: "CREATE_CUSTOMER" | "CREATE_CHECKOUT"
 }
 
-export const generateAdminApiPath = (apiPath: ApiPath) => {
+export const generateApiUrl = (apiPath: ApiPath) => {
     switch(apiPath.type){
         case "CREATE_CUSTOMER": {
             return `${HOSTING_URL}/api/create-customer`
