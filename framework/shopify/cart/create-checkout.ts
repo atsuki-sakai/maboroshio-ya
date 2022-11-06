@@ -11,11 +11,11 @@ const createCheckout = async (): Promise<any> => {
     })
 
     const { data, errors } = await response.json()
+
+    console.log(data, errors)
     if(errors){
         throw Error(errors[0]?.message)
     }
-
-    console.log(data, errors)
     return data;
 }
 
