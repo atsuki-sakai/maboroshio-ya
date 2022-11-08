@@ -7,6 +7,7 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import '@splidejs/splide/css'; 
 import { Container } from "@components/ui";
 import { useCart } from '@components/context';
+import { Cart } from '@shopify/shema';
 
 
 
@@ -17,9 +18,14 @@ interface Props {
 
 const ProductView: FC<Props> = ({ product }) => {
 
-    const { cart } = useCart()
+    const { cart, updateCart } = useCart()
+
     const addProduct = async () => {
-        console.log("cart: ",cart)
+        console.log(cart)
+        const newCart = {...cart, totalPrice: "4.0"}
+        updateCart(newCart)
+
+        console.log(cart)
     }
 
     return (
