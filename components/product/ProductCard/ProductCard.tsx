@@ -39,7 +39,7 @@ const ProductCard = ({product} : Props) => {
                                             }
                                         </div>
                     }
-                    <p className='text-center text-red-500 text-xs font-thin'><span className='text-base font-medium '>¥ { Number(product.priceRangeV2.minVariantPrice.amount) }</span> 税込</p>
+                    <p className='text-center text-red-500 text-xs font-thin'><span className='text-base font-medium '>¥ { Number(product.priceRange.minVariantPrice.amount) }</span> 税込</p>
                 </a>
             </Link>
         </div>

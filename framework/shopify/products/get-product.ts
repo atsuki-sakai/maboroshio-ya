@@ -1,6 +1,5 @@
 
 import { ApiConfig, Variables } from "@shopify/types/api"
-import { Product as ShopifyProduct } from "@shopify/shema"
 import { Product } from "@shopify/types/product"
 import { normalizeProduct } from "@shopify/utils"
 import getProductQuery from "@shopify/utils/queries/get-product"

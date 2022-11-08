@@ -1,8 +1,7 @@
 
 import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
-import { createCheckout, getCheckoutId, getCheckout } from '@shopify/cart'
+import { createCheckout, getCheckoutId, getCheckout, checkoutToCart } from '@shopify/cart'
 import { Cart } from '@shopify/types/cart'
-import { normalizeCart } from '@shopify/utils'
 
 interface Props  {
     children: ReactNode | ReactNode[]
@@ -53,12 +52,12 @@ export const CartProvider = ({children}: Props) => {
                     // CheckoutIdでcheckoutを取得
                     const id = getCheckoutId()
                     const checkout = await getCheckout(id!)
-                    const cart = normalizeCart(checkout);
+                    const cart = checkoutToCart(checkout);
                     setCart(cart)
                 }else{
                     // Checkoutをを新しく作る
                     const checkout = await createCheckout();
-                    const cart = normalizeCart(checkout);
+                    const cart = checkoutToCart(checkout);
                     setCart(cart)
                 }
             }

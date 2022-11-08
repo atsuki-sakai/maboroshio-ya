@@ -7,7 +7,7 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import '@splidejs/splide/css'; 
 import { Container } from "@components/ui";
 import { useCart } from '@components/context';
-import { Cart } from '@shopify/shema';
+import { Cart, LineItem } from '@shopify/types/cart'
 
 
 
@@ -23,6 +23,8 @@ const ProductView: FC<Props> = ({ product }) => {
     
     const addProduct = async () => {
         
+        const newCart:Cart = { ...cart, lineItems: [] }
+        updateCart(newCart)
     }
 
     return (
@@ -50,7 +52,7 @@ const ProductView: FC<Props> = ({ product }) => {
                         </div>
                         <h1 className='py-2 font-bold text-2xl'>{product.name}</h1>
                         <div className='flex items-center justify-start space-x-12'>
-                            <p className='text-base text-red-500'>¥ <span className={`text-2xl font-sans font-bold ${product.totalInventory === 0 ? "line-through" : "" }`}>{Number(product.priceRangeV2.minVariantPrice.amount)}</span> 税込</p>
+                            <p className='text-base text-red-500'>¥ <span className={`text-2xl font-sans font-bold ${product.totalInventory === 0 ? "line-through" : "" }`}>{Number(product.priceRange.minVariantPrice.amount)}</span> 税込</p>
                             {
                                 product.totalInventory === 0 ? <p className='bg-gray-600 text-white px-4 py-0.5'>売り切れ</p> : ""
                             }

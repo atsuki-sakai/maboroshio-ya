@@ -6,14 +6,14 @@ export interface ProductImage {
     height: number
 }
 
-export interface MoneyV2 {
+export interface Money {
     amount: number
     currencyCode: "USD" | "EUR" | "JPY" | string
 }
 
-export interface PriceRangeV2 {
-    minVariantPrice: MoneyV2
-    maxVariantPrice: MoneyV2
+export interface PriceRange {
+    minVariantPrice: Money
+    maxVariantPrice: Money
 }
 
 export interface ProductOptionValues {
@@ -47,7 +47,7 @@ export interface Product {
     slug: string
     path: string
     images: ProductImage[]
-    priceRangeV2: PriceRangeV2
+    priceRange: PriceRange
     options: ProductOption[]
     variants: ProductVariant[]
 

@@ -4,8 +4,9 @@ import React from 'react'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import { getAllProducts } from '@shopify/products'
 import { getConfig } from "@shopify/api/config"
-import { Product } from '@shopify/types/product'
-import { ProductCard, Container, Hero } from '@components/ui'
+import { Hero, Container } from "@components/ui"
+import { ProductCard  } from "@components/product"
+import type { Product } from '@shopify/types/product'
 import { MetaHead } from '@components/common'
 
 

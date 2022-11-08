@@ -14,7 +14,7 @@ query productById($slug: String!) {
             name
             values
         }
-        priceRangeV2 {
+        priceRange {
             minVariantPrice {
                 amount
                 currencyCode

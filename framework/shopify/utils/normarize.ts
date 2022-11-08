@@ -1,4 +1,4 @@
-import { ImageEdge, Product as ShopifyProduct, ProductOption, Checkout,ProductVariantConnection, SelectedOption, CheckoutLineItemEdge } from '../shema';
+import { ImageEdge, ProductOption, Checkout,ProductVariantConnection, SelectedOption, CheckoutLineItemEdge } from '../shema';
 import { Product } from "@shopify/types/product";
 import { Cart, LineItem } from '@shopify/types/cart';
 
@@ -109,7 +109,7 @@ export function normalizeProduct(productNode: any): Product {
         vendor,
         description,
         images: imageConnection,
-        priceRangeV2,
+        priceRange,
         options,
         variants,
         totalInventory,
@@ -124,7 +124,7 @@ export function normalizeProduct(productNode: any): Product {
         description,
         images: normalizeProductImages(imageConnection),
         path: `/${handle}`,
-        priceRangeV2,
+        priceRange,
         slug: handle.replace(/^\/+|\/+$/g,""),
         options: options ?
             options.filter((o: any) => o.name !== "Title").map((o: any) => normarizeProductOption(o)):

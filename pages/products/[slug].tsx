@@ -8,7 +8,7 @@ import {
 import { getConfig } from '@shopify/api/config'
 import getAllProductsPaths from '@shopify/products/get-all-product-paths'
 import { getProduct } from '@shopify/products'
-import { ProductView } from '@components/ui'
+import { ProductView } from '@components/product'
 
 const ProductSlug = ({ product }: InferGetStaticPropsType<typeof getStaticProps>) => {
     return (

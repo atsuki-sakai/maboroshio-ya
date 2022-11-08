@@ -11,10 +11,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 
     const response = await ShopifyApiFeatcher(
         {type:"STOREFRONT_API"},
-        checkoutCreateMutation,
-        {
-            input: {}
-        }
+        checkoutCreateMutation
     )
 
     const data = await response.json()
