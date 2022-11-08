@@ -32,7 +32,7 @@ export const CartProvider = ({children}: Props) => {
     const updateCart = (cart: Cart) => setCart(cart);
 
     useEffect(() => {
-        (async () => {
+        const f = async () => {
             if(getCheckoutId()) {
                 // CheckoutIdでcheckoutを取得
                 const id = getCheckoutId()
@@ -45,8 +45,9 @@ export const CartProvider = ({children}: Props) => {
                 const cart = normalizeCart(checkout);
                 setCart(cart)
             }
-        })
-    }, [cart])
+        }
+        f();
+    })
 
     const value = useMemo(() => {
         return {
