@@ -18,9 +18,7 @@ const createCheckout = async (): Promise<Checkout> => {
     }
 
     console.log("1")
-    console.log(data)
-    console.log(data.createCheckout)
-    const { checkout, checkoutUserErrors } = data.createCheckout as CheckoutCreatePayload;
+    const { checkout, checkoutUserErrors } = data.checkoutCreate as CheckoutCreatePayload;
     if(checkoutUserErrors){
         throw Error(checkoutUserErrors[0]?.message)
     }
