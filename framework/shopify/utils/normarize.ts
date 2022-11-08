@@ -109,7 +109,7 @@ export function normalizeProduct(productNode: any): Product {
         vendor,
         description,
         images: imageConnection,
-        priceRange,
+        priceRangeV2,
         options,
         variants,
         totalInventory,
@@ -124,7 +124,7 @@ export function normalizeProduct(productNode: any): Product {
         description,
         images: normalizeProductImages(imageConnection),
         path: `/${handle}`,
-        priceRange,
+        priceRangeV2,
         slug: handle.replace(/^\/+|\/+$/g,""),
         options: options ?
             options.filter((o: any) => o.name !== "Title").map((o: any) => normarizeProductOption(o)):

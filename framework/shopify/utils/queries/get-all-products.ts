@@ -12,7 +12,7 @@ edges {
         handle
         description
         totalInventory
-        priceRange {
+        priceRangeV2 {
             minVariantPrice {
                 amount
                 currencyCode
