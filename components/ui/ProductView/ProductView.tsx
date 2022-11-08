@@ -9,7 +9,8 @@ import { Container } from "@components/ui";
 import { createCheckout } from '@shopify/cart';
 import Cookies from 'js-cookie';
 import { SHOPIFY_CHECKOUT_ID_COOKIE, SHOPIFY_COOKIE_EXPIRE } from '@shopify/const';
-import { normalizeCart } from '@shopify/utils';
+import { getCheckoutId, normalizeCart } from '@shopify/utils';
+import getCheckout from '@shopify/utils/getCheckout';
 
 
 
@@ -22,10 +23,12 @@ const ProductView: FC<Props> = ({ product }) => {
 
 
     const addProduct = async () => {
-        const checkout = await createCheckout();
-
+        
+        console.log("cookie: ",getCheckoutId())
+        const id = getCheckoutId()
+        const checkout = await getCheckout(id!)
         const cart = normalizeCart(checkout);
-        console.log("cart: ", cart)
+        console.log("cart1: ",cart)
     }
 
     return (

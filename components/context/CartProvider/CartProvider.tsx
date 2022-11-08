@@ -3,6 +3,8 @@
 import { createCheckout } from '@shopify/cart'
 import { SHOPIFY_CHECKOUT_ID_COOKIE } from '@shopify/const'
 import { Cart } from '@shopify/types/cart'
+import { getCheckoutId, normalizeCart } from '@shopify/utils'
+import getCheckout from '@shopify/utils/getCheckout'
 import Cookies from 'js-cookie'
 import React, { createContext, ReactNode, useContext, useEffect } from 'react'
 
@@ -14,23 +16,24 @@ const CartContext = createContext<Cart | undefined>(undefined)
 
 export const CartProvider = ({children}: Props) => {
 
-    let initialValue: Cart
     useEffect(() => {
 
         (async () => {
-            const checkout_cookie = Cookies.get(SHOPIFY_CHECKOUT_ID_COOKIE!);
-
-            console.log("checkoutCookie: ",checkout_cookie)
-            if(checkout_cookie) {
+            if(getCheckoutId()) {
                 // CheckoutIdでcheckoutを取得
-                console.log("cookie: ",checkout_cookie)
+                console.log("cookie: ",getCheckoutId())
+                const id = getCheckoutId()
+                const checkout = await getCheckout(id!)
+                const cart = normalizeCart(checkout);
+                console.log("cart1: ",cart)
             }else{
                 // Checkoutをを新しく作る
                 console.log("new checkout")
-                // const checkout = await createCheckout();
+                const checkout = await createCheckout();
+                const cart = normalizeCart(checkout);
+                console.log("cart2: ",cart)
             }
         })
-
     }, [])
 
     return (

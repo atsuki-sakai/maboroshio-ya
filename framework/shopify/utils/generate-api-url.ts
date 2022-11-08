@@ -2,7 +2,7 @@
 import { HOSTING_URL } from "@shopify/const"
 
 export type ApiPath = {
-    type: "CREATE_CUSTOMER" | "CREATE_CHECKOUT"
+    type: "CREATE_CUSTOMER" | "CREATE_CHECKOUT" | "GET_CHECKOUT"
 }
 
 export const generateApiUrl = (apiPath: ApiPath) => {
@@ -12,6 +12,9 @@ export const generateApiUrl = (apiPath: ApiPath) => {
         }
         case "CREATE_CHECKOUT": {
             return `${HOSTING_URL}/api/create-checkout`
+        }
+        case "GET_CHECKOUT": {
+            return `${HOSTING_URL}/api/get-checkout`
         }
     }
 }

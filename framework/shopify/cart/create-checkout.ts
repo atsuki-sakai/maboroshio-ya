@@ -15,12 +15,9 @@ const createCheckout = async (): Promise<Checkout> => {
     if(errors){
         throw Error(errors[0]?.message)
     }
-    const { checkout, checkoutUserErrors } = data.checkoutCreate as CheckoutCreatePayload;
-    if(checkoutUserErrors){
-        console.log(checkoutUserErrors)
-        console.log(Error(checkoutUserErrors[0]?.message))
-    }
+    const { checkout } = data.checkoutCreate as CheckoutCreatePayload;
     const checkoutId = checkout?.id;
+
     if(checkoutId){
         const options = {
             expires: SHOPIFY_COOKIE_EXPIRE
