@@ -19,14 +19,12 @@ interface Props {
 
 const ProductView: FC<Props> = ({ product }) => {
 
-    const createCart = async () => {
 
+    const addProduct = async () => {
         const checkout = await createCheckout();
-        console.log("checkout: ", checkout)
-
-        Cookies.set(SHOPIFY_CHECKOUT_ID_COOKIE!, checkout.id, { expires: SHOPIFY_COOKIE_EXPIRE })
-
+        console.log(checkout)
     }
+
     return (
         <>
             <Container>
@@ -62,7 +60,7 @@ const ProductView: FC<Props> = ({ product }) => {
                         </div>
                     </div>
                     <div className='fixed bottom-0 left-0 bg-orange-600 w-1/2 rounded-tr-md z-50'>
-                        <button onClick={createCart} className='w-full h-full'>
+                        <button onClick={addProduct} className='w-full h-full'>
                             <div className='text-center py-3'>
                                 <p className='text-white font-bold'>カートへ追加</p>
                             </div>

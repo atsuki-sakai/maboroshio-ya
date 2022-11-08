@@ -1,2 +1,3 @@
 
-export { default as CartProvider } from "./CartProvider"
+export { CartProvider } from "./CartProvider"
+export { useCart } from "./CartProvider"
