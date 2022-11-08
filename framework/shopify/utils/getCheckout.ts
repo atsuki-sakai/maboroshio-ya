@@ -11,10 +11,10 @@ const getCheckout = async(id: string) => {
             id: id
         })
     });
-    
     const data = await response.json();
 
-    console.log(data.node)
+    console.log(data)
+   
 
     return data.node;
 }
