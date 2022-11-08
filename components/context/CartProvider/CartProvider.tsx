@@ -31,23 +31,24 @@ export const CartProvider = ({children}: Props) => {
 
     const updateCart = (cart: Cart) => setCart(cart);
 
-    useEffect(() => {
-        const f = async () => {
-            if(getCheckoutId()) {
-                // CheckoutIdでcheckoutを取得
-                const id = getCheckoutId()
-                const checkout = await getCheckout(id!)
-                const cart = normalizeCart(checkout);
-                setCart(cart)
-            }else{
-                // Checkoutをを新しく作る
-                const checkout = await createCheckout();
-                const cart = normalizeCart(checkout);
-                setCart(cart)
-            }
+    const setupCheckout = async () => {
+        if(getCheckoutId()) {
+            // CheckoutIdでcheckoutを取得
+            const id = getCheckoutId()
+            const checkout = await getCheckout(id!)
+            const cart = normalizeCart(checkout);
+            setCart(cart)
+        }else{
+            // Checkoutをを新しく作る
+            const checkout = await createCheckout();
+            const cart = normalizeCart(checkout);
+            setCart(cart)
         }
-        console.log("f ")
-        f();
+    }
+
+    useEffect(() => {
+        console.log('setup checkout.')
+        setupCheckout()
     },[])
 
     const value = useMemo(() => {
