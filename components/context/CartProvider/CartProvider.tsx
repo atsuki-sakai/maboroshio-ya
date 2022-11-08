@@ -46,6 +46,7 @@ export const CartProvider = ({children}: Props) => {
                 setCart(cart)
             }
         }
+        console.log("f ")
         f();
     })
 
