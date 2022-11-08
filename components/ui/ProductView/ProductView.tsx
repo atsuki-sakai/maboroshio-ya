@@ -6,11 +6,7 @@ import { Product } from '@shopify/types/product'
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import '@splidejs/splide/css'; 
 import { Container } from "@components/ui";
-import { createCheckout } from '@shopify/cart';
-import Cookies from 'js-cookie';
-import { SHOPIFY_CHECKOUT_ID_COOKIE, SHOPIFY_COOKIE_EXPIRE } from '@shopify/const';
-import { getCheckoutId, normalizeCart } from '@shopify/utils';
-import getCheckout from '@shopify/utils/getCheckout';
+import { useCart } from '@components/context';
 
 
 
@@ -21,14 +17,9 @@ interface Props {
 
 const ProductView: FC<Props> = ({ product }) => {
 
-
+    const { cart } = useCart()
     const addProduct = async () => {
-        
-        console.log("cookie: ",getCheckoutId())
-        const id = getCheckoutId()
-        const checkout = await getCheckout(id!)
-        const cart = normalizeCart(checkout);
-        console.log("cart1: ",cart)
+        console.log("cart: ",cart)
     }
 
     return (
