@@ -6,9 +6,9 @@ import { Product } from '@shopify/types/product'
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import '@splidejs/splide/css'; 
 import { Container } from "@components/ui";
-import { createCustomer } from "@shopify/auth"
-import { CustomerCreatePayload } from '@shopify/shema';
 import { createCheckout } from '@shopify/cart';
+import Cookies from 'js-cookie';
+import { SHOPIFY_CHECKOUT_ID_COOKIE, SHOPIFY_COOKIE_EXPIRE } from '@shopify/const';
 
 
 
@@ -20,8 +20,12 @@ interface Props {
 const ProductView: FC<Props> = ({ product }) => {
 
     const createCart = async () => {
-        const { checkout, checkoutUserErrors } = await createCheckout();
+
+        const checkout = await createCheckout();
         console.log("checkout: ", checkout)
+
+        Cookies.set(SHOPIFY_CHECKOUT_ID_COOKIE!, checkout.id, { expires: SHOPIFY_COOKIE_EXPIRE })
+
     }
     return (
         <>

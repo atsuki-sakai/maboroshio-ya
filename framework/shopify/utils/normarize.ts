@@ -86,7 +86,7 @@ const normarizedProductVariants = ({ edges }: ProductVariantConnection) => {
 }
 
 export function normalizeCart(checkout: Checkout): Cart {
-    console.log(JSON.stringify(checkout, null, 2));
+
     return {
         id: checkout.id,
         createdAt: checkout.createdAt,
@@ -116,7 +116,7 @@ export function normalizeProduct(productNode: any): Product {
         totalInventory,
         ...rest
     } = productNode;
-    console.log(JSON.stringify(productNode, null, 2))
+
     const product: Product = {
         id,
         name,

@@ -11,7 +11,7 @@ export type ApiFetchResults<T> = {
 }
 
 export interface ApiConfig {
-    fetch<T>(options: ApiFetchOptions): Promise<ApiFetchResults<T>>
+    fetch<T>(options: ApiFetchOptions): Promise<ApiFetchResults<T>>,
     checkoutCookie: string
 }
 

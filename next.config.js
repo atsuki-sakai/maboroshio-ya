@@ -12,7 +12,3 @@ module.exports = {
   //   defaultLocale: projectLocale[0]
   // }
 }
-
-
-console.log("next.config: ",JSON.stringify(module.exports, null, 2))
-
