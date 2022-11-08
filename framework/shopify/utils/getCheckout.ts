@@ -14,9 +14,9 @@ const getCheckout = async(id: string) => {
     
     const data = await response.json();
 
-    console.log(data)
+    console.log(data.node)
 
-    return data;
+    return data.node;
 }
 
 export default getCheckout
