@@ -26,6 +26,8 @@ const Cart = () => {
         })
     }, [isCartOpen])
 
+    console.log(cart)
+
     return (
             <motion.div
                 initial={{ x:"100%", opacity:0.0 }}
@@ -43,10 +45,10 @@ const Cart = () => {
                         <div className='col-span-3 bg-transparent rounded-tl-md rounded-bl-md p-5 overflow-hidden relative'>
                             <h3 className='font-serif text-xl font-bold'>お客様のカート</h3>
                             <div className='flex h-full w-full justify-center items-center'>
-                                <p className={style.empty_text}>現在カート内に商品はございません。</p>
-                                <p>{cart.id}</p>
-                                <p>{cart.createdAt}</p>
-                                <p>{JSON.stringify(cart, null, 2)}</p>
+                                {
+                                    cart.lineItems.length === 0 && <p className={style.empty_text}>現在カート内に商品はございません。</p>
+                                }
+
                             </div>
                             <div className='absolute left-0 right-0 top-0 -z-10 w-full h-full'>
                                 <Image src={"/images/wasi.png"} layout="fill" width="100%" height="100%" alt={"background image"} />
