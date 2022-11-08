@@ -90,7 +90,7 @@ export function normalizeCart(checkout: Checkout): Cart {
         id: checkout.id,
         createdAt: checkout.createdAt,
         currency: {
-            code: checkout.currencyCode
+            code: checkout.totalPrice.currencyCode
         },
         taxesIncluded: checkout.taxesIncluded,
         lineItemsSubtotalPrice: checkout.subtotalPrice.amount,
