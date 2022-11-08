@@ -48,7 +48,7 @@ export const CartProvider = ({children}: Props) => {
         }
         console.log("f ")
         f();
-    })
+    },[])
 
     const value = useMemo(() => {
         return {
