@@ -11,22 +11,15 @@ const createCheckout = async (): Promise<Checkout> => {
         method: "POST"
     })
 
-    console.log("0")
     const { data, errors } = await response.json()
     if(errors){
         throw Error(errors[0]?.message)
     }
-
-    console.log("1")
-    console.log(data.checkoutCreate)
     const { checkout, checkoutUserErrors } = data.checkoutCreate as CheckoutCreatePayload;
-    console.log(checkout, checkoutUserErrors)
     if(checkoutUserErrors){
         console.log(Error(checkoutUserErrors[0]?.message))
     }
-    console.log(checkout)
     const checkoutId = checkout?.id;
-    console.log("2")
     if(checkoutId){
         const options = {
             expires: SHOPIFY_COOKIE_EXPIRE
@@ -34,7 +27,6 @@ const createCheckout = async (): Promise<Checkout> => {
         Cookies.set(SHOPIFY_CHECKOUT_ID_COOKIE!, checkoutId, options)
         Cookies.set(SHOPIFY_CHECKOUT_URL_COOKIE!, checkout?.webUrl, options)
     }
-    console.log("3")
     return checkout as Checkout;
 }
 
