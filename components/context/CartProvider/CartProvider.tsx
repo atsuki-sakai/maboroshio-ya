@@ -12,8 +12,6 @@ interface Props  {
 
 const CartContext = createContext<Cart | undefined>(undefined)
 
-
-
 export const CartProvider = ({children}: Props) => {
 
     let initialValue: Cart
@@ -23,12 +21,13 @@ export const CartProvider = ({children}: Props) => {
             const checkout_cookie = Cookies.get(SHOPIFY_CHECKOUT_ID_COOKIE!);
 
             console.log("checkoutCookie: ",checkout_cookie)
-
             if(checkout_cookie) {
                 // CheckoutIdでcheckoutを取得
+                console.log("cookie: ",checkout_cookie)
             }else{
                 // Checkoutをを新しく作る
-                const checkout = await createCheckout();
+                console.log("new checkout")
+                // const checkout = await createCheckout();
             }
         })
 
