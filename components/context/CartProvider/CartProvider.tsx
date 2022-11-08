@@ -1,13 +1,16 @@
 
-
-import { createCheckout } from '@shopify/cart'
-import { Cart } from '@shopify/types/cart'
-import { getCheckoutId, normalizeCart } from '@shopify/utils'
-import getCheckout from '@shopify/utils/getCheckout'
 import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
+import { createCheckout, getCheckoutId, getCheckout } from '@shopify/cart'
+import { Cart } from '@shopify/types/cart'
+import { normalizeCart } from '@shopify/utils'
 
 interface Props  {
     children: ReactNode | ReactNode[]
+}
+
+type State = {
+    updateCart: (cart: Cart) => void
+    cart: Cart
 }
 
 const initialCart = {
@@ -23,7 +26,17 @@ const initialCart = {
     discounts: []
 }
 
-const CartContext = createContext<any>(initialCart)
+const CartModifiers = {
+    updateCart: (cart: Cart) => {}
+}
+
+
+const initialState:State = {
+    cart: initialCart,
+    ...CartModifiers
+}
+
+const CartContext = createContext<State>(initialState)
 
 export const CartProvider = ({children}: Props) => {
 
@@ -31,29 +44,32 @@ export const CartProvider = ({children}: Props) => {
 
     const updateCart = (cart: Cart) => setCart(cart);
 
-    const setupCheckout = async () => {
-        if(getCheckoutId()) {
-            // CheckoutIdでcheckoutを取得
-            const id = getCheckoutId()
-            const checkout = await getCheckout(id!)
-            const cart = normalizeCart(checkout);
-            setCart(cart)
-        }else{
-            // Checkoutをを新しく作る
-            const checkout = await createCheckout();
-            const cart = normalizeCart(checkout);
-            setCart(cart)
-        }
-    }
-
     useEffect(() => {
-        console.log('setup checkout.')
-        setupCheckout()
+
+        (async() => {
+            const setupCheckout = async () => {
+                // CookieにcheckoutIdがなければ
+                if(getCheckoutId()) {
+                    // CheckoutIdでcheckoutを取得
+                    const id = getCheckoutId()
+                    const checkout = await getCheckout(id!)
+                    const cart = normalizeCart(checkout);
+                    setCart(cart)
+                }else{
+                    // Checkoutをを新しく作る
+                    const checkout = await createCheckout();
+                    const cart = normalizeCart(checkout);
+                    setCart(cart)
+                }
+            }
+            setupCheckout()
+        })()
+
     },[])
 
     const value = useMemo(() => {
         return {
-            cart,
+            cart: cart,
             updateCart
         }
     }, [cart])

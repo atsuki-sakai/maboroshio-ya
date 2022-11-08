@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react'
-import { useUI } from '@components/context'
+import { useUI, useCart } from '@components/context'
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import style from "./Cart.module.css"
@@ -8,7 +8,7 @@ import style from "./Cart.module.css"
 const Cart = () => {
 
     const { isCartOpen, onCartClose } = useUI();
-
+    const { cart } = useCart()
 
     const handle = (e: any) => {
         e.preventDefault();
@@ -44,6 +44,10 @@ const Cart = () => {
                             <h3 className='font-serif text-xl font-bold'>お客様のカート</h3>
                             <div className='flex h-full w-full justify-center items-center'>
                                 <p className={style.empty_text}>現在カート内に商品はございません。</p>
+                                <p>{cart.id}</p>
+                                <p>{cart.createdAt}</p>
+
+                                <p>{JSON.stringify(cart, null, 2)}</p>
                             </div>
                             <div className='absolute left-0 right-0 top-0 -z-10 w-full h-full'>
                                 <Image src={"/images/wasi.png"} layout="fill" width="100%" height="100%" alt={"background image"} />

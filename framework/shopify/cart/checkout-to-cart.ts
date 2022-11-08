@@ -1,6 +1,6 @@
 
 import { Checkout, Maybe } from "@shopify/shema"
-import { normalizeCart } from "./normarize";
+import { normalizeCart } from "../utils/normarize";
 
 const checkoutToCart = (checkout: Maybe<Checkout> | undefined) => {
     if(!checkout) {

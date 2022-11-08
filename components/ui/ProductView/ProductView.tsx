@@ -20,12 +20,9 @@ const ProductView: FC<Props> = ({ product }) => {
 
     const { cart, updateCart } = useCart()
 
+    
     const addProduct = async () => {
-        console.log(cart)
-        const newCart = {...cart, totalPrice: "4.0"}
-        updateCart(newCart)
-
-        console.log(cart)
+        
     }
 
     return (

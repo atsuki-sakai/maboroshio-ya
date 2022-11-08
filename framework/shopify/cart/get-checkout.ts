@@ -1,5 +1,5 @@
 import { Checkout } from "@shopify/shema";
-import { generateApiUrl } from "./generate-api-url";
+import { generateApiUrl } from "../utils/generate-api-url";
 
 const getCheckout = async(id: string): Promise<Checkout> => {
 

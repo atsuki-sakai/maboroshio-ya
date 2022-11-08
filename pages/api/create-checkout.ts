@@ -15,7 +15,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         {
             input: {}
         }
-        )
+    )
 
     const data = await response.json()
     res.statusCode = 200

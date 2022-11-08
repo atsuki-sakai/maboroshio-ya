@@ -5,8 +5,8 @@ import Cookies from "js-cookie"
 
 const createCheckout = async (): Promise<Checkout> => {
 
-    const createCheckoutUrl = generateApiUrl({type:"CREATE_CHECKOUT"})
-    const response = await fetch(createCheckoutUrl, {
+    const createCheckoutUrl = generateApiUrl({type: "CREATE_CHECKOUT"})
+    const response = await fetch(createCheckoutUrl!, {
         mode: "no-cors",
         method: "POST"
     })

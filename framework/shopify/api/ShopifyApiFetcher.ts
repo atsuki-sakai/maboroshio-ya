@@ -28,10 +28,10 @@ const StorefrontApiHeaders = {
 } as any
 
 
-export const ShopifyApiFeatcher = async (api: ApiType, query: string, variables?: Variables) => {
+export const ShopifyApiFeatcher = async ({ type }: ApiType, query: string, variables?: Variables) => {
 
-    const apiUrl = api.type === "ADMIN_API" ? SHOPIFY_ADMIN_API_URL : SHOPIFY_STOREFRONT_API_URL
-    const headers = api.type === "ADMIN_API" ? AdminApiHeaders : StorefrontApiHeaders
+    const apiUrl = type === "ADMIN_API" ? SHOPIFY_ADMIN_API_URL : SHOPIFY_STOREFRONT_API_URL
+    const headers = type === "ADMIN_API" ? AdminApiHeaders : StorefrontApiHeaders
 
     const response = await fetch(apiUrl!,{
         method: 'POST',
