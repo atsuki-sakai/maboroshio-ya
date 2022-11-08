@@ -5,7 +5,7 @@ const getCheckout = async(id: string): Promise<Checkout> => {
 
     const getCheckoutApiUrl = generateApiUrl({type: "GET_CHECKOUT"})
 
-    const response = await fetch(getCheckoutApiUrl, {
+    const response = await fetch(getCheckoutApiUrl!, {
         mode: "no-cors",
         method: "POST",
         body: JSON.stringify({

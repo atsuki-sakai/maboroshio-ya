@@ -46,7 +46,6 @@ const Cart = () => {
                                 <p className={style.empty_text}>現在カート内に商品はございません。</p>
                                 <p>{cart.id}</p>
                                 <p>{cart.createdAt}</p>
-
                                 <p>{JSON.stringify(cart, null, 2)}</p>
                             </div>
                             <div className='absolute left-0 right-0 top-0 -z-10 w-full h-full'>
