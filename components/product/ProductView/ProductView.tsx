@@ -50,7 +50,10 @@ const ProductView: FC<Props> = ({ product }) => {
                 }
             }
             const checkout = await checkoutLineItemsAdd(variable)
-            console.log("checkout :",checkout)
+            const newCart = checkoutToCart(checkout)
+            console.log(newCart)
+            updateCart(newCart)
+            console.log(cart)
             onCartOpen()
         }catch(e: any){
             alert(`error: ${e.message}`)
