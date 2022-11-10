@@ -85,7 +85,6 @@ const normarizedProductVariants = ({ edges }: ProductVariantConnection) => {
 }
 
 export function normalizeCart(checkout: Checkout): Cart {
-
     return {
         id: checkout.id,
         createdAt: checkout.createdAt,
