@@ -1,23 +1,29 @@
 
-import { HOSTING_URL } from "@shopify/const"
+import { HOSTING_URL, NGROK_URL } from "@shopify/const"
 
 export type ApiPath = {
     type: "CREATE_CUSTOMER" | "CREATE_CHECKOUT" | "GET_CHECKOUT" | "UPDATE_CHECKOUT" | "CHECKOUT_LINEITEMS_ADD"
 }
 
+//開発時はdev
+
+const dev = true
+
+const baseUrl = dev ? NGROK_URL : HOSTING_URL
+
 export const generateApiUrl = (apiPath: ApiPath) => {
     switch(apiPath.type){
         case "CREATE_CUSTOMER": {
-            return `${HOSTING_URL}/api/create-customer`
+            return `${baseUrl}/api/create-customer`
         }
         case "CREATE_CHECKOUT": {
-            return `${HOSTING_URL}/api/create-checkout`
+            return `${baseUrl}/api/create-checkout`
         }
         case "GET_CHECKOUT": {
-            return `${HOSTING_URL}/api/get-checkout`
+            return `${baseUrl}/api/get-checkout`
         }
         case "CHECKOUT_LINEITEMS_ADD": {
-            return `${HOSTING_URL}/api/checkout-lineitems-add`
+            return `${baseUrl}/api/checkout-lineitems-add`
         }
     }
 }

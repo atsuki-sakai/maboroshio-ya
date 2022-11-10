@@ -8,7 +8,7 @@ module.exports = {
     scrollRestoration: true,
   },
   images:{
-    domains: [ "cdn.shopify.com"]
+    domains: ["cdn.shopify.com"]
   }
   // i18n: {
   //   locales: projectLocale,

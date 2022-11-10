@@ -1,7 +1,7 @@
 import { Product } from "@shopify/types/product";
 
 
-type AvailableChoices = string
+type AvailableChoices = "default title" |  string
 
 export type Choices = {
     [P in AvailableChoices]: string
