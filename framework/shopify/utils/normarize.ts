@@ -35,8 +35,8 @@ const normalizeLineItem = ({node: { id, title, variant, quantity, ...rest }}: Ch
                 url: variant?.image?.url ?? "/public/images/product-image-placeholder.svg"
             },
             requiresShipping: variant?.requiresShipping ?? false,
-            price: variant?.priceV2.amount,
-            listPrice: variant?.compareAtPriceV2?.amount
+            price: variant?.price.amount,
+            listPrice: variant?.compareAtPrice?.amount
         },
         ...rest
     }
