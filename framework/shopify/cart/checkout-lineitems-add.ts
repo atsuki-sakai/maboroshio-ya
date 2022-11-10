@@ -27,9 +27,8 @@ const checkoutLineItemsAdd = async ( { checkoutId, lineItems }: CheckoutLineItem
     if(errors){
         throw Error(errors[0]?.message ?? errors[0].message)
     }
-    console.log('1')
-    console.log("data: ", data)
     const { checkout } =  data.checkoutLineItemsAdd as CheckoutLineItemsAddPayload;
+    console.log("checkout: ",checkout)
     return checkout as Checkout
 }
 

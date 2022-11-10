@@ -7,7 +7,6 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import '@splidejs/splide/css'; 
 import { Container } from "@components/ui";
 import { useCart, useUI } from '@components/context';
-import { Cart, LineItem } from '@shopify/types/cart'
 import { Choices, getVariant } from '../helpers'
 import checkoutLineItemsAdd from '@shopify/cart/checkout-lineitems-add';
 import { checkoutToCart, getCheckoutId } from '@shopify/cart';
@@ -40,8 +39,6 @@ const ProductView: FC<Props> = ({ product }) => {
 
     const addProduct = async () => {
         try{
-            //カートに商品を追加
-            //checkoutに商品を追加
             const variable = {
                 checkoutId: getCheckoutId() ?? cart.id,
                 lineItems: {
@@ -50,6 +47,7 @@ const ProductView: FC<Props> = ({ product }) => {
                 }
             }
             const checkout = await checkoutLineItemsAdd(variable)
+            console.log("product view checkout :", checkout)
             const newCart = checkoutToCart(checkout)
             console.log(newCart)
             updateCart(newCart)
