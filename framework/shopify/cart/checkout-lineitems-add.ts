@@ -1,5 +1,5 @@
 
-import { Checkout, CustomerCreatePayload } from "@shopify/shema"
+import { Checkout, CheckoutLineItemsAddPayload, CustomerCreatePayload } from "@shopify/shema"
 import { generateApiUrl } from "@shopify/utils/generate-api-url"
 
 
@@ -27,9 +27,15 @@ const checkoutLineItemsAdd = async ( { checkoutId, lineItems }: CheckoutLineItem
     if(errors){
         throw Error(errors[0]?.message ?? errors[0].message)
     }
-    console.log("data: ",data)
-    console.log(data.checkoutLineItemsAdd.checkout)
-    return data.checkoutLineItemsAdd.checkout as Checkout;
+    console.log('1')
+    const { checkout, checkoutUserErrors } =  data.checkoutLineItemsAdd as CheckoutLineItemsAddPayload;
+
+    console.log('2')
+    if(checkoutUserErrors){
+        throw Error(errors[0]?.message ?? errors[0].message)
+    }
+    console.log('3')
+    return checkout as Checkout
 }
 
 export default checkoutLineItemsAdd

@@ -34,11 +34,10 @@ const ProductView: FC<Props> = ({ product }) => {
         })
         return initialOptions
     }
-
     const [ choices, setChoices ] = useState<Choices>(initialOptions());
     const variant = getVariant(product, choices)
 
-    console.log(variant)
+
     const addProduct = async () => {
         try{
             //カートに商品を追加
@@ -51,16 +50,13 @@ const ProductView: FC<Props> = ({ product }) => {
                 }
             }
             const checkout = await checkoutLineItemsAdd(variable)
-            const newCart = checkoutToCart(checkout)
-            updateCart(newCart)
-            console.log("checkout: ", newCart)
+            console.log("checkout :",checkout)
+            onCartOpen()
         }catch(e: any){
             alert(`error: ${e.message}`)
         }
 
-        onCartOpen()
     }
-
 
     return (
         <>
