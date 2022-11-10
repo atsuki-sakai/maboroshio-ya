@@ -48,27 +48,28 @@ const Cart = () => {
                             <h3 className='font-serif text-xl font-bold'>お客様のカート</h3>
                             <div className='h-full w-full mt-12'>
                                 {
-                                    cart.lineItems.length === 0 && <p className={style.empty_text}>現在カート内に商品はございません。</p>
-                                }
-                                {
-                                    cart.lineItems.map((item: LineItem) => {
-                                        return (
-
-                                            <div key={item.id}>
-                                                <div className='flex items-start font-serif'>
-                                                    <Image className="flex-1 rounded-md shadow-md mb-2" src={item.variant.image?.url ?? placeholderImage} width={70} height={70} alt={"test"}/>
-                                                    <div className='pl-2 flex-1'>
-                                                        <h5 className='text-sm font-bold'>{item.name}</h5>
-                                                        <p className='text-xs mt-1'>数量 / {item.quantity}</p>
-                                                        <p className='text-xs'>¥ <span>{Math.floor(item.variant.price!)}</span> 税込</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )
-                                    })
+                                    cart.lineItems.length !== 0 ? <p className={style.empty_text}>現在カート内に商品はございません。</p> 
+                                    :  <div>
+                                            {
+                                                cart.lineItems.map((item: LineItem) => {
+                                                    return (
+                                                        <div key={item.id}>
+                                                            <div className='flex items-start font-serif'>
+                                                                <Image className="flex-1 rounded-md shadow-md mb-2" src={item.variant.image?.url ?? placeholderImage} width={70} height={70} alt={"test"}/>
+                                                                <div className='pl-2 flex-1'>
+                                                                    <h5 className='text-sm font-bold'>{item.name}</h5>
+                                                                    <p className='text-xs mt-1'>数量 / {item.quantity}</p>
+                                                                    <p className='text-xs'>¥ <span>{Math.floor(item.variant.price!)}</span> 税込</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })
+                                            }
+                                            <div className="text-gray-700 font-serif">合計 : <span className="font-bold font-sans">¥{cart.totalPrice ?? 0}</span> <span className="text-xs">税込</span> </div>
+                                        </div>
                                 }
                             </div>
-                            <div>合計金額 : {cart.totalPrice}</div>
                             <div className='absolute left-0 right-0 top-0 -z-10 w-full h-full'>
                                 <Image src={"/images/wasi.png"} layout="fill" width="100%" height="100%" alt={"background image"} />
                             </div>
