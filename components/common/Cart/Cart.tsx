@@ -45,9 +45,18 @@ const Cart = () => {
                             <h3 className='font-serif text-xl font-bold'>お客様のカート</h3>
                             <div className='flex h-full w-full justify-center items-center'>
                                 {
-                                    cart.lineItems.length === 0 ?
-                                    <p className={style.empty_text}>現在カート内に商品はございません。</p>
-                                    : <p>{cart.lineItems.map((item: LineItem) => item.name)}</p>
+                                    cart.lineItems.length === 0 && <p className={style.empty_text}>現在カート内に商品はございません。</p>
+                                }
+                                {
+                                    cart.lineItems.map((item: LineItem) => {
+                                        return (
+                                            <div key={item.id}>
+                                                <h3>{item.name}</h3>
+                                                <p>{item.quantity}</p>
+                                                <p>{item.variant.price}</p>
+                                            </div>
+                                        )
+                                    })
                                 }
                             </div>
                             <div className='absolute left-0 right-0 top-0 -z-10 w-full h-full'>

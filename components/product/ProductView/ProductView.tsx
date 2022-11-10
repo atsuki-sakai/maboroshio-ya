@@ -37,7 +37,7 @@ const ProductView: FC<Props> = ({ product }) => {
     const variant = getVariant(product, choices)
 
 
-    const addProduct = async () => {
+    const addItem = async () => {
         try{
             const variable = {
                 checkoutId: getCheckoutId() ?? cart.id,
@@ -117,7 +117,7 @@ const ProductView: FC<Props> = ({ product }) => {
                         </div>
                     </div>
                     <div className='fixed bottom-0 left-0 bg-orange-600 w-1/2 rounded-tr-md z-50'>
-                        <button onClick={addProduct} className='w-full h-full'>
+                        <button onClick={addItem} className='w-full h-full'>
                             <div className='text-center py-3'>
                                 <p className='text-white font-bold'>カートへ追加</p>
                             </div>
