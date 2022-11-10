@@ -8,14 +8,14 @@ const normalizeProductImages = ({edges}: {edges: Array<ImageEdge>}): any => {
 }
 
 
-const normalizeLineItem = ({node: { id, title, variant, quantity, discountAllocations, ...rest }}: CheckoutLineItemEdge): LineItem => {
+const normalizeLineItem = ({node: { id, title, variant, quantity, ...rest }}: CheckoutLineItemEdge): LineItem => {
     return {
         id,
         variantId: String(variant?.id),
         productId: String(variant?.id),
         name: title,
         path: variant?.product?.handle ?? "",
-        discounts: discountAllocations.map((discount) => discount.allocatedAmount.amount),
+        discounts: [],
         quantity,
         options: variant?.selectedOptions.map(({name, value}: SelectedOption) => {
             const option = normarizeProductOption({
