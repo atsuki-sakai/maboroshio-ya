@@ -28,9 +28,12 @@ const checkoutLineItemsAdd = async ( { checkoutId, lineItems }: CheckoutLineItem
         throw Error(errors[0]?.message ?? errors[0].message)
     }
     console.log('1')
+    console.log("data: ", data)
     const { checkout, checkoutUserErrors } =  data.checkoutLineItemsAdd as CheckoutLineItemsAddPayload;
 
     console.log('2')
+    console.log(checkout)
+    console.log(checkoutUserErrors)
     if(checkoutUserErrors){
         throw Error(errors[0]?.message ?? errors[0].message)
     }
