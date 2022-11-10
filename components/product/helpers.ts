@@ -8,7 +8,10 @@ export type Choices = {
 }
 
 
-export const getVariant = (product: Product, choices: Choices) =>
+export const getVariant = (product: Product, choices: Choices) => {
+    if(choices.title === "default title"){
+        return product.variants[0]
+    }
     product.variants.find(variant =>
         variant.options.every(variantOption => {
             const optionName = variantOption.displayName.toLocaleLowerCase()
@@ -16,3 +19,4 @@ export const getVariant = (product: Product, choices: Choices) =>
                 choices[optionName] === variantOption.values[0].label
         })
     )
+}

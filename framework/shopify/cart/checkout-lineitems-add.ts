@@ -23,10 +23,14 @@ const checkoutLineItemsAdd = async ( { checkoutId, lineItems }: CheckoutLineItem
             lineItems: lineItems
         })
     })
-    const { data, errors } = await response.json()
+
+    console.log("0")
+    const { data, errors } = await response.json();
+    console.log("1")
     if(errors){
         throw Error(errors[0]?.message ?? errors[0].message)
     }
+    console.log('2')
     const { checkout } =  data.checkoutLineItemsAdd as CheckoutLineItemsAddPayload;
     return checkout as Checkout
 }

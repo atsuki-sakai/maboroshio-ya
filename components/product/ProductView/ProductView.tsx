@@ -40,7 +40,7 @@ const ProductView: FC<Props> = ({ product }) => {
     const addItem = async () => {
         try{
             const variable = {
-                checkoutId: getCheckoutId() ?? cart.id,
+                checkoutId: cart.id,
                 lineItems: {
                     variantId: variant!.id,
                     quantity: 1
