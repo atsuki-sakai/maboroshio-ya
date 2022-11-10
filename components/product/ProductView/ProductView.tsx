@@ -38,7 +38,7 @@ const ProductView: FC<Props> = ({ product }) => {
 
 
     const addProduct = async () => {
-        
+        try{
             const variable = {
                 checkoutId: getCheckoutId() ?? cart.id,
                 lineItems: {
@@ -47,12 +47,12 @@ const ProductView: FC<Props> = ({ product }) => {
                 }
             }
             const checkout = await checkoutLineItemsAdd(variable)
-            console.log("product view checkout :", checkout)
             const newCart = checkoutToCart(checkout)
-            console.log(newCart)
-            // updateCart(newCart)
-            // console.log(cart)
-            // onCartOpen()
+            updateCart(newCart)
+            onCartOpen()
+        }catch(e: any){
+            alert(`error: ${e.message}`)
+        }
 
     }
 
