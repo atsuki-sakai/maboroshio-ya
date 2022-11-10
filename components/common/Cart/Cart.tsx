@@ -66,7 +66,7 @@ const Cart = () => {
                                                     )
                                                 })
                                             }
-                                            <div className="text-gray-700 font-serif mt-8">合計 : <span className="font-bold font-sans">¥{Math.floor(cart.totalPrice)}</span> <span className="text-xs">税込</span> </div>
+                                            <div className="font-serif mt-6">合計 : <span className="font-bold font-sans">¥{Math.floor(cart.totalPrice)}</span> <span className="text-xs">税込</span> </div>
                                         </div>
                                 }
                             </div>
