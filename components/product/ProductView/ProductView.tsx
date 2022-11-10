@@ -38,6 +38,8 @@ const ProductView: FC<Props> = ({ product }) => {
 
 
     const addItem = async () => {
+        console.log("cart: ",cart)
+        console.log("checkout id: ",getCheckoutId())
         try{
             const variable = {
                 checkoutId: cart.id,
@@ -46,7 +48,9 @@ const ProductView: FC<Props> = ({ product }) => {
                     quantity: 1
                 }
             }
+            console.log('1')
             const checkout = await checkoutLineItemsAdd(variable)
+            console.log("2")
             const newCart = checkoutToCart(checkout)
             updateCart(newCart)
             onCartOpen()

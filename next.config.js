@@ -5,7 +5,7 @@ module.exports = {
   reactStrictMode: true,
   swcMinify: true,
   experimental: {
-    scrollRestooration: true
+    scrollRestoration: true,
   },
   images:{
     domains: [ "cdn.shopify.com"]
