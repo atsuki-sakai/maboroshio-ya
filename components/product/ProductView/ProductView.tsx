@@ -1,13 +1,16 @@
 
 
-import { FC } from 'react'
+import { FC, useState, useEffect } from 'react'
 import Image from 'next/image';
 import { Product } from '@shopify/types/product'
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import '@splidejs/splide/css'; 
 import { Container } from "@components/ui";
-import { useCart } from '@components/context';
+import { useCart, useUI } from '@components/context';
 import { Cart, LineItem } from '@shopify/types/cart'
+import { Choices, getVariant } from '../helpers'
+import checkoutLineItemsAdd from '@shopify/cart/checkout-lineitems-add';
+import { getCheckoutId } from '@shopify/cart';
 
 
 
@@ -19,13 +22,43 @@ interface Props {
 const ProductView: FC<Props> = ({ product }) => {
 
     const { cart, updateCart } = useCart()
+    const { onCartOpen } = useUI()
 
-    
-    const addProduct = async () => {
-        
-        const newCart:Cart = { ...cart, lineItems: [] }
-        updateCart(newCart)
+    const initialOptions = () => {
+        let initialOptions: {[key: string]: string} = {}
+        product.variants[0].options.map((option) => {
+            initialOptions = {
+                ...initialOptions,
+                [option.displayName.toLocaleLowerCase()]:option.values[0].label.toLocaleLowerCase()
+            }
+        })
+        return initialOptions
     }
+
+    const [ choices, setChoices ] = useState<Choices>(initialOptions());
+    const variant = getVariant(product, choices)
+
+    console.log(variant)
+    const addProduct = async () => {
+        try{
+            //カートに商品を追加
+            //checkoutに商品を追加
+            const variable = {
+                checkoutId: getCheckoutId() ?? cart.id,
+                lineItems: {
+                    variantId: variant!.id,
+                    quantity: 1
+                }
+            }
+            const checkout = await checkoutLineItemsAdd(variable)
+            console.log(checkout)
+        }catch(e: any){
+            alert(`error: ${e.message}`)
+        }
+
+        onCartOpen()
+    }
+
 
     return (
         <>
@@ -52,10 +85,37 @@ const ProductView: FC<Props> = ({ product }) => {
                         </div>
                         <h1 className='py-2 font-bold text-2xl'>{product.name}</h1>
                         <div className='flex items-center justify-start space-x-12'>
-                            <p className='text-base text-red-500'>¥ <span className={`text-2xl font-sans font-bold ${product.totalInventory === 0 ? "line-through" : "" }`}>{Number(product.priceRange.minVariantPrice.amount)}</span> 税込</p>
+                            <p className='text-base text-red-500'>¥ <span className={`text-2xl font-sans font-bold ${product.totalInventory === 0 ? "line-through" : "" }`}>{variant?.price}</span> 税込</p>
                             {
                                 product.totalInventory === 0 ? <p className='bg-gray-600 text-white px-4 py-0.5'>売り切れ</p> : ""
                             }
+                        </div>
+                        <div className='flex items-end'>
+                        <section>
+                        {product.options.map((option, index) =>
+                            <div key={index}>
+                                <h2 className='text-sm mt-2'>{ option.displayName }</h2>
+                                <div className='flex items-row py-2'>
+                                    {
+                                        option.values.map((value, index) => {
+                                            const activeChoice = choices[option.displayName.toLowerCase()]
+                                            return (
+                                                <div className={`text-xs ml-2 px-3 py-3 rounded-full h-12 w-12 flex justify-center items-center shadow-md transfrom duration-300 ease-in-out ${ activeChoice === value.label ? "scale-110 border border-green-300" : "bg-gray-100 scale-95" }`} key={index} onClick={() => {
+                                                    setChoices({
+                                                        ...choices,
+                                                        [option.displayName.toLocaleLowerCase()]: value.label.toLocaleLowerCase(),
+                                                        price: String(product.variants[index].price)
+                                                    })
+                                                }}>
+                                                    <p className='font-sans'><span className='font-bold text-sm'>{ value.label }</span></p>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
+                            </div>
+                        )}
+                    </section>
                         </div>
                         <div className="p-3">
                             <p className='text-gray-500'>{product.description}</p>

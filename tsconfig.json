@@ -19,7 +19,8 @@
       "@styles/*": ["styles/*"],
       "@components/*": ["components/*"],
       "@aseets/*": ["assets/*"],
-      "@shopify/*": ["framework/shopify/*"]
+      "@shopify/*": ["framework/shopify/*"],
+      "@lib/*": ["lib/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
