@@ -48,7 +48,7 @@ const Cart = () => {
                             <h3 className='font-serif text-xl font-bold'>お客様のカート</h3>
                             <div className='h-full w-full mt-12'>
                                 {
-                                    cart.lineItems.length !== 0 ? <p className={style.empty_text}>現在カート内に商品はございません。</p> 
+                                    cart.lineItems.length === 0 ? <p className={style.empty_text}>現在カート内に商品はございません。</p> 
                                     :  <div>
                                             {
                                                 cart.lineItems.map((item: LineItem) => {
