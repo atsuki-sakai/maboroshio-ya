@@ -10,7 +10,7 @@ import { useCart, useUI } from '@components/context';
 import { Cart, LineItem } from '@shopify/types/cart'
 import { Choices, getVariant } from '../helpers'
 import checkoutLineItemsAdd from '@shopify/cart/checkout-lineitems-add';
-import { getCheckoutId } from '@shopify/cart';
+import { checkoutToCart, getCheckoutId } from '@shopify/cart';
 
 
 
@@ -51,7 +51,9 @@ const ProductView: FC<Props> = ({ product }) => {
                 }
             }
             const checkout = await checkoutLineItemsAdd(variable)
-            console.log("checkout: ", checkout)
+            const newCart = checkoutToCart(checkout)
+            updateCart(newCart)
+            console.log("checkout: ", newCart)
         }catch(e: any){
             alert(`error: ${e.message}`)
         }
