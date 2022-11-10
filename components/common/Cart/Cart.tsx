@@ -57,7 +57,7 @@ const Cart = () => {
                                                             <div className='flex items-start font-serif'>
                                                                 <Image className="flex-1 rounded-md shadow-md mb-2" src={item.variant.image?.url ?? placeholderImage} width={70} height={70} alt={"test"}/>
                                                                 <div className='pl-2 flex-1'>
-                                                                    <h5 className='text-sm font-bold'>{item.name}</h5>
+                                                                    <h5 className='text-sm font-bold'>{item.variant.name}</h5>
                                                                     <p className='text-xs mt-1'>数量 / {item.quantity}</p>
                                                                     <p className='text-xs'>¥ <span>{Math.floor(item.variant.price!)}</span> 税込</p>
                                                                 </div>
