@@ -46,7 +46,7 @@ const Cart = () => {
                         </div>
                         <div className='col-span-3 bg-transparent rounded-tl-md rounded-bl-md p-5 overflow-hidden relative'>
                             <h3 className='font-serif text-xl font-bold'>お客様のカート</h3>
-                            <div className='h-full w-full mt-12'>
+                            <div className='h-full w-full mt-8'>
                                 {
                                     cart.lineItems.length === 0 ? <p className={style.empty_text}>現在カート内に商品はございません。</p> 
                                     :  <div>
@@ -66,7 +66,7 @@ const Cart = () => {
                                                     )
                                                 })
                                             }
-                                            <div className="text-gray-700 font-serif">合計 : <span className="font-bold font-sans">¥{cart.totalPrice ?? 0}</span> <span className="text-xs">税込</span> </div>
+                                            <div className="text-gray-700 font-serif mt-8">合計 : <span className="font-bold font-sans">¥{Math.floor(cart.totalPrice)}</span> <span className="text-xs">税込</span> </div>
                                         </div>
                                 }
                             </div>
