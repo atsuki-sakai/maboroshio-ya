@@ -43,7 +43,7 @@ const Cart = () => {
                         </div>
                         <div className='col-span-3 bg-transparent rounded-tl-md rounded-bl-md p-5 overflow-hidden relative'>
                             <h3 className='font-serif text-xl font-bold'>お客様のカート</h3>
-                            <div className='flex h-full w-full justify-center items-center'>
+                            <div className='h-full w-full mt-12'>
                                 {
                                     cart.lineItems.length === 0 && <p className={style.empty_text}>現在カート内に商品はございません。</p>
                                 }
@@ -53,7 +53,7 @@ const Cart = () => {
                                             <div key={item.id}>
                                                 <h3>{item.name}</h3>
                                                 <p>{item.quantity}</p>
-                                                <p>{item.variant.price}</p>
+                                                <p>{item.variant.price?.toFixed()}</p>
                                             </div>
                                         )
                                     })
