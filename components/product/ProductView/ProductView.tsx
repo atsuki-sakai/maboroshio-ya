@@ -51,7 +51,7 @@ const ProductView: FC<Props> = ({ product }) => {
                 }
             }
             const checkout = await checkoutLineItemsAdd(variable)
-            console.log(checkout)
+            console.log("checkout: ", checkout)
         }catch(e: any){
             alert(`error: ${e.message}`)
         }

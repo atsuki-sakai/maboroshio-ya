@@ -1,5 +1,5 @@
 
-import { CustomerCreatePayload } from "@shopify/shema"
+import { Checkout, CustomerCreatePayload } from "@shopify/shema"
 import { generateApiUrl } from "@shopify/utils/generate-api-url"
 
 
@@ -12,7 +12,7 @@ interface CheckoutLineItemsAddType {
     }
 }
 
-const checkoutLineItemsAdd = async ( { checkoutId, lineItems }: CheckoutLineItemsAddType ): Promise<any> => {
+const checkoutLineItemsAdd = async ( { checkoutId, lineItems }: CheckoutLineItemsAddType ): Promise<Checkout> => {
 
     const checkoutLineItemsAddApiUrl = generateApiUrl({type:"CHECKOUT_LINEITEMS_ADD"})!
     const response = await fetch(checkoutLineItemsAddApiUrl, {
@@ -28,7 +28,8 @@ const checkoutLineItemsAdd = async ( { checkoutId, lineItems }: CheckoutLineItem
         throw Error(errors[0]?.message ?? errors[0].message)
     }
     console.log("data: ",data)
-    return data;
+    console.log(data.checkoutLineItemsAdd.checkout)
+    return data.checkoutLineItemsAdd.checkout as Checkout;
 }
 
 export default checkoutLineItemsAdd
