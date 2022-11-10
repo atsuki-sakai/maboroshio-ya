@@ -53,7 +53,7 @@ const Cart = () => {
                                             <div key={item.id}>
                                                 <h3>{item.name}</h3>
                                                 <p>{item.quantity}</p>
-                                                <p>{item.variant.price?.toFixed()}</p>
+                                                <p>{Math.floor(item.variant.price!)}</p>
                                             </div>
                                         )
                                     })
