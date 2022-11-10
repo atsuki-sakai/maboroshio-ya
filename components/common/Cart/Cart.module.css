@@ -4,6 +4,6 @@
 }
 
 .empty_text {
-    @apply text-gray-500 font-bold text-lg font-serif;
+    @apply text-gray-500 font-bold text-lg font-serif w-fit mx-auto;
     writing-mode: vertical-rl;
 }
