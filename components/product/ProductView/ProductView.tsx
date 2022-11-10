@@ -53,7 +53,6 @@ const ProductView: FC<Props> = ({ product }) => {
         }catch(e: any){
             alert(`error: ${e.message}`)
         }
-
     }
 
     return (
