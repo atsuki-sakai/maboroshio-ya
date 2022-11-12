@@ -1,6 +1,6 @@
 
 
-import { FC, useState, useEffect } from 'react'
+import { FC, useState } from 'react'
 import Image from 'next/image';
 import { Product } from '@shopify/types/product'
 import { Splide, SplideSlide } from "@splidejs/react-splide";
@@ -10,8 +10,8 @@ import { useCart, useUI } from '@components/context';
 import { Choices, getVariant } from '../helpers'
 import checkoutLineItemsAdd from '@shopify/cart/checkout-lineitems-add';
 import { checkoutToCart, getCheckoutId } from '@shopify/cart';
-
-
+import { motion } from 'framer-motion';
+import LoadCircle from '@components/icon/LoadCircle';
 
 interface Props {
     product: Product
@@ -34,28 +34,27 @@ const ProductView: FC<Props> = ({ product }) => {
         return initialOptions
     }
     const [ choices, setChoices ] = useState<Choices>(initialOptions());
+    const [isLoading, setIsLoading] = useState(false);
     const variant = getVariant(product, choices)
 
-
     const addItem = async () => {
-        console.log("cart: ",cart)
-        console.log("checkout id: ",getCheckoutId())
+        setIsLoading(true)
         try{
             const variable = {
-                checkoutId: cart.id,
+                checkoutId: getCheckoutId() ?? cart.id,
                 lineItems: {
                     variantId: variant!.id,
                     quantity: 1
                 }
             }
-            console.log('1')
             const checkout = await checkoutLineItemsAdd(variable)
-            console.log("2")
             const newCart = checkoutToCart(checkout)
             updateCart(newCart)
             onCartOpen()
         }catch(e: any){
             alert(`error: ${e.message}`)
+        }finally{
+            setIsLoading(false)
         }
     }
 
@@ -85,9 +84,6 @@ const ProductView: FC<Props> = ({ product }) => {
                         <h1 className='py-2 font-bold text-2xl'>{product.name}</h1>
                         <div className='flex items-center justify-start space-x-12'>
                             <p className='text-base text-red-500'>¥ <span className={`text-2xl font-sans font-bold ${product.totalInventory === 0 ? "line-through" : "" }`}>{variant?.price}</span> 税込</p>
-                            {
-                                product.totalInventory === 0 ? <p className='bg-gray-600 text-white px-4 py-0.5'>売り切れ</p> : ""
-                            }
                         </div>
                         <div className='flex items-end'>
                         <section>
@@ -99,13 +95,17 @@ const ProductView: FC<Props> = ({ product }) => {
                                         option.values.map((value, index) => {
                                             const activeChoice = choices[option.displayName.toLowerCase()]
                                             return (
-                                                <div className={`text-xs ml-2 px-3 py-3 rounded-full h-12 w-12 flex justify-center items-center shadow-md transfrom duration-300 ease-in-out ${ activeChoice === value.label ? "scale-110 border border-green-300" : "bg-gray-100 scale-95" }`} key={index} onClick={() => {
-                                                    setChoices({
-                                                        ...choices,
-                                                        [option.displayName.toLocaleLowerCase()]: value.label.toLocaleLowerCase(),
-                                                        price: String(product.variants[index].price)
-                                                    })
-                                                }}>
+                                                <div
+                                                    className={`text-xs ml-2 px-3 py-3 rounded-full h-12 w-12 flex justify-center items-center shadow-md transfrom duration-300 ease-in-out ${ activeChoice === value.label ? "scale-110 border border-green-300" : "bg-gray-100 scale-95" }`} 
+                                                    key={index}
+                                                    onClick={() => {
+                                                        setChoices({
+                                                            ...choices,
+                                                            [option.displayName.toLocaleLowerCase()]: value.label.toLocaleLowerCase(),
+                                                            price: String(product.variants[index].price)
+                                                        })
+                                                    }}
+                                                >
                                                     <p className='font-sans'><span className='font-bold text-sm'>{ value.label }</span></p>
                                                 </div>
                                             )
@@ -116,16 +116,19 @@ const ProductView: FC<Props> = ({ product }) => {
                         )}
                     </section>
                         </div>
+                        <div className={`w-1/2 rounded-md z-50 ${product.totalInventory === 0 ? "bg-gray-500" : "bg-green-500"}`} >
+                            <button onClick={addItem} className='w-full h-full' disabled={product.totalInventory === 0}>
+                                <div className='text-center h-full py-3 flex items-center justify-center space-x-2'>
+                                    <div className='text-white font-bold'>{product.totalInventory === 0 ? "売り切れ" : "カートへ追加"}</div>
+                                    <motion.div className='flex items-center' initial={{width:0 , height:0, opacity:0}} animate={{width: isLoading ? 20: 0, height: isLoading ? 12: 0, opacity: isLoading ? 1: 0}}>
+                                        <LoadCircle className='animate-spin text-blue-500' />
+                                    </motion.div>
+                                </div>
+                            </button>
+                        </div>
                         <div className="p-3">
                             <p className='text-gray-500'>{product.description}</p>
                         </div>
-                    </div>
-                    <div className='fixed bottom-0 left-0 bg-orange-600 w-1/2 rounded-tr-md z-50'>
-                        <button onClick={addItem} className='w-full h-full'>
-                            <div className='text-center py-3'>
-                                <p className='text-white font-bold'>カートへ追加</p>
-                            </div>
-                        </button>
                     </div>
                 </div>
             </Container>

@@ -11,14 +11,14 @@ const placeholderImage = "/images/product-image-placeholder.svg"
 
 const ProductCard = ({product} : Props) => {
     return (
-        <div key={product.id}>
+        <div key={product.id} className="rounded-md overflow-hidden">
             <Link href={`/products/${product.slug}`} passHref>
                 <a>
                     <h4 className='text-sm font-serif text-gray-800 text-center pb-1'>
                         { product.name }
                     </h4>
                     {
-                        product.images && <div className='shadow-md rounded-md relative'>
+                        product.images && <div className='relative'>
                                             <Image
                                                 alt={product.name ?? "Product Image"}
                                                 src={product.images[0]?.url ?? placeholderImage}
