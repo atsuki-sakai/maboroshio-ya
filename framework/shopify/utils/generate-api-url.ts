@@ -5,23 +5,20 @@ export type ApiPath = {
     type: "CREATE_CUSTOMER" | "CREATE_CHECKOUT" | "GET_CHECKOUT" | "UPDATE_CHECKOUT" | "CHECKOUT_LINEITEMS_ADD"
 }
 
-//開発時はtrue ngrokは都度生成されるので変更する
-const dev = false
-const baseUrl = dev ? "https://7ecf-219-122-209-55.jp.ngrok.io" : HOSTING_URL
 
 export const generateApiUrl = (apiPath: ApiPath) => {
     switch(apiPath.type){
         case "CREATE_CUSTOMER": {
-            return `${baseUrl}/api/create-customer`
+            return `${HOSTING_URL}/api/create-customer`
         }
         case "CREATE_CHECKOUT": {
-            return `${baseUrl}/api/create-checkout`
+            return `${HOSTING_URL}/api/create-checkout`
         }
         case "GET_CHECKOUT": {
-            return `${baseUrl}/api/get-checkout`
+            return `${HOSTING_URL}/api/get-checkout`
         }
         case "CHECKOUT_LINEITEMS_ADD": {
-            return `${baseUrl}/api/checkout-lineitems-add`
+            return `${HOSTING_URL}/api/checkout-lineitems-add`
         }
     }
 }
