@@ -6,7 +6,7 @@ export type ApiPath = {
 }
 
 //開発時はtrue ngrokは都度生成されるので変更する
-const dev = true
+const dev = false
 const baseUrl = dev ? "https://7ecf-219-122-209-55.jp.ngrok.io" : HOSTING_URL
 
 export const generateApiUrl = (apiPath: ApiPath) => {
