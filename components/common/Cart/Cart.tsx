@@ -25,7 +25,7 @@ const Cart = () => {
                 <div className='w-screen h-full'>
                     <div className='grid grid-cols-5'>
                         <div className='col-span-2 bg-black bg-opacity-70 h-full' onClick={onCartClose}>
-                            <div className='flex justify-center h-full items-center'>
+                            <div className="h-full flex justify-center pt-56 font-bold">
                                 <p onClick={onCartClose} className={style.close_text}>カートを閉じる</p>
                             </div>
                         </div>
@@ -56,12 +56,12 @@ const Cart = () => {
                                         })
                                     }
                                     <div className="font-serif mt-6">
-                                        合計 : <span className="font-sans">¥{Math.floor(cart.totalPrice)}</span><span className="text-xs">税込</span>
+                                        合計 : <span className="font-sans text-xl">¥{Math.floor(cart.totalPrice)}</span><span className="text-xs">税込</span>
                                     </div>
                                     <div className='flex justify-center mt-4'>
-                                        <div className='bg-green-500 px-6 py-1'>
-                                            <p className='text-white text-lg tracking-wider'>
-                                                商品を購入
+                                        <div className='bg-black px-6 py-1' onClick={() => console.log('購入')}>
+                                            <p className='text-white text-xl tracking-wider'>
+                                                購入する
                                             </p>
                                         </div>
                                     </div>

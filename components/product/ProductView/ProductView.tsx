@@ -70,7 +70,7 @@ const ProductView: FC<Props> = ({ product }) => {
                                 return (
                                     <SplideSlide key={index}>
                                         <div className='flex items-center justify-center bg-gray-100 rounded-md overflow-hidden shadow-md'>
-                                            <Image className='block w-full h-full object-cover' src={image.url} width={image.width} height={image.height} alt={image.altText} />
+                                            <Image className='block w-full h-full object-cover overflow-hidden rounded-md' src={image.url} width={image.width} height={image.height} alt={image.altText} />
                                         </div>
                                     </SplideSlide>
                                 )
@@ -96,7 +96,7 @@ const ProductView: FC<Props> = ({ product }) => {
                                             const activeChoice = choices[option.displayName.toLowerCase()]
                                             return (
                                                 <div
-                                                    className={`text-xs ml-2 px-3 py-3 rounded-full h-12 w-12 flex justify-center items-center shadow-md transfrom duration-300 ease-in-out ${ activeChoice === value.label ? "scale-110 border border-green-300" : "bg-gray-100 scale-95" }`} 
+                                                    className={`text-xs ml-2 px-3 py-3 rounded-full h-12 w-12 flex justify-center items-center shadow-md transfrom duration-300 ease-in-out ${ activeChoice === value.label ? "scale-110 border border-gray-500" : "bg-gray-100 scale-95" }`} 
                                                     key={index}
                                                     onClick={() => {
                                                         setChoices({
@@ -116,12 +116,12 @@ const ProductView: FC<Props> = ({ product }) => {
                         )}
                     </section>
                         </div>
-                        <div className={`w-1/2 rounded-md z-50 ${product.totalInventory === 0 ? "bg-gray-500" : "bg-green-500"}`} >
+                        <div className={`my-3 ${product.totalInventory === 0 ? "bg-gray-500" : "bg-black"}`} >
                             <button onClick={addItem} className='w-full h-full' disabled={product.totalInventory === 0}>
                                 <div className='text-center h-full py-3 flex items-center justify-center space-x-2'>
                                     <div className='text-white font-bold'>{product.totalInventory === 0 ? "売り切れ" : "カートへ追加"}</div>
-                                    <motion.div className='flex items-center' initial={{width:0 , height:0, opacity:0}} animate={{width: isLoading ? 20: 0, height: isLoading ? 12: 0, opacity: isLoading ? 1: 0}}>
-                                        <LoadCircle className='animate-spin text-blue-500' />
+                                    <motion.div className='-translate-y-1' initial={{width:0 , height:0, opacity:0}} animate={{width: isLoading ? 20: 0, height: isLoading ? 12: 0, opacity: isLoading ? 1: 0}}>
+                                        <LoadCircle className='animate-spin text-white' />
                                     </motion.div>
                                 </div>
                             </button>
