@@ -66,7 +66,7 @@ const Cart = () => {
                                                                         <div className='pl-2 flex-1'>
                                                                             <h5 className='text-sm font-bold'>{item.name}</h5>
                                                                             {
-                                                                                item.options![0].displayName === "Title" ? <></>:  <p className='text-xs'>{item.options![0].displayName} / {item.variant.name}</p>
+                                                                                item.options && item.options![0].displayName === "Title" ? <></>:  <p className='text-xs'>{item.options![0].displayName} / {item.variant.name}</p>
                                                                             }
                                                                             <p className='text-xs mt-1'>数量 / {item.quantity}</p>
                                                                             <p className='text-xs'>¥ <span>{Math.floor(item.variant.price!)}</span> 税込</p>
