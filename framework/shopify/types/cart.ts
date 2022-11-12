@@ -12,7 +12,7 @@ export interface LineItem {
     path: string | undefined
     quantity: number
     discounts: Discount[]
-    options: ProductOption[]
+    options?: ProductOption[]
     variant: Partial<ProductVariant>
 }
 
