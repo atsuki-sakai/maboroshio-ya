@@ -27,13 +27,13 @@ const CartCard = ({product, minus, plus}: Props) => {
                     <a>
                         <div className='relative' onClick={onCartClose}>
                             <Image className="flex-1 rounded-md shadow-md mb-2" src={product.variant.image?.url ?? placeholderImage} width={70} height={70} alt={"test"}/>
-                            <div className='absolute -top-1 -right-1 h-6 w-6 bg-gray-500 rounded-full flex justify-center items-center shadow-md'>
+                            <div className='absolute -top-1 -right-1 h-6 w-6 bg-gray-700 rounded-full flex justify-center items-center shadow-md'>
                                 <p className='text-white text-sm text-center font-sans'>{product.quantity}</p>
                             </div>
                         </div>
                     </a>
                 </Link>
-                <div className='pl-2 flex-1'>
+                <div className='pl-4 flex-1'>
                     <h5 className='text-sm'>{product.name}</h5>
                     {
                         product.options && product.options![0].displayName === "Title" ? <></>:  <p className='text-xs text-gray-500'>{product.options![0].displayName} / {product.variant.name}</p>
@@ -41,7 +41,7 @@ const CartCard = ({product, minus, plus}: Props) => {
                 </div>
             </div>
             <div className='flex items-center'>
-                <p className='w-full text-xs scale-90'>¥ <span className='text-base'>{product.variant.price! * product.quantity}</span> 税込</p>
+                <p className='w-full text-xs scale-90'>¥ <span className='text-base font-bold'>{product.variant.price! * product.quantity}</span> 税込</p>
                 <div className='w-full flex items-center space-x-2'>
                     <button onClick={() => minus(product.id)}>
                         <Minus className='text-red-400 h-5 w-5'/>

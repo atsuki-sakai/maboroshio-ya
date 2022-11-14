@@ -48,30 +48,30 @@ const Cart = () => {
                     <div className='grid grid-cols-6'>
                         <div className={`col-span-1 h-full transition duration-300 ease-in-out ${isCartOpen ? "bg-black bg-opacity-50": ""}`} onClick={onCartClose} />
                         <div className='col-span-5 h-full bg-white rounded-tl-md rounded-bl-md p-3'>
-                            <div className='flex items-center justify-between bg-gray-700 rounded-md px-3 py-2'>
+                            <div className='flex items-center justify-between bg-gray-700 shadow-md rounded-md px-3 py-2'>
                                 <h3 className=' text-white'>お客様のカート</h3>
                                 <div className='bg-white rounded-md'>
-                                    <button className='flex items-center text-black px-3 py-1' onClick={() => test()}>
-                                        <span className='text-xs'>カートを閉じる</span><RightArrow className="h-4 w-4" />
+                                    <button className='flex items-center text-gray-800 px-3 py-1' onClick={onCartClose}>
+                                        <span className='text-xs font-bold'>カートを閉じる</span><RightArrow className="h-4 w-4" />
                                     </button>
                                 </div>
                             </div>
-                            <div className='flex items-end justify-between mt-4'>
+                            <div className='flex items-end justify-between my-6'>
                                 <div className="text-base font-noto border-b">
-                                    合計  <span className="font-sans text-2xl">¥{Math.floor(cart.totalPrice)}</span><span className="text-sm"> 税込</span>
+                                    合計  <span className="font-sans text-3xl">¥{Math.floor(cart.totalPrice)}</span><span className="text-sm"> 税込</span>
                                 </div>
                                 <div>
-                                    <p className='text-xs text-gray-500'><span className='text-base font-semibold'>{cartTotalQuantity()}</span> 個の商品</p>
+                                    <p className='text-xs'><span className='text-lg font-semibold'>{cartTotalQuantity()}</span> 点の商品</p>
                                 </div>
                             </div>
-                            <div className='flex justify-center my-4'>
+                            <div className='flex justify-center my-6'>
                                 <div className='bg-gradient-to-tl to-green-600 from-lime-500 shadow-md w-full py-2 rounded-md' onClick={() => console.log('購入')}>
-                                    <p className='text-white text-sm text-center tracking-wider'>
+                                    <p className='text-white text-lg text-center tracking-wider'>
                                         商品を購入する
                                     </p>
                                 </div>
                             </div>
-                            <div className=' overflow-y-auto bg-gray-100 rounded-md mt-4 p-1'>
+                            <div className=' overflow-y-auto bg-gray-100 rounded-md my-4 p-1'>
                                     {
                                         cart.lineItems.length === 0
                                         ? <p>カート内に商品はありません</p>
