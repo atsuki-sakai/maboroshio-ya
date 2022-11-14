@@ -1,6 +1,6 @@
 import { ProductOption, ProductVariant } from "./product"
 
-interface Discount {
+export interface Discount {
     value: number
 }
 

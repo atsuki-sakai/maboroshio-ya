@@ -2,7 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Product } from '@shopify/types/product'
-
+import { truncate } from '@lib/truncate'
 interface Props {
     product: Product
 }
@@ -15,7 +15,7 @@ const ProductCard = ({product} : Props) => {
             <Link href={`/products/${product.slug}`} passHref>
                 <a>
                     <h4 className='text-sm font-serif text-gray-800 text-center pb-1'>
-                        { product.name }
+                        { truncate(product.name, 25) }
                     </h4>
                     {
                         product.images && <div className='relative'>

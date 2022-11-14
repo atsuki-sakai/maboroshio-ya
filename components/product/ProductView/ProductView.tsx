@@ -1,6 +1,6 @@
 
 
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import Image from 'next/image';
 import { Product } from '@shopify/types/product'
 import { Splide, SplideSlide } from "@splidejs/react-splide";
@@ -12,6 +12,7 @@ import checkoutLineItemsAdd from '@shopify/cart/checkout-lineitems-add';
 import { checkoutToCart, getCheckoutId } from '@shopify/cart';
 import { motion } from 'framer-motion';
 import LoadCircle from '@components/icon/LoadCircle';
+import Swatch from '../Swatch';
 
 interface Props {
     product: Product
@@ -23,7 +24,7 @@ const ProductView: FC<Props> = ({ product }) => {
     const { cart, updateCart } = useCart()
     const { onCartOpen } = useUI()
 
-    const initialOptions = () => {
+    const initialOptions = (product: Product) => {
         let initialOptions: {[key: string]: string} = {}
         product.variants[0].options.map((option) => {
             initialOptions = {
@@ -33,7 +34,7 @@ const ProductView: FC<Props> = ({ product }) => {
         })
         return initialOptions
     }
-    const [ choices, setChoices ] = useState<Choices>(initialOptions());
+    const [ choices, setChoices ] = useState<Choices>(initialOptions(product));
     const [isLoading, setIsLoading] = useState(false);
     const variant = getVariant(product, choices)
 
@@ -57,6 +58,10 @@ const ProductView: FC<Props> = ({ product }) => {
             setIsLoading(false)
         }
     }
+
+    useEffect(() => {
+        setChoices(initialOptions(product))
+    }, [product])
 
     return (
         <>

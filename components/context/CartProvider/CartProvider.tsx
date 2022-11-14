@@ -1,7 +1,7 @@
 
 import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import { createCheckout, getCheckoutId, getCheckout, checkoutToCart } from '@shopify/cart'
-import { Cart } from '@shopify/types/cart'
+import { Cart, LineItem } from '@shopify/types/cart'
 
 interface Props  {
     children: ReactNode | ReactNode[]
@@ -41,7 +41,10 @@ export const CartProvider = ({children}: Props) => {
 
     const [cart, setCart] = useState<Cart>(initialCart)
 
-    const updateCart = (cart: Cart) => setCart(cart);
+    const updateCart = (cart: Cart) => {
+        
+        setCart(cart)
+    };
 
     useEffect(() => {
 
@@ -68,7 +71,7 @@ export const CartProvider = ({children}: Props) => {
 
     const value = useMemo(() => {
         return {
-            cart: cart,
+            cart,
             updateCart
         }
     }, [cart])
