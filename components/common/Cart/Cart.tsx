@@ -44,7 +44,7 @@ const Cart = () => {
                 transition={{ duration:"0.7" }}
                 className="fixed top-0 left-0 right-0 bottom-0 overflow-y-auto z-50"
             >
-                <div className="w-screen h-full">
+                <div className="w-screen h-screen">
                     <div className='grid grid-cols-6'>
                         <div className={`col-span-1 h-full transition duration-300 ease-in-out ${isCartOpen ? "bg-black bg-opacity-50": ""}`} onClick={onCartClose} />
                         <div className='col-span-5 h-full bg-white rounded-tl-md rounded-bl-md p-3'>
