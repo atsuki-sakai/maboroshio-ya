@@ -83,12 +83,13 @@ const ProductView: FC<Props> = ({ product }) => {
                         }
                     </Splide>
                     <div className='font-serif'>
-                        <div className='w-full'>
+                        <div className='w-full mt-2 text-sm'>
                             <p>{product.vendor}</p>
                         </div>
                         <h1 className='py-2 font-bold text-2xl'>{product.name}</h1>
-                        <div className='flex items-center justify-start space-x-12'>
-                            <p className='text-base text-red-500'>¥ <span className={`text-2xl font-sans font-bold ${product.totalInventory === 0 ? "line-through" : "" }`}>{variant?.price}</span> 税込</p>
+                        <div className='flex items-center justify-between'>
+                            <p className='text-sm text-red-500'>¥ <span className={`text-2xl font-sans font-bold tracking-wider ${product.totalInventory === 0 ? "line-through" : "" }`}>{variant?.price}</span> 税込</p>
+                            <p className='font-sans'>在庫数 / {product.totalInventory}</p>
                         </div>
                         <div className='flex items-end'>
                         <section>

@@ -45,7 +45,7 @@ const Cart = () => {
                 className="fixed top-0 left-0 right-0 bottom-0 overflow-y-auto z-50"
             >
                 <div className="w-screen h-screen">
-                    <div className='grid grid-cols-6'>
+                    <div className='grid grid-cols-6 h-full'>
                         <div className={`col-span-1 h-full transition duration-300 ease-in-out ${isCartOpen ? "bg-black bg-opacity-50": ""}`} onClick={onCartClose} />
                         <div className='col-span-5 h-full bg-white rounded-tl-md rounded-bl-md p-3'>
                             <div className='flex items-center justify-between bg-gray-700 shadow-md rounded-md px-3 py-2'>
@@ -56,27 +56,43 @@ const Cart = () => {
                                     </button>
                                 </div>
                             </div>
-                            <div className='flex items-end justify-between my-6'>
-                                <div className="text-base font-noto border-b">
-                                    合計  <span className="font-sans text-3xl">¥{Math.floor(cart.totalPrice)}</span><span className="text-sm"> 税込</span>
+                            <div className='mt-5'>
+                                <div className='w-full flex items-center justify-end rounded-md text-center'>
+                                    <p className='bg-indigo-100 text-xs text-indigo-600 rounded-md px-2 py-0.5'>あと<span className='text-base font-bold'>¥{8000 - cart.totalPrice}</span>で<span className='text-sm font-bold'>送料無料</span></p>
                                 </div>
-                                <div>
-                                    <p className='text-xs'><span className='text-lg font-semibold'>{cartTotalQuantity()}</span> 点の商品</p>
+                                <div className='grid grid-cols-7 items-end justify-between my-3'>
+                                    <div className="col-span-5 text-gray-500 text-base font-noto">
+                                        合計 <span className="font-sans text-black text-3xl">¥{Math.floor(cart.totalPrice)}</span>
+                                    </div>
+                                    <div className='col-span-2'>
+                                        <p className='text-xs text-end'><span className='text-lg font-semibold'>{cartTotalQuantity()}</span> 点の商品</p>
+                                    </div>
                                 </div>
                             </div>
-                            <div className='flex justify-center my-6'>
-                                <div className='bg-gradient-to-tl to-green-600 from-lime-500 shadow-md w-full py-2 rounded-md' onClick={() => console.log('購入')}>
-                                    <p className='text-white text-lg text-center tracking-wider'>
+                            <div className='w-full mt-1 flex items-center justify-end'>
+                                <p className='text-xs text-blue-600 bg-blue-100 w-fit rounded-md px-3 py-1'>送料は次のステップで計算されます</p>
+                            </div>
+                            <div className='flex justify-center mt-4'>
+                                <button className={`bg-gradient-to-tl to-green-600 from-lime-500 shadow-md w-full py-2 rounded-md`} onClick={() => {
+                                    if(cart.lineItems.length === 0){
+                                        console.log('cart is empty...')
+                                    }else{
+                                        console.log('in the cart.')
+                                    }
+                                }}>
+                                    <p className='text-white text-lg font-bold text-center tracking-wider'>
                                         商品を購入する
                                     </p>
-                                </div>
+                                </button>
                             </div>
-                            <div className=' overflow-y-auto bg-gray-100 rounded-md my-4 p-1'>
+                            <div className=' overflow-y-auto bg-gray-100 rounded-md my-5 p-1 shadow-sm'>
                                     {
                                         cart.lineItems.length === 0
-                                        ? <p>カート内に商品はありません</p>
+                                        ? <div>
+                                            <p className='py-6 text-center font-bold text-gray-400'>カート内に商品はありません</p>
+                                        </div>
                                         : cart.lineItems.map((item: LineItem) => {
-                                            return <CartCard key={item.id} product={item} minus={(id) => minusLineItem(id)} plus={(id) => {console.log(id)}}/>
+                                            return <CartCard key={item.id} product={item}/>
                                         })
                                     }
                             </div>
