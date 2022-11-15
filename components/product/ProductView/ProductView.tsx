@@ -134,8 +134,8 @@ const ProductView: FC<Props> = ({ product }) => {
                             <button onClick={addItem} className='w-full h-full' disabled={isLoading || product.totalInventory === 0}>
                                 <div className='text-center h-full py-3 flex items-center justify-between space-x-2 px-6 bg-gray-50 rounded-md'>
                                     <div>
-                                        <p className='text-xs text-start scale-75 -translate-x-3 text-gray-500'>商品価格</p>
-                                        <p className='text-xs text-red-500'>¥ <span className={`text-2xl font-sans font-bold tracking-wider ${product.totalInventory === 0 ? "line-through" : "" }`}>{variant?.price}</span> 税込</p>
+                                        <p className='text-xs text-start scale-90 -translate-x-2 text-gray-500'>商品価格</p>
+                                        <p className='text-sm text-red-500'>¥ <span className={`text-2xl font-sans font-bold tracking-wider ${product.totalInventory === 0 ? "line-through" : "" }`}>{variant?.price}</span> 税込</p>
                                     </div>
                                     <div className={`flex items-center text-white font-bold px-6 py-2 ${product.totalInventory === 0 ? "bg-gray-500" : "bg-gradient-to-tl to-green-600 from-lime-600"} rounded-md shadow-md tracking-widest`}>
                                         <p>{product.totalInventory === 0 ? "売り切れ" : "カートへ追加"}</p>
