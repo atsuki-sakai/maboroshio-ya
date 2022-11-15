@@ -6,12 +6,11 @@ const Footer = () => {
     return (
         <div className=''>
             <div className='p-3'>
-
-                <div className="-translate-x-4 font-serif">
+                <div className="-translate-x-4 font-serif w-fit pl-4">
                     <Link href={"/"} passHref>
                         <a>
-                            <h1 className='text-lg font-bold pl-4'>まぼろし屋</h1>
-                            <p className='text-[10px] scale-90 -translate-y-1'>丹波篠山の食料品卸の店</p>
+                            <h1 className='text-lg font-bold'>まぼろし屋</h1>
+                            <p className='text-[10px] scale-90 -translate-y-1 -translate-x-1'>丹波篠山の食料品卸の店</p>
                         </a>
                     </Link>
                 </div>
