@@ -137,7 +137,7 @@ const ProductView: FC<Props> = ({ product }) => {
                                         <p className='text-xs text-start scale-75 -translate-x-3 text-gray-500'>商品価格</p>
                                         <p className='text-xs text-red-500'>¥ <span className={`text-2xl font-sans font-bold tracking-wider ${product.totalInventory === 0 ? "line-through" : "" }`}>{variant?.price}</span> 税込</p>
                                     </div>
-                                    <div className='flex items-center text-white font-bold px-6 py-2 bg-gradient-to-tl to-green-600 from-lime-600 rounded-md shadow-md tracking-widest'>
+                                    <div className={`flex items-center text-white font-bold px-6 py-2 ${product.totalInventory === 0 ? "bg-gray-500" : "bg-gradient-to-tl to-green-600 from-lime-600"} rounded-md shadow-md tracking-widest`}>
                                         <p>{product.totalInventory === 0 ? "売り切れ" : "カートへ追加"}</p>
                                         <motion.div className='-translate-y-1 pl-1' initial={{width:0 , height:0, opacity:0}} animate={{width: isLoading ? 20: 0, height: isLoading ? 12: 0, opacity: isLoading ? 1: 0}}>
                                             <LoadCircle className='animate-spin text-white h-5 w-5' />
