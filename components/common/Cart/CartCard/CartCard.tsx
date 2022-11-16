@@ -44,7 +44,7 @@ const CartCard = ({ product }: Props) => {
                     <button>
                         <Minus className='text-red-400 h-6 w-6'/>
                     </button>
-                    <input className='w-12 h-5 text-sm bg-white text-gray-700 border text-center rounded-md' id='quantity' type="text" value={product.quantity} />
+                    <input className='w-12 h-5 text-[17px] scale-80 bg-white text-gray-700 border text-center rounded-md' id='quantity' type="text" value={product.quantity} />
                     <button>
                         <Plus className='text-green-400 h-6 w-6'/>
                     </button>

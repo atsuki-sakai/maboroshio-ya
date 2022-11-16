@@ -4,6 +4,7 @@ const Document = () => {
     return (
         <Html lang="ja">
         <Head>
+            <meta name="viewport" content="width=device-wieth, initial-scale=1.0, maximum-scale=1.0"/>
             {/* <meta name="google-site-verification" content="0XtQNlT5YH6qHvShAPXOg1uXYnODAsVWsWhMpMGV15g" />
             <meta name="facebook-domain-verification" content="n3khm8j15exid0sb7a8tlc9kwgdfnw" /> */}
         </Head>
