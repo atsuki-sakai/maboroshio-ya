@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link';
 import { useUI, useCart } from '@components/context'
 import { motion } from 'framer-motion';
@@ -16,8 +16,8 @@ const Cart = () => {
 
     const { isCartOpen, onCartClose } = useUI();
     const { cart, updateCart } = useCart()
-    console.log("cart: ",cart)
-
+    const shippingFreeCost = 18000
+    const shippingFree = (shippingFreeCost - cart.totalPrice) > 0
 
     const minusLineItem = (productId: string) => {
         const newCart = cart;
@@ -30,13 +30,7 @@ const Cart = () => {
     }
 
     const cartTotalQuantity = () => cart.lineItems.map((item: LineItem) => item.quantity).reduce((sum, element) => sum + element, 0)
-    const test = () => {
-        cart.lineItems.map((item) => {
-            console.log(item)
-        })
-        console.log(cart)
-    }
-    console.log(getCheckoutId())
+
     return (
             <motion.div
                 initial={{ x:"100%", opacity:0.0 }}
@@ -58,21 +52,26 @@ const Cart = () => {
                             </div>
                             <div className='mt-5'>
                                 <div className='w-full flex items-center justify-end rounded-md text-center'>
-                                    <p className='bg-indigo-100 text-xs text-indigo-600 rounded-md px-2 py-0.5'>あと<span className='text-base font-bold'>¥{8000 - cart.totalPrice}</span>で<span className='text-sm font-bold'>送料無料</span></p>
+
+                                    {
+                                        shippingFree ? <p className='bg-indigo-100 text-xs text-indigo-600 rounded-md px-2 py-0.5'>あと<span className='text-base font-bold'>¥{shippingFreeCost - cart.totalPrice}</span>で<span className='text-sm font-bold'>送料無料</span></p> : <p className='bg-yellow-100 px-3 py-1 rounded-md'><span className='text-yellow-500 text-sm font-bold'>送料無料</span></p>
+                                    }
                                 </div>
-                                <div className='grid grid-cols-7 items-end justify-between my-3'>
-                                    <div className="col-span-5 text-gray-500 text-base font-noto">
+                                <div className='grid grid-cols-7 items-end justify-between mt-2 py-2 px-2 rounded-md bg-gray-50'>
+                                    <div className="col-span-5 text-gray-500 text-sm font-noto">
                                         合計 <span className="font-sans text-black text-3xl">¥{Math.floor(cart.totalPrice)}</span>
                                     </div>
                                     <div className='col-span-2'>
-                                        <p className='text-xs text-end'><span className='text-lg font-semibold'>{cartTotalQuantity()}</span> 点の商品</p>
+                                        <p className='text-sm text-end text-gray-500'><span className='text-lg font-semibold text-black'>{cartTotalQuantity()}</span> 点の商品</p>
                                     </div>
                                 </div>
                             </div>
                             <div className='w-full mt-1 flex items-center justify-end'>
-                                <p className='text-xs text-blue-600 bg-blue-100 w-fit rounded-md px-3 py-1'>送料は次のステップで計算されます</p>
+                                {
+                                    shippingFree ? <p className='text-xs text-blue-600 bg-blue-100 w-fit rounded-md px-3 py-1'>送料は次のステップで計算されます</p> : <></>
+                                }
                             </div>
-                            <div className='flex justify-center mt-4'>
+                            <div className='flex justify-center mt-3'>
                                 <button className={`bg-gradient-to-tl to-green-600 from-lime-500 shadow-md w-full py-2 rounded-md`} onClick={() => {
                                     if(cart.lineItems.length === 0){
                                         console.log('cart is empty...')

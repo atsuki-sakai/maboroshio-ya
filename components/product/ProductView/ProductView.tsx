@@ -13,6 +13,7 @@ import { checkoutToCart, getCheckoutId } from '@shopify/cart';
 import { motion } from 'framer-motion';
 import LoadCircle from '@components/icon/LoadCircle';
 import Swatch from '../Swatch';
+import { Minus, Plus } from '@components/icon';
 
 interface Props {
     product: Product
@@ -89,23 +90,25 @@ const ProductView: FC<Props> = ({ product }) => {
                                     {product.vendor}
                                 </p>
                             </div>
-                            <div className={`${product.totalInventory < 10 ? "bg-red-100" : "bg-blue-100"} rounded-md px-3 py-1`}>
-                                <p className={`font-sans text-xs ${product.totalInventory < 10 ? " text-red-500": "text-blue-500"}`}>残り<span className='text-sm font-bold'>{product.totalInventory}</span>点</p>
+                            <div className={`${product.totalInventory < 10 ? "bg-red-100" : "bg-green-100"} rounded-md px-3 py-1`}>
+                                <p className={`font-sans text-xs ${product.totalInventory < 10 ? " text-red-500": "text-green-500"}`}>残り<span className='text-sm font-bold'>{product.totalInventory}</span>点</p>
                             </div>
                         </div>
-                        <h1 className='py-5 font-bold text-xl'>{product.name}</h1>
+                        <h1 className='py-5 font-bold text-2xl'>{product.name}</h1>
                         <div className='flex items-end font-sans'>
                             <section>
                                 {product.options.map((option, index) =>
                                     <div key={index}>
-                                        <h2 className='text-sm mt-2'>{ option.displayName }</h2>
+                                        <div className='bg-indigo-100 w-fit rounded-md px-3 py-1'>
+                                            <p className='text-xs text-indigo-500'>{ option.displayName }</p>
+                                        </div>
                                         <div className='grid grid-cols-5 gap-1 py-2 w-full'>
                                             {
                                                 option.values.map((value, index) => {
                                                     const activeChoice = choices[option.displayName.toLowerCase()]
                                                     return (
                                                         <div
-                                                            className={`text-xs ml-2 px-3 py-3 rounded-full h-12 w-12 flex justify-center items-center shadow-md transfrom duration-300 ease-in-out ${ activeChoice === value.label ? "scale-110 border border-gray-500" : "bg-gray-100 scale-95 text-gray-500" }`} 
+                                                            className={`text-xs ml-2 px-2 py-2 rounded-full h-11 w-11 flex justify-center items-center shadow-md transfrom duration-300 ease-in-out ${ activeChoice === value.label ? "scale-110 border border-indigo-600 text-indigo-600 bg-indigo-50" : "bg-gray-100 scale-95 text-gray-500" }`} 
                                                             key={index}
                                                             onClick={() => {
                                                                 setChoices({
@@ -115,7 +118,7 @@ const ProductView: FC<Props> = ({ product }) => {
                                                                 })
                                                             }}
                                                         >
-                                                            <p className='font-sans'><span className='font-bold text-sm'>{ value.label }</span></p>
+                                                            <p className='font-sans'><span className='text-sm'>{ value.label }</span></p>
                                                         </div>
                                                     )
                                                 })
@@ -132,9 +135,19 @@ const ProductView: FC<Props> = ({ product }) => {
                     <div className='fixed bottom-0 left-0 right-0 h-fits z-40 bg-white border-t'>
                         <div className={``} >
                             <button onClick={addItem} className='w-full h-full' disabled={isLoading || product.totalInventory === 0}>
-                                <div className='text-center h-full py-3 flex items-center justify-between space-x-2 px-6 bg-gray-50 rounded-md'>
+                                <div className='text-center h-full py-2 flex items-center justify-between space-x-2 px-6 bg-gray-50 rounded-md'>
                                     <div>
-                                        <p className='text-xs text-start scale-90 -translate-x-2 text-gray-500'>商品価格</p>
+                                        <div className='flex items-center'>
+                                            <div className='w-full flex items-center space-x-2'>
+                                                <button>
+                                                    <Minus className='text-red-400 h-5 w-5'/>
+                                                </button>
+                                                <input className='w-12 h-5 text-sm bg-white text-gray-700 border text-center rounded-md' id='quantity' type="text" value={1} />
+                                                <button>
+                                                    <Plus className='text-green-400 h-5 w-5'/>
+                                                </button>
+                                            </div>
+                                        </div>
                                         <p className='text-sm text-red-500'>¥ <span className={`text-2xl font-sans font-bold tracking-wider ${product.totalInventory === 0 ? "line-through" : "" }`}>{variant?.price}</span> 税込</p>
                                     </div>
                                     <div className={`flex items-center text-white font-bold px-6 py-2 ${product.totalInventory === 0 ? "bg-gray-500" : "bg-gradient-to-tl to-green-600 from-lime-600"} rounded-md shadow-md tracking-widest`}>

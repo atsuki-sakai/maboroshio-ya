@@ -37,7 +37,7 @@ const Header = () => {
         <header className={style.root}>
             <div className={headerClassName}>
                 {/* MARQUEE */}
-                <div className="bg-green-900">
+                <div className="bg-green-800">
                     <Marquee>
                         <div className={style.marquee}>
                             <p>丹波篠山の特産品を買うならまぼろし屋！</p>
@@ -47,11 +47,19 @@ const Header = () => {
                 </div>
                 {/* MOBIEL HEADER */}
                 <div className={style.mobile_container}>
-                    <div className="-translate-x-2">
+                    <div className={style.mobile_menu}>
+                        <button onClick={onDrawerOpen}>
+                            <Menu/>
+                        </button>
+                        <button className='invisible'>
+                            <Menu/>
+                        </button>
+                    </div>
+                    <div className="">
                         <Link href={"/"} passHref>
                             <a>
-                                <h1 className='text-lg font-bold pl-[11px]'>まぼろし屋</h1>
-                                <p className='text-[10px] scale-75 -translate-y-1'>丹波篠山の食料品卸の店</p>
+                                <h1 className='text-lg font-bold'>まぼろし屋</h1>
+                                <p className='text-[10px] scale-75 -translate-y-1 -translate-x-3'>丹波篠山の食料品卸の店</p>
                             </a>
                         </Link>
                     </div>
@@ -61,9 +69,6 @@ const Header = () => {
                         </button>
                         <button onClick={onCartOpen}>
                             <Cart/>
-                        </button>
-                        <button onClick={onDrawerOpen}>
-                            <Menu/>
                         </button>
                     </div>
                 </div>
