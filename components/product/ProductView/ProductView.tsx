@@ -61,7 +61,7 @@ const ProductView: FC<Props> = ({ product }) => {
         }
     }
 
-    const handleChange = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setQuantity(parseInt(e.target.value))
     }
 
