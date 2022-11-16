@@ -4,9 +4,4 @@
 }
 
 .drawer_title {
-    @apply font-serif font-bold text-2xl mb-12;
-}
-.close_text {
-    @apply text-white font-serif;
-    writing-mode: vertical-rl;
 }

@@ -90,11 +90,16 @@ const ProductView: FC<Props> = ({ product }) => {
                                     {product.vendor}
                                 </p>
                             </div>
-                            <div className={`${product.totalInventory < 10 ? "bg-red-100" : "bg-green-100"} rounded-md px-3 py-1`}>
-                                <p className={`font-sans text-xs ${product.totalInventory < 10 ? " text-red-500": "text-green-500"}`}>残り<span className='text-sm font-bold'>{product.totalInventory}</span>点</p>
+                        </div>
+                        <div className='py-4'>
+                            <h1 className='font-bold text-2xl'>{product.name}</h1>
+                            <div className='flex items-center justify-between'>
+                                <p className='text-sm text-red-500'>¥ <span className={`text-2xl font-sans font-bold tracking-wider ${product.totalInventory === 0 ? "line-through" : "" }`}>{variant?.price}</span> 税込</p>
+                                <div className={`${product.totalInventory < 10 ? "bg-red-100" : "bg-green-100"} rounded-md px-3 py-1`}>
+                                    <p className={`font-sans text-xs ${product.totalInventory < 10 ? " text-red-500": "text-green-500"}`}>残り<span className='text-sm font-bold'>{product.totalInventory}</span>点</p>
+                                </div>
                             </div>
                         </div>
-                        <h1 className='py-5 font-bold text-2xl'>{product.name}</h1>
                         <div className='flex items-end font-sans'>
                             <section>
                                 {product.options.map((option, index) =>
@@ -134,30 +139,30 @@ const ProductView: FC<Props> = ({ product }) => {
                     </div>
                     <div className='fixed bottom-0 left-0 right-0 h-fits z-40 bg-white border-t'>
                         <div className={``} >
-                            <button onClick={addItem} className='w-full h-full' disabled={isLoading || product.totalInventory === 0}>
-                                <div className='text-center h-full py-2 flex items-center justify-between space-x-2 px-6 bg-gray-50 rounded-md'>
-                                    <div>
-                                        <div className='flex items-center'>
-                                            <div className='w-full flex items-center space-x-2'>
-                                                <button>
-                                                    <Minus className='text-red-400 h-5 w-5'/>
-                                                </button>
-                                                <input className='w-12 h-5 text-sm bg-white text-gray-700 border text-center rounded-md' id='quantity' type="text" value={1} />
-                                                <button>
-                                                    <Plus className='text-green-400 h-5 w-5'/>
-                                                </button>
-                                            </div>
+                            <div className='text-center h-full py-2 flex items-center justify-between space-x-2 px-6 bg-gray-50 rounded-md mb-1'>
+                                <div className='mb-1'>
+                                    <p className='text-xs scale-90 w-full text-start -translate-x-1'>購入数量</p>
+                                    <div className='flex items-center'>
+                                        <div className='w-full flex items-center space-x-2'>
+                                            <button>
+                                                <Minus className='text-red-400 h-7 w-7'/>
+                                            </button>
+                                            <input className='w-16 h-8 text-sm bg-white text-gray-700 border text-center rounded-md' id='quantity' type="text" value={1} />
+                                            <button>
+                                                <Plus className='text-green-400 h-7 w-7'/>
+                                            </button>
                                         </div>
-                                        <p className='text-sm text-red-500'>¥ <span className={`text-2xl font-sans font-bold tracking-wider ${product.totalInventory === 0 ? "line-through" : "" }`}>{variant?.price}</span> 税込</p>
                                     </div>
+                                </div>
+                                <button onClick={addItem} className='w-fit h-full' disabled={isLoading || product.totalInventory === 0}>
                                     <div className={`flex items-center text-white font-bold px-6 py-2 ${product.totalInventory === 0 ? "bg-gray-500" : "bg-gradient-to-tl to-green-600 from-lime-600"} rounded-md shadow-md tracking-widest`}>
                                         <p>{product.totalInventory === 0 ? "売り切れ" : "カートへ追加"}</p>
                                         <motion.div className='-translate-y-1 pl-1' initial={{width:0 , height:0, opacity:0}} animate={{width: isLoading ? 20: 0, height: isLoading ? 12: 0, opacity: isLoading ? 1: 0}}>
                                             <LoadCircle className='animate-spin text-white h-5 w-5' />
                                         </motion.div>
                                     </div>
-                                </div>
-                            </button>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
