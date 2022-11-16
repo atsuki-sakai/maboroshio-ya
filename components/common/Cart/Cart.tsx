@@ -36,7 +36,7 @@ const Cart = () => {
             <motion.div
                 initial={{ x:"100%", opacity:0.0 }}
                 animate={{ x: isCartOpen ? "0%" : "100%", opacity: isCartOpen ? 1.0 : 0.0 }}
-                transition={{ duration:"0.7" }}
+                transition={{ duration:"0.6" }}
                 className="fixed top-0 left-0 right-0 bottom-0 overflow-y-auto z-50"
             >
                 <div className="w-screen h-screen">

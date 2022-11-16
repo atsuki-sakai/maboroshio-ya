@@ -57,6 +57,9 @@ const ProductView: FC<Props> = ({ product }) => {
         }catch(e: any){
             alert(`error: ${e.message}`)
         }finally{
+            setTimeout(() => {
+                setQuantity(1)
+            }, 600)
             setIsLoading(false)
         }
     }
@@ -152,7 +155,7 @@ const ProductView: FC<Props> = ({ product }) => {
                                             <button onClick={() => setQuantity(quantity - 1)}>
                                                 <Minus className='text-red-400 h-7 w-7'/>
                                             </button>
-                                            <input className='w-16 h-10 text-[19px] scale-90 bg-white text-gray-700 border text-center rounded-md' id='quantity' type="text" value={quantity} onChange={handleChange} />
+                                            <input className='w-16 h-10 text-[19px] scale-90 bg-white text-gray-700 border text-center rounded-md focus:outline-none' id='quantity' type="number" value={quantity} onChange={handleChange} />
                                             <button onClick={() => setQuantity(quantity + 1)}>
                                                 <Plus className='text-green-400 h-7 w-7'/>
                                             </button>
