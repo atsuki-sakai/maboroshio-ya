@@ -65,7 +65,17 @@ const ProductView: FC<Props> = ({ product }) => {
     }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if(parseInt(e.target.value) <= 0 || parseInt(e.target.value) >= 100) return;
         setQuantity(parseInt(e.target.value))
+    }
+
+    const decrementQuantity = () => {
+        if(quantity <= 1) return;
+        setQuantity(quantity - 1)
+    }
+    const incrementQuantity = () => {
+        if(quantity >= 99) return;
+        setQuantity(quantity + 1)
     }
 
     useEffect(() => {
@@ -152,11 +162,11 @@ const ProductView: FC<Props> = ({ product }) => {
                                     {/* <p className='text-xs scale-90 w-full text-start -translate-x-1'>購入数量</p> */}
                                     <div className='flex items-center'>
                                         <div className='w-full flex items-center space-x-2'>
-                                            <button onClick={() => setQuantity(quantity - 1)}>
+                                            <button onClick={decrementQuantity}>
                                                 <Minus className='text-red-400 h-7 w-7'/>
                                             </button>
                                             <input className='w-16 h-10 text-[19px] scale-90 bg-white text-gray-700 border text-center rounded-md focus:outline-none' id='quantity' type="number" value={quantity} onChange={handleChange} />
-                                            <button onClick={() => setQuantity(quantity + 1)}>
+                                            <button onClick={incrementQuantity}>
                                                 <Plus className='text-green-400 h-7 w-7'/>
                                             </button>
                                         </div>
@@ -165,7 +175,7 @@ const ProductView: FC<Props> = ({ product }) => {
                                 <button onClick={addItem} className='w-fit h-full' disabled={isLoading || product.totalInventory === 0}>
                                     <div className={`flex items-center text-white font-bold px-6 py-2 ${product.totalInventory === 0 ? "bg-gray-500" : "bg-gradient-to-tl to-green-600 from-lime-600"} rounded-md shadow-md tracking-widest`}>
                                         <p>{product.totalInventory === 0 ? "売り切れ" : "カートへ追加"}</p>
-                                        <motion.div className='-translate-y-1 pl-1' initial={{width:0 , height:0, opacity:0}} animate={{width: isLoading ? 20: 0, height: isLoading ? 12: 0, opacity: isLoading ? 1: 0}}>
+                                        <motion.div className='-translate-y-1 pl-1' initial={{width:0 , height:0, opacity:0}} animate={{width: isLoading ? 20: 0, height: isLoading ? 12: 12, opacity: isLoading ? 1: 0}}>
                                             <LoadCircle className='animate-spin text-white h-5 w-5' />
                                         </motion.div>
                                     </div>
