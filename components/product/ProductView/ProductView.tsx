@@ -50,12 +50,13 @@ const ProductView: FC<Props> = ({ product }) => {
                     quantity: quantity
                 }
             }
+
             const checkout = await checkoutLineItemsAdd(variable)
             const newCart = checkoutToCart(checkout)
             updateCart(newCart)
             onCartOpen()
         }catch(e: any){
-            alert(`error: ${e.message}`)
+            alert(`Error: ${e.message}`)
         }finally{
             setTimeout(() => {
                 setQuantity(1)

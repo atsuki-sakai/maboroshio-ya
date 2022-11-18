@@ -1,6 +1,6 @@
 
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useUI, useCart } from '@components/context'
@@ -26,37 +26,26 @@ const CartCard = ({ product }: Props) => {
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if(e.target.value === "") {
-            setQuantity(0)
-        }else{
-            const parseNum = parseInt(e.target.value);
-            if(parseNum <= 0 || parseNum >= 100) return;
-            setQuantity(parseNum)
-        }
-        if(quantity !== 0){
-            updateQuantity();
-        }
+        if(parseInt(e.target.value) <= 0 || parseInt(e.target.value) >= 100) return;
+        setQuantity(parseInt(e.target.value) ?? 1)
     }
-
+    
     const increment = () => {
         if(quantity >= 99 || isUpdate) return;
         const newQuantity = quantity + 1
-        console.log("new:  ", newQuantity)
         setQuantity(newQuantity)
-        console.log("quantity: ",quantity);
-        updateQuantity();
+        updateQuantity(newQuantity)
     }
 
     const decriment = () => {
         if(quantity <= 1 || isUpdate) return;
         const newQuantity = quantity - 1
-        console.log("new:  ", newQuantity)
         setQuantity(newQuantity)
-        console.log("quantity: ",quantity);
-        updateQuantity()
+        updateQuantity(newQuantity)
     }
 
-    const updateQuantity = async() => {
+    const updateQuantity = async(quantity: number) => {
+        console.log("update q: ", quantity)
         setIsUpdate(true)
         try{
             const variable = {
@@ -104,7 +93,7 @@ const CartCard = ({ product }: Props) => {
                     <button onClick={decriment} disabled={isUpdate}>
                         <Minus className='text-red-400 h-6 w-6'/>
                     </button>
-                    <input className='w-12 h-6 text-[17px] scale-80 bg-white text-gray-700 border text-center rounded-md focus:outline-none' id='quantity' type="text" value={product.quantity} onChange={handleChange} disabled={isUpdate} />
+                    <input className='w-12 h-6 text-[17px] scale-80 bg-white text-gray-700 border text-center rounded-md focus:outline-none' id='quantity' type="text" value={quantity} onChange={handleChange} disabled={isUpdate} />
                     <button onClick={increment} disabled={isUpdate}>
                         <Plus className='text-green-400 h-6 w-6'/>
                     </button>
