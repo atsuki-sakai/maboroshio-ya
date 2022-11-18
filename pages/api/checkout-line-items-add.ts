@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 
 
-export interface CheckoutLineItemsAddType {
+export interface CheckoutLineItemsType {
     checkoutId: string,
     lineItems: {
         variantId: string,
@@ -16,7 +16,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 
     if(req.method !== "POST") throw Error("request is GET? this api is only POST!!!");
 
-    let body = await JSON.parse(req.body) as CheckoutLineItemsAddType
+    let body = await JSON.parse(req.body) as CheckoutLineItemsType
     const variables = {
         checkoutId: body.checkoutId,
         lineItems: body.lineItems

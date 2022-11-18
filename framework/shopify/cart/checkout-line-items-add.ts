@@ -4,7 +4,7 @@ import { generateApiUrl } from "@shopify/utils/generate-api-url"
 
 
 
-interface CheckoutLineItemsAddType {
+interface CheckoutLineItemsType {
     checkoutId: string,
     lineItems: {
         variantId: string,
@@ -12,9 +12,9 @@ interface CheckoutLineItemsAddType {
     }
 }
 
-const checkoutLineItemsAdd = async ( { checkoutId, lineItems }: CheckoutLineItemsAddType ): Promise<Checkout> => {
+const checkoutLineItemsAdd = async ( { checkoutId, lineItems }: CheckoutLineItemsType ): Promise<Checkout> => {
 
-    const checkoutLineItemsAddApiUrl = generateApiUrl({type:"CHECKOUT_LINEITEMS_ADD"})!
+    const checkoutLineItemsAddApiUrl = generateApiUrl({type:"CHECKOUT_LINE_ITEMS_ADD"})!
     const response = await fetch(checkoutLineItemsAddApiUrl, {
         method: "POST",
         mode: "no-cors",

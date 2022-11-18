@@ -8,7 +8,7 @@ import '@splidejs/splide/css';
 import { Container } from "@components/ui";
 import { useCart, useUI } from '@components/context';
 import { Choices, getVariant } from '../helpers'
-import checkoutLineItemsAdd from '@shopify/cart/checkout-lineitems-add';
+import checkoutLineItemsAdd from '@shopify/cart/checkout-line-items-add';
 import { checkoutToCart, getCheckoutId } from '@shopify/cart';
 import { motion } from 'framer-motion';
 import LoadCircle from '@components/icon/LoadCircle';

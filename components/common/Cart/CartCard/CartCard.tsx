@@ -6,10 +6,8 @@ import Image from 'next/image'
 import { useUI, useCart } from '@components/context'
 import { Cart, LineItem } from '@shopify/types/cart'
 import { Minus, Plus } from "@components/icon"
-import { prototype } from 'events'
-import { ProductCard } from '@components/product'
-import LoadCircle from '@components/icon/LoadCircle'
-import { motion } from 'framer-motion'
+import { checkoutToCart, getCheckoutId } from '@shopify/cart'
+import checkoutLineItemsUpdate from '@shopify/cart/checkout-line-items-update'
 
 interface Props {
     product: LineItem
@@ -19,31 +17,65 @@ interface Props {
 const placeholderImage = "/images/product-image-placeholder.svg"
 
 const CartCard = ({ product }: Props) => {
+
+    const { cart, updateCart } = useCart()
+    const lineItem:LineItem = cart.lineItems.filter((lineItem: LineItem) => lineItem.variantId === product.variantId)[0]
     const { onCartClose } = useUI();
     const [quantity, setQuantity] = useState<number>(product.quantity)
-    const { cart, updateCart } = useCart()
     const [ isUpdate, setIsUpdate ] = useState(false)
 
-    const increment = () => {
-        if(quantity >= 99) return;
-        setQuantity(quantity + 1)
-    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if(parseInt(e.target.value) <= 0 || parseInt(e.target.value) >= 100) return;
-        setQuantity(parseInt(e.target.value))
+        if(e.target.value === "") {
+            setQuantity(0)
+        }else{
+            const parseNum = parseInt(e.target.value);
+            if(parseNum <= 0 || parseNum >= 100) return;
+            setQuantity(parseNum)
+        }
+        if(quantity !== 0){
+            updateQuantity();
+        }
+    }
+
+    const increment = () => {
+        if(quantity >= 99 || isUpdate) return;
+        const newQuantity = quantity + 1
+        console.log("new:  ", newQuantity)
+        setQuantity(newQuantity)
+        console.log("quantity: ",quantity);
+        updateQuantity();
     }
 
     const decriment = () => {
-        if(quantity <= 1) return;
-        setQuantity(quantity - 1)
+        if(quantity <= 1 || isUpdate) return;
+        const newQuantity = quantity - 1
+        console.log("new:  ", newQuantity)
+        setQuantity(newQuantity)
+        console.log("quantity: ",quantity);
+        updateQuantity()
     }
 
-    const updateQuantity = () => {
+    const updateQuantity = async() => {
         setIsUpdate(true)
-        setTimeout(() => {
+        try{
+            const variable = {
+                checkoutId: getCheckoutId() ?? cart.id,
+                lineItems: {
+                    id: lineItem.id,
+                    variantId: product.variantId,
+                    quantity: quantity
+                }
+            }
+            console.log('variable: ', variable)
+            const checkout = await checkoutLineItemsUpdate(variable);
+            const newCart = checkoutToCart(checkout);
+            updateCart(newCart);
+        }catch(e) {
+            alert(e)
+        }finally {
             setIsUpdate(false)
-        }, 1000)
+        }
     }
 
     return (
@@ -69,11 +101,11 @@ const CartCard = ({ product }: Props) => {
             <div className='flex items-center'>
                 <p className='w-full text-xs scale-90'>¥ <span className='text-lg font-bold'>{product.variant.price! * product.quantity}</span> 税込</p>
                 <div className='relative w-full flex items-center justify-center space-x-3'>
-                    <button onClick={decriment}>
+                    <button onClick={decriment} disabled={isUpdate}>
                         <Minus className='text-red-400 h-6 w-6'/>
                     </button>
-                    <input className='w-12 h-6 text-[17px] scale-80 bg-white text-gray-700 border text-center rounded-md focus:outline-none' id='quantity' type="text" value={quantity} onChange={handleChange} />
-                    <button onClick={increment}>
+                    <input className='w-12 h-6 text-[17px] scale-80 bg-white text-gray-700 border text-center rounded-md focus:outline-none' id='quantity' type="text" value={product.quantity} onChange={handleChange} disabled={isUpdate} />
+                    <button onClick={increment} disabled={isUpdate}>
                         <Plus className='text-green-400 h-6 w-6'/>
                     </button>
                 </div>

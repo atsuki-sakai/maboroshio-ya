@@ -16,22 +16,12 @@ import Check from '@components/icon/Check';
 const Cart = () => {
 
     const { isCartOpen, onCartClose } = useUI();
-    const { cart, updateCart } = useCart()
+    const { cart } = useCart()
     const shippingFreeCost = 10000
     const shippingFree = (shippingFreeCost - cart.totalPrice) > 0
 
-    const minusLineItem = (productId: string) => {
-        const newCart = cart;
-        newCart.lineItems.map((item: LineItem) => {
-            if(productId === item.id){
-                item.quantity -= 1;
-            }
-        })
-        updateCart(newCart)
-    }
 
     const cartTotalQuantity = () => cart.lineItems.map((item: LineItem) => item.quantity).reduce((sum, element) => sum + element, 0)
-
     return (
             <motion.div
                 initial={{ x:"100%", opacity:0.0 }}

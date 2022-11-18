@@ -2,7 +2,8 @@
 import { HOSTING_URL } from "@shopify/const"
 
 export type ApiPath = {
-    type: "CREATE_CUSTOMER" | "CREATE_CHECKOUT" | "GET_CHECKOUT" | "UPDATE_CHECKOUT" | "CHECKOUT_LINEITEMS_ADD"
+    type: "CREATE_CUSTOMER" | "CREATE_CHECKOUT" | "GET_CHECKOUT" | "UPDATE_CHECKOUT" 
+    | "CHECKOUT_LINE_ITEMS_ADD" | "CHECKOUT_LINE_ITEMS_UPDATE" ;
 }
 
 
@@ -17,8 +18,11 @@ export const generateApiUrl = (apiPath: ApiPath) => {
         case "GET_CHECKOUT": {
             return `${HOSTING_URL}/api/get-checkout`
         }
-        case "CHECKOUT_LINEITEMS_ADD": {
-            return `${HOSTING_URL}/api/checkout-lineitems-add`
+        case "CHECKOUT_LINE_ITEMS_ADD": {
+            return `${HOSTING_URL}/api/checkout-line-items-add`
+        }
+        case "CHECKOUT_LINE_ITEMS_UPDATE" : {
+            return `${HOSTING_URL}/api/checkout-line-items-update`;
         }
     }
 }
