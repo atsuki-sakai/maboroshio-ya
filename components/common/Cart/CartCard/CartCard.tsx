@@ -51,7 +51,7 @@ const CartCard = ({ product }: Props) => {
     }
 
     const onKeydown = (key: string) => {
-        switch (key.key as string) {
+        switch (key) {
             case "Enter": {
                 updateQuantity(quantity)
                 break;
@@ -113,7 +113,7 @@ const CartCard = ({ product }: Props) => {
                         <Minus className={` h-6 w-6 transition duration-300 ease-in-out ${isUpdate ? "text-gray-400 scale-95": "text-red-400"} `}/>
                     </button>
                     <div className='relative'>
-                        <input className={`w-12 h-6 text-[17px] scale-80  ${isUpdate ? "bg-gray-100 text-gray-400": "bg-white text-gray-700"} border text-center rounded-md focus:outline-none`} id='quantity' type="text" value={quantity} onChange={handleChange} onKeyDown={(e) => onKeydown(e)}/>
+                        <input className={`w-12 h-6 text-[17px] scale-80  ${isUpdate ? "bg-gray-100 text-gray-400": "bg-white text-gray-700"} border text-center rounded-md focus:outline-none`} id='quantity' type="text" value={quantity} onChange={handleChange} onKeyDown={(e) => onKeydown(e.key)}/>
                         <motion.div initial={{ opacity: 0, width:0, height:12 }} animate={{ opacity: isUpdate? 1.0 : 0.0, width: isUpdate ? 12 : 0.0 }} className='absolute top-0 left-0 w-full h-full translate-x-1.5 -translate-y-1.5'>
                             <LoadCircle className="h-9 w-9 animate-spin text-blue-500"/>
                         </motion.div>
