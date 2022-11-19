@@ -7,7 +7,7 @@ import { useUI, useCart } from '@components/context'
 import { Cart, LineItem } from '@shopify/types/cart'
 import { Minus, Plus } from "@components/icon"
 import { checkoutToCart, getCheckoutId } from '@shopify/cart'
-import checkoutLineItemsUpdate from '@shopify/cart/checkout-line-items-update'
+import { checkoutLineItemsUpdate, checkoutLineItemRemove } from '@shopify/cart'
 import LoadCircle from '@components/icon/LoadCircle'
 
 import { motion } from 'framer-motion'
@@ -46,20 +46,26 @@ const CartCard = ({ product }: Props) => {
         updateQuantity(newQuantity)
     }
 
-
-const onKeydown = (key: string) => {
-    switch (key.key) {
-      case "Enter": {
-        updateQuantity(quantity)
-        break;
-      }
-      default:
-        break;
+    const removeItem = async () => {
+        console.log("remove")
     }
-  };
+
+    const onKeydown = (key: string) => {
+        switch (key.key) {
+            case "Enter": {
+                updateQuantity(quantity)
+                break;
+            }
+            default:
+            break;
+        }
+    };
 
     const updateQuantity = async(quantity: number) => {
         setIsUpdate(true)
+        if(quantity === 0){
+            setQuantity(1)
+        }
         try{
             const variable = {
                 checkoutId: getCheckoutId() ?? cart.id,
@@ -69,6 +75,7 @@ const onKeydown = (key: string) => {
                     quantity: quantity
                 }
             }
+           
             const checkout = await checkoutLineItemsUpdate(variable);
             const newCart = checkoutToCart(checkout);
             updateCart(newCart);
@@ -80,7 +87,7 @@ const onKeydown = (key: string) => {
     }
 
     return (
-        <div>
+        <div className={"relative"}>
             <div className='flex items-start mt-2 p-1'>
                 <Link href={`/products/${product.path}`} passHref>
                     <a>
@@ -106,7 +113,7 @@ const onKeydown = (key: string) => {
                         <Minus className={` h-6 w-6 transition duration-300 ease-in-out ${isUpdate ? "text-gray-400 scale-95": "text-red-400"} `}/>
                     </button>
                     <div className='relative'>
-                        <input className={`w-12 h-6 text-[17px] scale-80  ${isUpdate ? "bg-gray-100 text-gray-400": "bg-white text-gray-700"} border text-center rounded-md focus:outline-none`} id='quantity' type="text" value={quantity} onChange={handleChange} disabled={isUpdate} onKeyDown={(e) => onKeydown(e)}/>
+                        <input className={`w-12 h-6 text-[17px] scale-80  ${isUpdate ? "bg-gray-100 text-gray-400": "bg-white text-gray-700"} border text-center rounded-md focus:outline-none`} id='quantity' type="text" value={quantity} onChange={handleChange} onKeyDown={(e) => onKeydown(e)}/>
                         <motion.div initial={{ opacity: 0, width:0, height:12 }} animate={{ opacity: isUpdate? 1.0 : 0.0, width: isUpdate ? 12 : 0.0 }} className='absolute top-0 left-0 w-full h-full translate-x-1.5 -translate-y-1.5'>
                             <LoadCircle className="h-9 w-9 animate-spin text-blue-500"/>
                         </motion.div>
@@ -115,6 +122,7 @@ const onKeydown = (key: string) => {
                         <Plus className={` h-6 w-6 transition duration-300 ease-in-out ${isUpdate ? "text-gray-400 scale-95": "text-green-400"} `}/>
                     </button>
                 </div>
+                
             </div>
             <div className='bg-gray-300 h-[1px] w-3/4 mx-auto my-3' />
         </div>
