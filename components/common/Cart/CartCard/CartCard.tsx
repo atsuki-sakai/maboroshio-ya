@@ -52,10 +52,10 @@ const CartCard = ({ product }: Props) => {
     }
 
     const onKeydown = (key: string) => {
+        alert(key)
         switch (key) {
             case "Enter": {
                 updateQuantity(quantity)
-                setQuantity(1)
                 break;
             }
             default:
@@ -81,6 +81,9 @@ const CartCard = ({ product }: Props) => {
         }catch(e) {
             alert(e)
         }finally {
+            if(quantity === 0 ){
+                setQuantity(1)
+            }
             setIsUpdate(false)
         }
     }
@@ -121,7 +124,6 @@ const CartCard = ({ product }: Props) => {
                         <Plus className={` h-6 w-6 transition duration-300 ease-in-out ${isUpdate ? "text-gray-400 scale-95": "text-green-400"} `}/>
                     </button>
                 </div>
-                
             </div>
             <div className='bg-gray-300 h-[1px] w-3/4 mx-auto my-3' />
         </div>
