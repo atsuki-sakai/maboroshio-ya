@@ -8,6 +8,9 @@ import { Cart, LineItem } from '@shopify/types/cart'
 import { Minus, Plus } from "@components/icon"
 import { checkoutToCart, getCheckoutId } from '@shopify/cart'
 import checkoutLineItemsUpdate from '@shopify/cart/checkout-line-items-update'
+import LoadCircle from '@components/icon/LoadCircle'
+
+import { motion } from 'framer-motion'
 
 interface Props {
     product: LineItem
@@ -24,12 +27,11 @@ const CartCard = ({ product }: Props) => {
     const [quantity, setQuantity] = useState<number>(product.quantity)
     const [ isUpdate, setIsUpdate ] = useState(false)
 
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(parseInt(e.target.value) <= 0 || parseInt(e.target.value) >= 100) return;
-        setQuantity(parseInt(e.target.value) ?? 1)
+        const newQuantity = parseInt(e.target.value === "" ? "0": e.target.value)
+        setQuantity(newQuantity)
     }
-    
     const increment = () => {
         if(quantity >= 99 || isUpdate) return;
         const newQuantity = quantity + 1
@@ -44,8 +46,19 @@ const CartCard = ({ product }: Props) => {
         updateQuantity(newQuantity)
     }
 
+
+const onKeydown = (key: string) => {
+    switch (key.key) {
+      case "Enter": {
+        updateQuantity(quantity)
+        break;
+      }
+      default:
+        break;
+    }
+  };
+
     const updateQuantity = async(quantity: number) => {
-        console.log("update q: ", quantity)
         setIsUpdate(true)
         try{
             const variable = {
@@ -56,7 +69,6 @@ const CartCard = ({ product }: Props) => {
                     quantity: quantity
                 }
             }
-            console.log('variable: ', variable)
             const checkout = await checkoutLineItemsUpdate(variable);
             const newCart = checkoutToCart(checkout);
             updateCart(newCart);
@@ -91,11 +103,16 @@ const CartCard = ({ product }: Props) => {
                 <p className='w-full text-xs scale-90'>¥ <span className='text-lg font-bold'>{product.variant.price! * product.quantity}</span> 税込</p>
                 <div className='relative w-full flex items-center justify-center space-x-3'>
                     <button onClick={decriment} disabled={isUpdate}>
-                        <Minus className='text-red-400 h-6 w-6'/>
+                        <Minus className={` h-6 w-6 transition duration-300 ease-in-out ${isUpdate ? "text-gray-400 scale-95": "text-red-400"} `}/>
                     </button>
-                    <input className='w-12 h-6 text-[17px] scale-80 bg-white text-gray-700 border text-center rounded-md focus:outline-none' id='quantity' type="text" value={quantity} onChange={handleChange} disabled={isUpdate} />
+                    <div className='relative'>
+                        <input className={`w-12 h-6 text-[17px] scale-80  ${isUpdate ? "bg-gray-100 text-gray-400": "bg-white text-gray-700"} border text-center rounded-md focus:outline-none`} id='quantity' type="text" value={quantity} onChange={handleChange} disabled={isUpdate} onKeyDown={(e) => onKeydown(e)}/>
+                        <motion.div initial={{ opacity: 0, width:0, height:12 }} animate={{ opacity: isUpdate? 1.0 : 0.0, width: isUpdate ? 12 : 0.0 }} className='absolute top-0 left-0 w-full h-full translate-x-1.5 -translate-y-1.5'>
+                            <LoadCircle className="h-9 w-9 animate-spin text-blue-500"/>
+                        </motion.div>
+                    </div>
                     <button onClick={increment} disabled={isUpdate}>
-                        <Plus className='text-green-400 h-6 w-6'/>
+                        <Plus className={` h-6 w-6 transition duration-300 ease-in-out ${isUpdate ? "text-gray-400 scale-95": "text-green-400"} `}/>
                     </button>
                 </div>
             </div>

@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from 'react'
 import Image from 'next/image';
 import { Product } from '@shopify/types/product'
 import { Splide, SplideSlide } from "@splidejs/react-splide";
-import '@splidejs/splide/css'; 
+import '@splidejs/splide/css';
 import { Container } from "@components/ui";
 import { useCart, useUI } from '@components/context';
 import { Choices, getVariant } from '../helpers'
