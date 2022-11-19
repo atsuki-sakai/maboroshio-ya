@@ -51,7 +51,7 @@ const CartCard = ({ product }: Props) => {
     }
 
     const onKeydown = (key: string) => {
-        switch (key.key) {
+        switch (key.key as string) {
             case "Enter": {
                 updateQuantity(quantity)
                 break;
