@@ -26,6 +26,7 @@ const CartCard = ({ product }: Props) => {
     const { onCartClose } = useUI();
     const [quantity, setQuantity] = useState<number>(product.quantity)
     const [ isUpdate, setIsUpdate ] = useState(false)
+    console.log(quantity)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(parseInt(e.target.value) <= 0 || parseInt(e.target.value) >= 100) return;
@@ -54,6 +55,7 @@ const CartCard = ({ product }: Props) => {
         switch (key) {
             case "Enter": {
                 updateQuantity(quantity)
+                setQuantity(1)
                 break;
             }
             default:
@@ -63,16 +65,13 @@ const CartCard = ({ product }: Props) => {
 
     const updateQuantity = async(quantity: number) => {
         setIsUpdate(true)
-        if(quantity === 0){
-            setQuantity(1)
-        }
         try{
             const variable = {
                 checkoutId: getCheckoutId() ?? cart.id,
                 lineItems: {
                     id: lineItem.id,
                     variantId: product.variantId,
-                    quantity: quantity
+                    quantity: quantity === 0 ? 1 : quantity
                 }
             }
            
