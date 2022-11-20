@@ -20,8 +20,8 @@ const Cart = () => {
     const shippingFreeCost = 10000
     const shippingFree = (shippingFreeCost - cart.totalPrice) > 0
 
-
     const cartTotalQuantity = () => cart.lineItems.map((item: LineItem) => item.quantity).reduce((sum, element) => sum + element, 0)
+
     return (
             <motion.div
                 initial={{ x:"100%", opacity:0.0 }}
@@ -63,13 +63,7 @@ const Cart = () => {
                                 }
                             </div>
                             <div className='flex justify-center mt-3'>
-                                <button className={`bg-gradient-to-tl to-green-600 from-lime-500 shadow-md w-full py-2 rounded-md`} onClick={() => {
-                                    if(cart.lineItems.length === 0){
-                                        console.log('cart is empty...')
-                                    }else{
-                                        console.log('in the cart.')
-                                    }
-                                }}>
+                                <button className={`bg-gradient-to-tl to-green-600 from-lime-500 shadow-md w-full py-2 rounded-md`} onClick={() => {console.log('buy cart.')}}>
                                     <p className='text-white text-lg font-bold text-center tracking-wider'>
                                         商品を購入する
                                     </p>

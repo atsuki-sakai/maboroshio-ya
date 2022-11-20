@@ -1,7 +1,7 @@
 
 
 const DEVLOPMENT = false
-const NGROK_URL = "https://17b8-219-122-209-55.jp.ngrok.io"
+const NGROK_URL = "https://8d54-219-122-209-55.jp.ngrok.io"
 
 export const HOSTING_URL = DEVLOPMENT ? NGROK_URL :  process.env.NEXT_PUBLIC_HOSTING_URL
 export const SHOPIFY_ADMIN_API_URL = process.env.NEXT_PUBLIC_SHOPIFY_ADMIN_API_URL

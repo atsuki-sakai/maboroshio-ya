@@ -1,5 +1,5 @@
 
-import { Checkout, CheckoutLineItemsUpdatePayload } from "@shopify/shema"
+import { Checkout, CheckoutLineItemsRemovePayload } from "@shopify/shema"
 import { generateApiUrl } from "@shopify/utils/generate-api-url"
 
 
@@ -11,8 +11,8 @@ interface CheckoutLineItemRemoveType {
 
 const checkoutLineItemRemove = async ( { checkoutId, lineItemIds }: CheckoutLineItemRemoveType ): Promise<Checkout> => {
 
-    const checkoutLineItemsUpdateApiUrl = generateApiUrl({type:"CHECKOUT_LINE_ITEMS_UPDATE"})!
-    const response = await fetch(checkoutLineItemsUpdateApiUrl, {
+    const checkoutLineItemsRemoveApiUrl = generateApiUrl({type:"CHECKOUT_LINE_ITEMS_REMOVE"})!
+    const response = await fetch(checkoutLineItemsRemoveApiUrl, {
         method: "POST",
         mode: "no-cors",
         body: JSON.stringify({
@@ -26,8 +26,7 @@ const checkoutLineItemRemove = async ( { checkoutId, lineItemIds }: CheckoutLine
     if(errors){
         throw Error(errors[0]?.message ?? errors[0].message)
     }
-    console.log("data: ",data)
-    const { checkout } =  data.checkoutLineItemsUpdate as CheckoutLineItemsUpdatePayload;
+    const { checkout } =  data.checkoutLineItemsRemove as CheckoutLineItemsRemovePayload;
     return checkout as Checkout
 }
 

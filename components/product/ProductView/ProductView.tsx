@@ -157,17 +157,17 @@ const ProductView: FC<Props> = ({ product }) => {
                     </div>
                     <div className='fixed bottom-0 left-0 right-0 h-fits z-40 bg-white border-t'>
                         <div className={``} >
-                            <div className='text-center h-full pb-3 pt-1.5 flex items-center justify-between space-x-2 px-6 bg-gray-50 rounded-md mb-1'>
+                            <div className='text-center h-full pb-3 pt-0.5 flex items-end justify-between space-x-2 px-6 bg-gray-50 rounded-md mb-1'>
                                 <div className=''>
-                                    {/* <p className='text-xs scale-90 w-full text-start -translate-x-1'>購入数量</p> */}
+                                    <p className='text-xs scale-90 w-full text-start text-gray-800 -translate-x-1'>購入数量</p>
                                     <div className='flex items-center'>
                                         <div className='w-full flex items-center space-x-2'>
-                                            <button onClick={decrementQuantity}>
-                                                <Minus className='text-red-400 h-7 w-7'/>
-                                            </button>
-                                            <input className='w-16 h-10 text-[19px] scale-90 bg-white text-gray-700 border text-center rounded-md focus:outline-none' id='quantity' type="number" value={quantity} onChange={handleChange} />
                                             <button onClick={incrementQuantity}>
                                                 <Plus className='text-green-400 h-7 w-7'/>
+                                            </button>
+                                            <input className='w-16 h-10 text-[19px] scale-90 bg-white text-gray-700 border text-center rounded-md focus:outline-none' id='quantity' type="number" value={quantity} onChange={handleChange} />
+                                            <button onClick={decrementQuantity}>
+                                                <Minus className='text-red-400 h-7 w-7'/>
                                             </button>
                                         </div>
                                     </div>
