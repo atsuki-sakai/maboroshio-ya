@@ -66,6 +66,10 @@ const ProductView: FC<Props> = ({ product }) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(parseInt(e.target.value) <= 0 || parseInt(e.target.value) >= 100) return;
+        if(parseInt(e.target.value) > product.totalInventory) {
+            setQuantity(product.totalInventory);
+            return;
+        }
         setQuantity(parseInt(e.target.value))
     }
 
@@ -75,6 +79,10 @@ const ProductView: FC<Props> = ({ product }) => {
     }
     const incrementQuantity = () => {
         if(quantity >= 99) return;
+        if(quantity >= product.totalInventory) {
+            setQuantity(product.totalInventory);
+            return;
+        }
         setQuantity(quantity + 1)
     }
 
@@ -110,9 +118,22 @@ const ProductView: FC<Props> = ({ product }) => {
                             </div>
                         </div>
                         <div className='py-4'>
-                            <h1 className='font-bold text-2xl'>{product.name}</h1>
-                            <div className='flex items-center justify-between'>
-                                <p className='text-sm text-red-500'>¥ <span className={`text-2xl font-sans font-bold tracking-wider ${product.totalInventory === 0 ? "line-through" : "" }`}>{variant?.price}</span> 税込</p>
+                            <h1 className='font-bold text-2xl my-3'>{product.name}</h1>
+                            <div className='flex items-end justify-between'>
+                                <div className='mb-2'>
+                                    <p className='text-xs w-full text-start text-gray-800'>購入数量</p>
+                                    <div className='flex items-center'>
+                                        <div className='w-full flex items-center space-x-2'>
+                                            <button onClick={incrementQuantity}>
+                                                <Plus className='text-green-400 h-7 w-7'/>
+                                            </button>
+                                            <input className='w-16 h-8 font-sans text-[17px] bg-white text-gray-700 border text-center rounded-md focus:outline-none' id='quantity' type="number" value={quantity} onChange={handleChange} />
+                                            <button onClick={decrementQuantity}>
+                                                <Minus className='text-red-400 h-7 w-7'/>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div className={`${product.totalInventory < 10 ? "bg-red-100" : "bg-green-100"} rounded-md px-3 py-1`}>
                                     <p className={`font-sans text-xs ${product.totalInventory < 10 ? " text-red-500": "text-green-500"}`}>残り<span className='text-sm font-bold'>{product.totalInventory}</span>点</p>
                                 </div>
@@ -157,20 +178,10 @@ const ProductView: FC<Props> = ({ product }) => {
                     </div>
                     <div className='fixed bottom-0 left-0 right-0 h-fits z-40 bg-white border-t'>
                         <div className={``} >
-                            <div className='text-center h-full pb-3 pt-0.5 flex items-end justify-between space-x-2 px-6 bg-gray-50 rounded-md mb-1'>
-                                <div className=''>
-                                    <p className='text-xs scale-90 w-full text-start text-gray-800 -translate-x-1'>購入数量</p>
-                                    <div className='flex items-center'>
-                                        <div className='w-full flex items-center space-x-2'>
-                                            <button onClick={incrementQuantity}>
-                                                <Plus className='text-green-400 h-7 w-7'/>
-                                            </button>
-                                            <input className='w-16 h-10 text-[19px] scale-90 bg-white text-gray-700 border text-center rounded-md focus:outline-none' id='quantity' type="number" value={quantity} onChange={handleChange} />
-                                            <button onClick={decrementQuantity}>
-                                                <Minus className='text-red-400 h-7 w-7'/>
-                                            </button>
-                                        </div>
-                                    </div>
+                            <div className='text-center h-full pb-3 pt-0.5 flex items-end justify-between px-6'>
+                                <div className='translate-y-1'>
+                                    <p className='text-xs text-start'>販売価格</p>
+                                    <p className='text-xs text-red-500'>¥ <span className={`text-2xl font-sans font-bold tracking-wider ${product.totalInventory === 0 ? "line-through" : "" }`}>{variant?.price}</span> 税込</p>
                                 </div>
                                 <button onClick={addItem} className='w-fit h-full' disabled={isLoading || product.totalInventory === 0}>
                                     <div className={`flex items-center text-white font-bold px-6 py-2 ${product.totalInventory === 0 ? "bg-gray-500" : "bg-gradient-to-tl to-green-600 from-lime-600"} rounded-md shadow-md tracking-widest`}>

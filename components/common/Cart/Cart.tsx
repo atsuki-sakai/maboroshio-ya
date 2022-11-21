@@ -48,11 +48,11 @@ const Cart = () => {
                                         shippingFree ? <p className='bg-indigo-100 text-xs text-indigo-600 rounded-md px-2 py-0.5'>あと<span className='text-base font-bold'>¥{shippingFreeCost - cart.totalPrice}</span>で<span className='text-sm font-bold'>送料無料</span></p> : <div className='bg-green-100 flex items-center space-x-2 px-3 py-1 rounded-md'><Check className='text-green-500 w-5 h-5'/><span className='text-green-500 text-sm font-bold'>送料無料</span></div>
                                     }
                                 </div>
-                                <div className='grid grid-cols-7 items-end justify-between mt-2 py-2 px-2 rounded-md bg-gray-50'>
-                                    <div className="col-span-5 text-gray-500 text-sm font-noto">
+                                <div className='grid grid-cols-7 items-end justify-between mt-2 py-2 px-2 rounded-md bg-gray-100'>
+                                    <div className="col-span-4 text-gray-500 text-sm font-noto">
                                         合計 <span className="font-sans text-black text-3xl">¥{Math.floor(cart.totalPrice)}</span>
                                     </div>
-                                    <div className='col-span-2'>
+                                    <div className='col-span-3'>
                                         <p className='text-sm text-end text-gray-500'><span className='text-lg font-semibold text-black'>{cartTotalQuantity()}</span> 点の商品</p>
                                     </div>
                                 </div>
@@ -63,13 +63,13 @@ const Cart = () => {
                                 }
                             </div>
                             <div className='flex justify-center mt-3'>
-                                <button className={`bg-gradient-to-tl to-green-600 from-lime-500 shadow-md w-full py-2 rounded-md`} onClick={() => {console.log('buy cart.')}}>
+                                <a href='/api/checkout' className={`bg-gradient-to-tl to-green-600 from-lime-500 shadow-md w-full py-2 rounded-md`} onClick={() => {console.log('buy cart.')}}>
                                     <p className='text-white text-lg font-bold text-center tracking-wider'>
                                         商品を購入する
                                     </p>
-                                </button>
+                                </a>
                             </div>
-                            <div className=' overflow-y-auto bg-gray-100 rounded-md my-5 p-1 shadow-sm'>
+                            <div className=' overflow-y-auto my-5 p-1'>
                                     {
                                         cart.lineItems.length === 0
                                         ? <div>

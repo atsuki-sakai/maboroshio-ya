@@ -132,7 +132,7 @@ const CartCard = ({ product }: Props) => {
                     <button onClick={increment} disabled={isUpdate}>
                         <Plus className={` h-6 w-6 transition duration-300 ease-in-out ${isUpdate ? "text-gray-400 scale-95": "text-green-400"} `}/>
                     </button>
-                    <input className={`w-16 h-8 text-[17px] scale-90 ${isUpdate ? "bg-gray-100 text-gray-400": "bg-white text-gray-700"} border text-center rounded-md focus:outline-none`} id='quantity' type="number" value={quantity} onChange={handleChange} disabled={isUpdate} onKeyDown={(e) => onKeydown(e.key)}/>
+                    <input className={`w-16 h-8 text-[17px] scale-90 ${isUpdate ? "bg-gray-100 text-gray-400": "bg-gray-50 text-gray-500"} text-center border rounded-md focus:outline-none`} id='quantity' type="number" value={quantity} onChange={handleChange} disabled={isUpdate} onKeyDown={(e) => onKeydown(e.key)}/>
                     <button onClick={decriment} disabled={isUpdate}>
                         <Minus className={` h-6 w-6 transition duration-300 ease-in-out ${isUpdate ? "text-gray-400 scale-95": "text-red-400"} `}/>
                     </button>
