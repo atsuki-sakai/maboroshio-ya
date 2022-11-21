@@ -1,5 +1,6 @@
 
 import React, { useEffect } from 'react'
+import Link from 'next/link';
 import { useUI } from '@components/context'
 import { motion } from 'framer-motion';
 import style from "./Drawer.module.css"
@@ -9,6 +10,7 @@ import Search from '@components/icon/Search';
 
 
 const Drawer = () => {
+
     const { isDrawerOpen, onDrawerClose } = useUI();
 
     const handle = (e: any) => {
@@ -58,8 +60,12 @@ const Drawer = () => {
                                     <div>
                                         マイページ
                                     </div>
-                                    <div>
-                                        会員登録 / ログイン
+                                    <div onClick={onDrawerClose}>
+                                        <Link href={"/account/login"} passHref>
+                                            <a>
+                                                会員登録 / ログイン
+                                            </a>
+                                        </Link>
                                     </div>
                                     <div>
                                         まぼろし屋について

@@ -64,9 +64,11 @@ const Header = () => {
                         </Link>
                     </div>
                     <div className={style.mobile_menu}>
-                        <button>
-                            <Person/>
-                        </button>
+                        <Link href='/account/login' passHref>
+                            <a>
+                                <Person/>
+                            </a>
+                        </Link>
                         <button onClick={onCartOpen}>
                             <Cart/>
                         </button>
