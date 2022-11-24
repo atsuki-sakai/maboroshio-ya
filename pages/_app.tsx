@@ -1,11 +1,11 @@
 import "@styles/tailwind.css"
 import type { AppProps } from 'next/app'
 import { Layout } from "@components/common"
-import { UIProvider, CartProvider, LoginProvider } from "@components/context"
+import { UIProvider, CartProvider, CustomerStateProvider } from "@components/context"
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <LoginProvider>
+    <CustomerStateProvider>
       <CartProvider>
         <UIProvider>
           <Layout>
@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           </Layout>
         </UIProvider>
       </CartProvider>
-    </LoginProvider>
+    </CustomerStateProvider>
   )
 }
 

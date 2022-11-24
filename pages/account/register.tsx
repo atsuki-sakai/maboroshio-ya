@@ -1,11 +1,17 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { Container } from "@components/ui"
-import { createCustomer } from '@shopify/auth'
+import { createCustomer, loginCustomer } from '@shopify/auth'
+import { useCustomerState } from '@components/context'
+import Cookies from 'js-cookie'
+import { SHOPIFY_CUSTOMER_ACCESS_TOKEN, SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE } from '@shopify/const'
 
 const Register = () => {
 
+    const router = useRouter()
+    const { updateCustomer } = useCustomerState()
     const [ credential, setCredential ] = useState<{[key:string]: any}>({
       lastName: "",
       firstName: "",
@@ -16,20 +22,18 @@ const Register = () => {
     })
 
     const createAccount = async() => {
-      console.log("create")
-
-      const { customer, customerUserErrors } = await createCustomer(credential.email, credential.password, credential.acceptMarketing, credential.firstName, credential.lastName, credential.phone)
-
+      const { customerUserErrors } = await createCustomer(credential.email, credential.password, credential.acceptMarketing, credential.firstName, credential.lastName, credential.phone)
       if(customerUserErrors[0]){
         alert(customerUserErrors[0].message)
         return;
       }
-
-      if(customer){
-        console.log(customer)
+      const { customer, customerAccessToken } = await loginCustomer(credential.email, credential.password);
+      updateCustomer(customer)
+      const options = {
+        expires: SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE!
       }
-      console.log(customer)
-
+      Cookies.set(SHOPIFY_CUSTOMER_ACCESS_TOKEN!, customerAccessToken.accessToken, options)
+      router.push('/')
     }
 
     console.log(credential)
@@ -43,19 +47,19 @@ const Register = () => {
           <div className='px-6 py-12'>
             <div>
               <label htmlFor="lastName" className='text-xs text-gray-700'>苗字</label>
-              <input id="lastName" className={`w-full h-10 text-base bg-gray-50 text-gray-500 pl-2 border rounded-md focus:outline-none`} type="text" placeholder='山田' value={credential.lastName} onChange={(e) => setCredential({...credential, lastName: e.target.value})} />
+              <input id="lastName" className={`w-full h-10 text-base bg-gray-50 text-gray-500 pl-2 border rounded-md focus:outline-none`} type="text" autoComplete='family-name' placeholder='山田' value={credential.lastName} onChange={(e) => setCredential({...credential, lastName: e.target.value})} />
             </div>
             <div>
               <label htmlFor="firstName" className='text-xs text-gray-700'>名字</label>
-              <input id="firstName" className={`w-full h-10 text-base bg-gray-50 text-gray-500 pl-2 border rounded-md focus:outline-none`} type="text" placeholder='太郎' value={credential.firstName} onChange={(e) => setCredential({...credential, firstName: e.target.value})} />
+              <input id="firstName" className={`w-full h-10 text-base bg-gray-50 text-gray-500 pl-2 border rounded-md focus:outline-none`} type="text" autoComplete='given-name' placeholder='太郎' value={credential.firstName} onChange={(e) => setCredential({...credential, firstName: e.target.value})} />
             </div>
             <div>
               <label htmlFor="email" className='text-xs text-gray-700'>メールアドレス</label>
-              <input id="email" className={`w-full h-10 text-base bg-gray-50 text-gray-500 pl-2 border rounded-md focus:outline-none`} type="email" placeholder='samplel@email.com' value={credential.email} onChange={(e) => setCredential({...credential, email: e.target.value})} />
+              <input id="email" className={`w-full h-10 text-base bg-gray-50 text-gray-500 pl-2 border rounded-md focus:outline-none`} type="email" autoComplete='email' placeholder='samplel@email.com' value={credential.email} onChange={(e) => setCredential({...credential, email: e.target.value})} />
             </div>
             <div>
               <label htmlFor="phone" className='text-xs text-gray-700'>電話番号</label>
-              <input id="phone" className={`w-full h-10 text-base bg-gray-50 text-gray-500 pl-2 border rounded-md focus:outline-none`} type="phone" placeholder='09012345678' value={credential.phone} onChange={(e) => setCredential({...credential, phone: e.target.value})} />
+              <input id="phone" className={`w-full h-10 text-base bg-gray-50 text-gray-500 pl-2 border rounded-md focus:outline-none`} type="number" autoComplete='phone' placeholder='09012345678' value={credential.phone} onChange={(e) => setCredential({...credential, phone: e.target.value})} />
             </div>
             <div>
               <label htmlFor="password" className='text-xs text-gray-700'>パスワード</label>

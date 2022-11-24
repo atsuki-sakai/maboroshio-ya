@@ -8,8 +8,8 @@ export { useLoaded } from "./LoadedProvider"
 export { CartProvider } from "./CartProvider"
 export { useCart } from "./CartProvider"
 
-export { LoginProvider } from "./LoginProvider"
-export { useLoginState } from "./LoginProvider"
+export { CustomerStateProvider } from "./CustomerStateProvider"
+export { useCustomerState } from "./CustomerStateProvider"
 
 
 export { default as useScrollY } from "./hooks"

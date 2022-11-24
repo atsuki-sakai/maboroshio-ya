@@ -1,6 +1,9 @@
 
+import { SHOPIFY_CUSTOMER_ACCESS_TOKEN, SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE } from "@shopify/const"
 import { CustomerCreatePayload } from "@shopify/shema"
 import { generateApiUrl } from "@shopify/utils/generate-api-url"
+import { createCustomerAccessToken, getCustomerAccessToken  } from "@shopify/auth"
+import Cookies from "js-cookie"
 
 const createCustomer = async (
         email: string,
@@ -28,6 +31,14 @@ const createCustomer = async (
     console.log(data, errors)
     if(errors){
         throw Error(errors[0]?.message ?? errors[0].message)
+    }
+
+    const accessToken = await createCustomerAccessToken(email, password);
+    if(!getCustomerAccessToken()){
+        const options = {
+            expires: SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE
+        }
+        Cookies.set(SHOPIFY_CUSTOMER_ACCESS_TOKEN!, accessToken.accessToken, options)
     }
     return data.customerCreate as CustomerCreatePayload;
 }

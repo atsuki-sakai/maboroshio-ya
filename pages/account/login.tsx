@@ -1,15 +1,17 @@
 
 import React, { useState } from 'react'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { Container } from "@components/ui"
 import { loginCustomer } from '@shopify/auth'
-import { useLoginState } from "@components/context"
+import { useCustomerState } from "@components/context"
+import { SHOPIFY_CUSTOMER_ACCESS_TOKEN, SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE } from '@shopify/const'
+import Cookies from 'js-cookie'
 
 const Login = () => {
-    const { updateLoginCustomer, loggedCustomer  } = useLoginState()
 
-
-    console.log('logged customer: ', loggedCustomer)
+    const router = useRouter()
+    const { updateCustomer } = useCustomerState()
 
     const [ credential, setCredential ] = useState<{[key:string]: any}>({
       email: "",
@@ -17,18 +19,20 @@ const Login = () => {
     })
 
     const login = async() => {
-      const customer = await loginCustomer(credential.email, credential.password);
-      updateLoginCustomer(customer);
-
-      console.log(customer)
+      const { customer, customerAccessToken } = await loginCustomer(credential.email, credential.password);
+      updateCustomer(customer)
+      const options = {
+        expires: SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE!
+      }
+      Cookies.set(SHOPIFY_CUSTOMER_ACCESS_TOKEN!, customerAccessToken.accessToken, options)
+      router.push("/")
     }
 
-    console.log(credential)
     return (
       <Container>
         <div className='px-6 py-4'>
           <div className="w-full text-start pl-5">
-            <h1 className='block text-3xl font-bold'>ログインページ</h1>
+            <h1 className='block text-3xl font-bold'>ログインする</h1>
           </div>
           <div className='px-6 py-12'>
             <div>

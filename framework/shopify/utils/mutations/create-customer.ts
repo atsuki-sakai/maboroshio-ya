@@ -5,6 +5,10 @@ const createCustomer = `
         customerCreate(input: $input) {
             customer{
                 id
+                firstName
+                lastName
+                acceptsMarketing
+                email
             }
             customerUserErrors{
                 message

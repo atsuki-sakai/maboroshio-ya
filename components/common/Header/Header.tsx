@@ -2,15 +2,15 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Marquee } from '@components/ui'
-import { useUI, useScrollY } from '@components/context'
+import { useUI, useScrollY, useCustomerState } from '@components/context'
 import style from "./Header.module.css"
 import cn from "classnames"
-import { Cart, Menu, Person } from '@components/icon'
-import Search from '@components/icon/Search'
+import { Cart, Menu, Person, MyPage, Search } from '@components/icon'
 
 const Header = () => {
 
     const { onDrawerOpen, onCartOpen} = useUI()
+    const { loggedCustomer } = useCustomerState()
     const scrollY = useScrollY()
     const changeBgColorY = 800;
     const [ changeBgolor, setChangeBgColor ] = useState(false)
@@ -64,11 +64,22 @@ const Header = () => {
                         </Link>
                     </div>
                     <div className={style.mobile_menu}>
-                        <Link href='/account/login' passHref>
-                            <a>
-                                <Person/>
-                            </a>
-                        </Link>
+                        {
+                            loggedCustomer !== undefined  ? 
+                                            <div className='relative'>
+                                                <div className='absolute -top-1 -left-2 h-2 w-2 bg-green-400 rounded-full'></div>
+                                                <Link href='/account/my-page' passHref>
+                                                    <a>
+                                                        <MyPage/>
+                                                    </a>
+                                                </Link>
+                                            </div>
+                                            : <Link href='/account/login' passHref>
+                                                <a>
+                                                    <Person/>
+                                                </a>
+                                            </Link>
+                        }
                         <button onClick={onCartOpen}>
                             <Cart/>
                         </button>
