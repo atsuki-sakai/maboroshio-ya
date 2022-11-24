@@ -2,20 +2,25 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { Container } from "@components/ui"
+import { loginCustomer } from '@shopify/auth'
+import { useLoginState } from "@components/context"
 
 const Login = () => {
+    const { updateLoginCustomer, loggedCustomer  } = useLoginState()
+
+
+    console.log('logged customer: ', loggedCustomer)
 
     const [ credential, setCredential ] = useState<{[key:string]: any}>({
-      lastName: "",
-      firstName: "",
       email: "",
-      password: "",
-      phoneNumber: "",
-      acceptMarketing: true,
+      password: ""
     })
 
-    const createAccount = async() => {
+    const login = async() => {
+      const customer = await loginCustomer(credential.email, credential.password);
+      updateLoginCustomer(customer);
 
+      console.log(customer)
     }
 
     console.log(credential)
@@ -35,7 +40,7 @@ const Login = () => {
               <input id="password" className={`w-full h-10 text-base bg-gray-50 text-gray-500 pl-2 border rounded-md focus:outline-none`} type="password" placeholder='パスワード' value={credential.password} onChange={(e) => setCredential({...credential, password: e.target.value})} />
             </div>
             <div className='w-fit mx-auto pt-8'>
-              <button className='px-6 py-2 textp-center bg-gradient-to-tl to-blue-500 from-sky-400 rounded-md' onClick={createAccount}>
+              <button className='px-6 py-2 textp-center bg-gradient-to-tl to-blue-500 from-sky-400 rounded-md' onClick={login}>
                 <p className='text-white font-bold'>ログインする</p>
               </button>
             </div>

@@ -73,7 +73,7 @@ export const CartProvider = ({children}: Props) => {
             cart,
             updateCart
         }
-    }, [cart, updateCart])
+    }, [cart])
 
     return (
         <CartContext.Provider value={value!}>

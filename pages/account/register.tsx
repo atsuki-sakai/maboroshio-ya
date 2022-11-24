@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { Container } from "@components/ui"
+import { createCustomer } from '@shopify/auth'
 
 const Register = () => {
 
@@ -10,11 +11,24 @@ const Register = () => {
       firstName: "",
       email: "",
       password: "",
-      phoneNumber: "",
+      phone: "",
       acceptMarketing: true,
     })
 
     const createAccount = async() => {
+      console.log("create")
+
+      const { customer, customerUserErrors } = await createCustomer(credential.email, credential.password, credential.acceptMarketing, credential.firstName, credential.lastName, credential.phone)
+
+      if(customerUserErrors[0]){
+        alert(customerUserErrors[0].message)
+        return;
+      }
+
+      if(customer){
+        console.log(customer)
+      }
+      console.log(customer)
 
     }
 
@@ -41,7 +55,7 @@ const Register = () => {
             </div>
             <div>
               <label htmlFor="phone" className='text-xs text-gray-700'>電話番号</label>
-              <input id="phone" className={`w-full h-10 text-base bg-gray-50 text-gray-500 pl-2 border rounded-md focus:outline-none`} type="number" placeholder='09012345678' value={credential.phone} onChange={(e) => setCredential({...credential, phone: parseInt(e.target.value)})} />
+              <input id="phone" className={`w-full h-10 text-base bg-gray-50 text-gray-500 pl-2 border rounded-md focus:outline-none`} type="phone" placeholder='09012345678' value={credential.phone} onChange={(e) => setCredential({...credential, phone: e.target.value})} />
             </div>
             <div>
               <label htmlFor="password" className='text-xs text-gray-700'>パスワード</label>
@@ -49,7 +63,7 @@ const Register = () => {
             </div>
             <div className='flex justify-center items-center mt-5'>
               <label htmlFor="acceptMarketing" className='text-sm text-gray-500'>メルマガを希望する</label>
-              <input id="acceptMarketing" className={`ml-2 h-5 w-5`} type="checkbox" value={credential.acceptMarketing} onChange={(e) => setCredential({...credential, acceptMarketing: e.target.value})}/>
+              <input id="acceptMarketing" className={`ml-2 h-5 w-5`} type="checkbox" value={credential.acceptMarketing} onChange={(_) => setCredential({...credential, acceptMarketing: !credential.acceptMarketing})} checked={credential.acceptMarketing}/>
             </div>
             <div className='w-fit mx-auto pt-8'>
               <button className='px-6 py-2 textp-center bg-gradient-to-tl to-blue-500 from-sky-400 rounded-md' onClick={createAccount}>
