@@ -2,7 +2,7 @@
 import { ShopifyApiFeatcher } from '@shopify/api/ShopifyApiFetcher';
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { createCustomerMutation } from '@shopify/utils/mutations';
-import { SHOPIFY_STOREFRONT_ACCESS_TOKEN, SHOPIFY_STOREFRONT_API_URL } from '@shopify/const';
+
 interface CustomerCreateInput {
     email: string
     password: string

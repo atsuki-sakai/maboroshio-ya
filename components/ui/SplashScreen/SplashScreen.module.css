@@ -1,9 +1,0 @@
-
-.sub_title {
-    @apply text-gray-900 text-2xl font-serif mb-12 font-bold;
-    writing-mode: vertical-rl;
-}
-.title {
-    @apply text-gray-900 text-2xl font-serif mt-12 font-bold;
-    writing-mode: vertical-rl;
-}

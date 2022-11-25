@@ -2,8 +2,6 @@ import { ShopifyApiFeatcher } from "@shopify/api/ShopifyApiFetcher";
 import { checkoutLineItemsAddMutation} from "@shopify/utils/mutations";
 import { NextApiRequest, NextApiResponse } from "next";
 
-
-
 export interface CheckoutLineItemsType {
     checkoutId: string,
     lineItems: {
@@ -27,7 +25,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         checkoutLineItemsAddMutation,
         variables
     )
-    
+
     const data = await response.json()
     res.statusCode = 200
     res.setHeader('Content-Type', 'application/json')

@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { Container } from "@components/ui"
+import { AlertDialog, Container, Field } from "@components/ui"
 import { loginCustomer } from '@shopify/auth'
 import { useCustomerState } from "@components/context"
 import { SHOPIFY_CUSTOMER_ACCESS_TOKEN, SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE } from '@shopify/const'
@@ -17,15 +17,31 @@ const Login = () => {
       email: "",
       password: ""
     })
+    const [ errorMessage, setErrorMessage ] = useState('')
+    const [ isLoading, setIsLoading ] = useState(false)
+
+    const completedFields = credential.email !== "" && credential.password !== ""
 
     const login = async() => {
-      const { customer, customerAccessToken } = await loginCustomer(credential.email, credential.password);
-      updateCustomer(customer)
-      const options = {
-        expires: SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE!
+
+      if(!completedFields){
+        setErrorMessage('未入力の項目があります。再度入力フォームを確認の上ログインしてください。')
+        return;
       }
-      Cookies.set(SHOPIFY_CUSTOMER_ACCESS_TOKEN!, customerAccessToken.accessToken, options)
-      router.push("/")
+      try{
+        setIsLoading(true)
+        const { customer, customerAccessToken } = await loginCustomer(credential.email, credential.password);
+        updateCustomer(customer)
+        const options = {
+          expires: SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE!
+        }
+        Cookies.set(SHOPIFY_CUSTOMER_ACCESS_TOKEN!, customerAccessToken.accessToken, options)
+        router.push("/")
+      }catch(e: any){
+        setErrorMessage(e.message)
+      }finally{
+        setIsLoading(false)
+      }
     }
 
     return (
@@ -34,17 +50,27 @@ const Login = () => {
           <div className="w-full text-start pl-5">
             <h1 className='block text-3xl font-bold'>ログインする</h1>
           </div>
-          <div className='px-6 py-12'>
-            <div>
-              <label htmlFor="email" className='text-xs text-gray-700'>メールアドレス</label>
-              <input id="email" className={`w-full h-10 text-base bg-gray-50 text-gray-500 pl-2 border rounded-md focus:outline-none`} type="email" placeholder='samplel@email.com' value={credential.email} onChange={(e) => setCredential({...credential, email: e.target.value})} />
-            </div>
-            <div>
-              <label htmlFor="password" className='text-xs text-gray-700'>パスワード</label>
-              <input id="password" className={`w-full h-10 text-base bg-gray-50 text-gray-500 pl-2 border rounded-md focus:outline-none`} type="password" placeholder='パスワード' value={credential.password} onChange={(e) => setCredential({...credential, password: e.target.value})} />
-            </div>
+          <div className='px-6 py-12 space-y-2'>
+            <Field
+              id='email'
+              label="メールアドレス"
+              value={credential.email}
+              autoComplete="email"
+              placeHolder="sample@email.com"
+              onChange={(e) => setCredential({...credential, email: e.target.value})}
+              required={true}
+            />
+            <Field
+              id='password'
+              label="パスワード"
+              value={credential.password}
+              autoComplete="password"
+              placeHolder="password"
+              onChange={(e) => setCredential({...credential, password: e.target.value})}
+              required={true}
+            />
             <div className='w-fit mx-auto pt-8'>
-              <button className='px-6 py-2 textp-center bg-gradient-to-tl to-blue-500 from-sky-400 rounded-md' onClick={login}>
+              <button className={`px-6 py-2 textp-center ${isLoading ? "bg-gray-300" : "bg-gradient-to-tl to-blue-500 from-sky-400"} rounded-md`} onClick={login} disabled={isLoading}>
                 <p className='text-white font-bold'>ログインする</p>
               </button>
             </div>
@@ -56,6 +82,9 @@ const Login = () => {
               </Link>
             </div>
           </div>
+          {
+            errorMessage ? <AlertDialog title='ログインエラー' message={errorMessage} onClose={() => setErrorMessage('')}/>: <></>
+          }
         </div>
       </Container>
     )
