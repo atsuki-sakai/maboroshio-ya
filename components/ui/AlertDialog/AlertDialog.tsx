@@ -11,7 +11,6 @@ interface Props {
 }
 
 const AlertDialog = ({title, message, onClose, onSuccess}: Props) => {
-
     const handle = (e: any) => {
         e.preventDefault()
     }

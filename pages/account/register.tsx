@@ -8,6 +8,7 @@ import { useCustomerState } from '@components/context'
 import Cookies from 'js-cookie'
 import { SHOPIFY_CUSTOMER_ACCESS_TOKEN, SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE } from '@shopify/const'
 import { motion } from 'framer-motion'
+import LoadCircle from '@components/icon/LoadCircle'
 
 const Register = () => {
 
@@ -20,8 +21,7 @@ const Register = () => {
       firstName: "",
       email: "",
       password: "",
-      phone: "",
-      acceptMarketing: true,
+      acceptMarketing: true
     })
 
     const completedFields = credential.lastName !== "" && credential.firstName !== "" && credential.email !== "" && credential.password !== ""
@@ -33,7 +33,7 @@ const Register = () => {
       }
       try{
         setIsLoading(true)
-        const { customerUserErrors } = await createCustomer(credential.email, credential.password, credential.acceptMarketing, credential.firstName, credential.lastName, credential.phone)
+        const { customerUserErrors } = await createCustomer(credential.email, credential.password, credential.acceptMarketing, credential.firstName, credential.lastName)
         if(customerUserErrors[0]){
           throw Error(customerUserErrors[0].message)
         }
@@ -53,7 +53,6 @@ const Register = () => {
 
     console.log(credential)
     return (
-      
       <Container>
         <div className='relative'>
           <div className='px-6 py-4'>
@@ -102,22 +101,18 @@ const Register = () => {
                 onChange={(e) => setCredential({...credential, password: e.target.value})}
                 required={true}
               />
-              <Field
-                id='phone'
-                label='電話番号'
-                type='number'
-                autoComplete="phone"
-                placeHolder='09012345678'
-                value={credential.phone}
-                onChange={(e) => setCredential({...credential, phone: e.target.value})}
-              />
-              <div className='flex justify-center items-center mt-5'>
+              <div className='flex justify-start items-center pt-5'>
+                <input id="acceptMarketing" className={`mr-2 h-5 w-5`} type="checkbox" value={credential.acceptMarketing} onChange={(_) => setCredential({...credential, acceptMarketing: !credential.acceptMarketing})} checked={credential.acceptMarketing}/>
                 <label htmlFor="acceptMarketing" className='text-sm text-gray-500'>メルマガを希望する</label>
-                <input id="acceptMarketing" className={`ml-2 h-5 w-5`} type="checkbox" value={credential.acceptMarketing} onChange={(_) => setCredential({...credential, acceptMarketing: !credential.acceptMarketing})} checked={credential.acceptMarketing}/>
               </div>
               <div className='w-fit mx-auto pt-8'>
                 <button className='px-6 py-2 textp-center bg-gradient-to-tl to-blue-500 from-sky-400 rounded-md' onClick={createAccount} disabled={isLoading}>
-                  <p className='text-white font-bold'>アカウントを作成</p>
+                  <div className='flex items-center justify-between'>
+                    <p className='text-white font-bold'>アカウントを作成</p>
+                    <motion.div className="ml-2 -translate-y-1.5" initial={{ opacity:0, height:12, width:0 }} animate={{ opacity: isLoading ? 1: 0, height:12, width: isLoading ? 12: 0 }}>
+                      <LoadCircle className='text-white h-6 w-6 animate-spin'/>
+                    </motion.div>
+                  </div>
                 </button>
               </div>
               <div className='pt-8 w-full text-center'>
@@ -130,7 +125,7 @@ const Register = () => {
             </div>
           </div>
           {
-            errorMessage ? <AlertDialog title='会員登録エラー' message={errorMessage} onClose={() => setErrorMessage('')} /> : <></>
+            errorMessage ? <AlertDialog title='会員登録エラー' message={errorMessage === "Unidentified customer" ? "ユーザーが見つかりませんでした。再度入力値が正しいかご確認の上お試しください。": errorMessage} onClose={() => setErrorMessage('')} /> : <></>
           }
         </div>
       </Container>

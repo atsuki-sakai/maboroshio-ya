@@ -5,7 +5,9 @@ import Link from 'next/link'
 import { AlertDialog, Container, Field } from "@components/ui"
 import { loginCustomer } from '@shopify/auth'
 import { useCustomerState } from "@components/context"
+import { LoadCircle } from '@components/icon'
 import { SHOPIFY_CUSTOMER_ACCESS_TOKEN, SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE } from '@shopify/const'
+import { motion } from "framer-motion"
 import Cookies from 'js-cookie'
 
 const Login = () => {
@@ -48,7 +50,7 @@ const Login = () => {
       <Container>
         <div className='px-6 py-4'>
           <div className="w-full text-start pl-5">
-            <h1 className='block text-3xl font-bold'>ログインする</h1>
+            <h1 className='block text-3xl font-bold'>ログイン</h1>
           </div>
           <div className='px-6 py-12 space-y-2'>
             <Field
@@ -56,22 +58,27 @@ const Login = () => {
               label="メールアドレス"
               value={credential.email}
               autoComplete="email"
+              type='email'
               placeHolder="sample@email.com"
               onChange={(e) => setCredential({...credential, email: e.target.value})}
-              required={true}
             />
             <Field
               id='password'
               label="パスワード"
+              type='password'
               value={credential.password}
               autoComplete="password"
               placeHolder="password"
               onChange={(e) => setCredential({...credential, password: e.target.value})}
-              required={true}
             />
             <div className='w-fit mx-auto pt-8'>
-              <button className={`px-6 py-2 textp-center ${isLoading ? "bg-gray-300" : "bg-gradient-to-tl to-blue-500 from-sky-400"} rounded-md`} onClick={login} disabled={isLoading}>
-                <p className='text-white font-bold'>ログインする</p>
+              <button className={`px-6 py-2 textp-center bg-gradient-to-tl to-blue-500 from-sky-400 rounded-md`} onClick={login} disabled={isLoading}>
+              <div className='flex items-center justify-between'>
+                    <p className='text-white font-bold'>ログインする</p>
+                    <motion.div className="ml-2 -translate-y-1.5" initial={{ opacity:0, height:12, width:0 }} animate={{ opacity: isLoading ? 1: 0, height:12, width: isLoading ? 12: 0 }}>
+                      <LoadCircle className='text-white h-6 w-6 animate-spin'/>
+                    </motion.div>
+                  </div>
               </button>
             </div>
             <div className='pt-8 w-full text-center'>
@@ -83,7 +90,7 @@ const Login = () => {
             </div>
           </div>
           {
-            errorMessage ? <AlertDialog title='ログインエラー' message={errorMessage} onClose={() => setErrorMessage('')}/>: <></>
+            errorMessage ? <AlertDialog title='ログインエラー' message={errorMessage === "Unidentified customer" ? "ユーザーが見つかりませんでした。再度入力値が正しいかご確認の上お試しください。": errorMessage} onClose={() => setErrorMessage('')}/>: <></>
           }
         </div>
       </Container>

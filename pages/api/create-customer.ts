@@ -9,7 +9,6 @@ interface CustomerCreateInput {
     acceptsMarketing: boolean
     firstName: string
     lastName: string
-    phone: string
 }
 
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
@@ -19,9 +18,6 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
     let body = await JSON.parse(req.body) as CustomerCreateInput
 
     // TODO - ここで変換するのは良くない？
-    if(body.phone.length === 11 && body.phone.slice(0,1) === "0"){
-        body.phone = `+81${body.phone.slice(1)}`
-    }
 
     const variables = {
         input: {
@@ -30,7 +26,6 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
             acceptsMarketing: body.acceptsMarketing,
             firstName: body.firstName,
             lastName: body.lastName,
-            phone: body.phone
         }
     }
     const response = await ShopifyApiFeatcher(

@@ -10,8 +10,7 @@ const createCustomer = async (
         password: string,
         acceptsMarketing: boolean,
         firstName: string,
-        lastName: string,
-        phone: string
+        lastName: string
     ): Promise<CustomerCreatePayload> => {
 
     const createCustomerApiUrl = generateApiUrl({type:"CREATE_CUSTOMER"})!
@@ -23,12 +22,10 @@ const createCustomer = async (
             password: password,
             acceptsMarketing: acceptsMarketing,
             firstName: firstName,
-            lastName: lastName,
-            phone: phone
+            lastName: lastName
         })
     })
     const { data, errors } = await response.json()
-    console.log(data, errors)
     if(errors){
         throw Error(errors[0]?.message ?? errors[0].message)
     }

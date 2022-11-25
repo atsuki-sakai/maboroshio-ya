@@ -11,6 +11,7 @@ const createCustomer = `
                 email
             }
             customerUserErrors{
+                code
                 message
             }
         }
