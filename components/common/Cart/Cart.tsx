@@ -62,7 +62,7 @@ const Cart = () => {
                                 }
                             </div>
                             <div className='flex justify-center mt-3'>
-                                <a href='/api/checkout' className={`bg-gradient-to-tl to-green-600 from-lime-500 shadow-md w-full py-2 rounded-md`} onClick={() => {console.log('buy cart.')}}>
+                                <a href={'/api/cart/checkout'} className={`bg-gradient-to-tl to-green-600 from-lime-500 shadow-md w-full py-2 rounded-md`}>
                                     <p className='text-white text-lg font-bold text-center tracking-wider'>
                                         商品を購入する
                                     </p>
