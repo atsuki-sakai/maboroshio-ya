@@ -21,7 +21,7 @@ const Cart = () => {
     const shippingFree = (shippingFreeCost - cart.totalPrice) > 0
 
     const cartTotalQuantity = () => cart.lineItems.map((item: LineItem) => item.quantity).reduce((sum, element) => sum + element, 0)
-
+    console.log("cart: ",cart)
     return (
             <motion.div
                 initial={{ x:"100%", opacity:0.0 }}
@@ -43,7 +43,6 @@ const Cart = () => {
                             </div>
                             <div className='mt-5'>
                                 <div className='w-full flex items-center justify-end rounded-md text-center'>
-
                                     {
                                         shippingFree ? <p className='bg-indigo-100 text-xs text-indigo-600 rounded-md px-2 py-0.5'>あと<span className='text-base font-bold'>¥{shippingFreeCost - cart.totalPrice}</span>で<span className='text-sm font-bold'>送料無料</span></p> : <div className='bg-green-100 flex items-center space-x-2 px-3 py-1 rounded-md'><Check className='text-green-500 w-5 h-5'/><span className='text-green-500 text-sm font-bold'>送料無料</span></div>
                                     }
