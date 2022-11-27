@@ -5454,6 +5454,7 @@ export type ProductVariant = HasMetafields &
      * The compare at price of the variant. This can be used to mark a variant as on sale, when `compareAtPrice` is higher than `price`.
      * @deprecated Use `compareAtPriceV2` instead.
      */
+    inventoryQuantity?: Maybe<Scalers['Int']>
     compareAtPrice?: Maybe<Scalars['Money']>
     /** The compare at price of the variant. This can be used to mark a variant as on sale, when `compareAtPriceV2` is higher than `priceV2`. */
     compareAtPriceV2?: Maybe<MoneyV2>

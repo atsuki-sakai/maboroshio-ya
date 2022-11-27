@@ -30,6 +30,7 @@ export const checkoutDetailFragment = `
                         id
                         sku
                         title
+                        quantityAvailable
                         selectedOptions {
                             name
                             value

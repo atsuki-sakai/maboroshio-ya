@@ -1,17 +1,11 @@
 
-import React, { useEffect, useState } from 'react'
-import Link from 'next/link';
+import React from 'react'
 import { useUI, useCart } from '@components/context'
 import { motion } from 'framer-motion';
-import Image from 'next/image';
-import style from "./Cart.module.css"
 import { LineItem } from '@shopify/types/cart';
-import { Close } from '@components/icon';
 import CartCard from './CartCard';
 import RightArrow from '@components/icon/RightArrow';
-import { getCheckoutId } from '@shopify/cart';
 import Check from '@components/icon/Check';
-
 
 const Cart = () => {
 
@@ -21,7 +15,6 @@ const Cart = () => {
     const shippingFree = (shippingFreeCost - cart.totalPrice) > 0
 
     const cartTotalQuantity = () => cart.lineItems.map((item: LineItem) => item.quantity).reduce((sum, element) => sum + element, 0)
-
     return (
             <motion.div
                 initial={{ x:"100%", opacity:0.0 }}
@@ -68,20 +61,14 @@ const Cart = () => {
                                     </p>
                                 </a>
                             </div>
-                            <div>
-                                cart:
-                                {
-                                    JSON.stringify(cart, null, 2)
-                                }
-                            </div>
-                            <div className=' overflow-y-auto my-5 p-1'>
+                            <div className='overflow-y-auto my-5 p-1'>
                                     {
                                         cart.lineItems.length === 0
                                         ? <div>
                                             <p className='py-6 text-center font-bold text-gray-400'>カート内に商品はありません</p>
                                         </div>
                                         : cart.lineItems.map((item: LineItem) => {
-                                            return <CartCard key={item.id} product={item}/>
+                                            return <CartCard key={item.id} item={item}/>
                                         })
                                     }
                             </div>

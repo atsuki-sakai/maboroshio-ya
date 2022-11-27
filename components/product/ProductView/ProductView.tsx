@@ -18,12 +18,10 @@ interface Props {
     product: Product
 }
 
-
 const ProductView: FC<Props> = ({ product }) => {
 
-    const { cart, updateCart } = useCart()
+    const { updateCart } = useCart()
     const { onCartOpen } = useUI()
-    const [ quantity, setQuantity ] = useState<number>(1)
 
     const initialOptions = (product: Product) => {
         let initialOptions: {[key: string]: string} = {}
@@ -39,11 +37,13 @@ const ProductView: FC<Props> = ({ product }) => {
     const [isLoading, setIsLoading] = useState(false);
     const variant = getVariant(product, choices)
 
+    const [ quantity, setQuantity ] = useState<number>(variant?.inventoryQuantity! === 0 ? 0: 1)
+
     const addItem = async () => {
         setIsLoading(true)
         try{
             const variable = {
-                checkoutId: getCheckoutId() ?? cart.id,
+                checkoutId: getCheckoutId()!,
                 lineItems: {
                     variantId: variant!.id,
                     quantity: quantity
@@ -66,8 +66,8 @@ const ProductView: FC<Props> = ({ product }) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(parseInt(e.target.value) <= 0 || parseInt(e.target.value) >= 100) return;
-        if(parseInt(e.target.value) > product.totalInventory) {
-            setQuantity(product.totalInventory);
+        if(parseInt(e.target.value) >= variant?.inventoryQuantity!) {
+            setQuantity(variant?.inventoryQuantity!);
             return;
         }
         setQuantity(parseInt(e.target.value))
@@ -79,8 +79,8 @@ const ProductView: FC<Props> = ({ product }) => {
     }
     const incrementQuantity = () => {
         if(quantity >= 99) return;
-        if(quantity >= product.totalInventory) {
-            setQuantity(product.totalInventory);
+        if(quantity >= variant?.inventoryQuantity!) {
+            setQuantity(variant?.inventoryQuantity!);
             return;
         }
         setQuantity(quantity + 1)
@@ -134,8 +134,8 @@ const ProductView: FC<Props> = ({ product }) => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className={`${product.totalInventory < 10 ? "bg-red-100" : "bg-green-100"} rounded-md px-3 py-1`}>
-                                    <p className={`font-sans text-xs ${product.totalInventory < 10 ? " text-red-500": "text-green-500"}`}>残り<span className='text-sm font-bold'>{product.totalInventory}</span>点</p>
+                                <div className={`${variant?.inventoryQuantity! < 10 ? "bg-red-100" : "bg-green-100"} rounded-md px-3 py-1`}>
+                                    <p className={`font-sans text-xs ${variant?.inventoryQuantity! < 10 ? " text-red-500": "text-green-500"}`}>残り<span className='text-sm font-bold'>{variant?.inventoryQuantity}</span>点</p>
                                 </div>
                             </div>
                         </div>
@@ -183,9 +183,9 @@ const ProductView: FC<Props> = ({ product }) => {
                                     <p className='text-xs text-start'>販売価格</p>
                                     <p className='text-xs text-red-500'>¥ <span className={`text-2xl font-sans font-bold tracking-wider ${product.totalInventory === 0 ? "line-through" : "" }`}>{variant?.price}</span> 税込</p>
                                 </div>
-                                <button onClick={addItem} className='w-fit h-full' disabled={isLoading || product.totalInventory === 0}>
-                                    <div className={`flex items-center text-white font-bold px-6 py-2 ${product.totalInventory === 0 ? "bg-gray-500" : "bg-gradient-to-tl to-green-600 from-lime-600"} rounded-md shadow-md tracking-widest`}>
-                                        <p>{product.totalInventory === 0 ? "売り切れ" : "カートへ追加"}</p>
+                                <button onClick={addItem} className='w-fit h-full' disabled={isLoading || variant?.inventoryQuantity === 0}>
+                                    <div className={`flex items-center text-white font-bold px-6 py-2 ${variant?.inventoryQuantity === 0 ? "bg-gray-500" : "bg-gradient-to-tl to-green-600 from-lime-600"} rounded-md shadow-md tracking-widest`}>
+                                        <p>{variant?.inventoryQuantity === 0 ? "売り切れ" : "カートへ追加"}</p>
                                         <motion.div className='-translate-y-1 pl-1' initial={{width:0 , height:0, opacity:0}} animate={{width: isLoading ? 20: 0, height: isLoading ? 12: 12, opacity: isLoading ? 1: 0}}>
                                             <LoadCircle className='animate-spin text-white h-5 w-5' />
                                         </motion.div>

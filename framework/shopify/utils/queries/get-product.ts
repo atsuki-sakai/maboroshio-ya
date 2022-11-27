@@ -30,6 +30,7 @@ query productById($slug: String!) {
                     id
                     title
                     sku
+                    inventoryQuantity
                     selectedOptions {
                         name
                         value

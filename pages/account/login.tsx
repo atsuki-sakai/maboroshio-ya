@@ -32,7 +32,9 @@ const Login = () => {
       }
       try{
         setIsLoading(true)
+        console.log('1')
         const { customer, customerAccessToken } = await loginCustomer(credential.email, credential.password);
+        console.log('2')
         updateCustomer(customer)
         const options = {
           expires: SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE!
@@ -53,24 +55,26 @@ const Login = () => {
             <h1 className='block text-3xl font-bold'>ログイン</h1>
           </div>
           <div className='px-6 py-12 space-y-2'>
-            <Field
-              id='email'
-              label="メールアドレス"
-              value={credential.email}
-              autoComplete="email"
-              type='email'
-              placeHolder="sample@email.com"
-              onChange={(e) => setCredential({...credential, email: e.target.value})}
-            />
-            <Field
-              id='password'
-              label="パスワード"
-              type='password'
-              value={credential.password}
-              autoComplete="password"
-              placeHolder="password"
-              onChange={(e) => setCredential({...credential, password: e.target.value})}
-            />
+            <form>
+              <Field
+                id='email'
+                label="メールアドレス"
+                value={credential.email}
+                autoComplete="email"
+                type='email'
+                placeHolder="sample@email.com"
+                onChange={(e) => setCredential({...credential, email: e.target.value})}
+              />
+              <Field
+                id='password'
+                label="パスワード"
+                type='password'
+                value={credential.password}
+                autoComplete="password"
+                placeHolder="password"
+                onChange={(e) => setCredential({...credential, password: e.target.value})}
+              />
+            </form>
             <div className='w-fit mx-auto pt-8'>
               <button className={`px-6 py-2 textp-center bg-gradient-to-tl to-blue-500 from-sky-400 rounded-md`} onClick={login} disabled={isLoading}>
               <div className='flex items-center justify-between'>

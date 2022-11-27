@@ -23,7 +23,7 @@ const fetchApi = async<T>({ query, variables }: ApiFetchOptions): Promise<ApiFet
     })
     const { data, errors } = await res.json();
     if(errors) {
-        throw new Error(errors[0].message ?? errors.message);
+        throw new Error(errors[0].message);
     }
     return { data }
 }

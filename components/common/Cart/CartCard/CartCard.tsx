@@ -14,34 +14,41 @@ import { motion } from 'framer-motion'
 import Trash from '@components/icon/Trash'
 
 interface Props {
-    product: LineItem
+    item: LineItem
 }
 
 
-const placeholderImage = "/images/product-image-placeholder.svg"
+const placeholderImage = "/images/item-image-placeholder.svg"
 
-const CartCard = ({ product }: Props) => {
+const CartCard = ({ item }: Props) => {
 
     const { cart, updateCart } = useCart()
-    const lineItem:LineItem = cart.lineItems.filter((lineItem: LineItem) => lineItem.variantId === product.variantId)[0]
     const { onCartClose } = useUI();
-    const [ quantity, setQuantity] = useState<string>(product.quantity.toString())
+    const [ quantity, setQuantity] = useState<string>(item.quantity.toString())
     const [ isUpdate, setIsUpdate ] = useState(false)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(parseInt(e.target.value) <= 0 || parseInt(e.target.value) >= 100) return;
+        if(parseInt(e.target.value ) >= item.variant.quantityAvailable!){
+            setQuantity(item.variant.quantityAvailable!.toString())
+            return;
+        }
         setQuantity(e.target.value)
     }
 
     const increment = () => {
-        if(parseInt(quantity) >= 99 || isUpdate) return;
+        if(parseInt(quantity) >= 99) return;
+        if(parseInt(quantity) >= item.variant.quantityAvailable!){
+            setQuantity(item.variant.quantityAvailable!.toString())
+            return;
+        }
         const newQuantity = parseInt(quantity) + 1
         setQuantity(newQuantity.toString())
         updateQuantity(newQuantity)
     }
 
     const decriment = () => {
-        if(parseInt(quantity) <= 1 || isUpdate) return;
+        if(parseInt(quantity) <= 1) return;
         const newQuantity = parseInt(quantity) - 1
         setQuantity(newQuantity.toString())
         updateQuantity(newQuantity)
@@ -52,7 +59,7 @@ const CartCard = ({ product }: Props) => {
         try{
             const variable = {
                 checkoutId: getCheckoutId() ?? cart.id,
-                lineItemIds: [lineItem.id]
+                lineItemIds: [item.id]
             }
             const checkout = await checkoutLineItemRemove(variable)
             const newCart = checkoutToCart(checkout)
@@ -80,10 +87,10 @@ const CartCard = ({ product }: Props) => {
         setIsUpdate(true)
         try{
             const variable = {
-                checkoutId: getCheckoutId() ?? cart.id,
+                checkoutId: getCheckoutId()!,
                 lineItems: {
-                    id: lineItem.id,
-                    variantId: product.variantId,
+                    id: item.id,
+                    variantId: item.variantId,
                     quantity: quantity === 0 ? 1 : quantity
                 }
             }
@@ -101,31 +108,31 @@ const CartCard = ({ product }: Props) => {
     }
 
     useEffect(() => {
-        setQuantity(product.quantity.toString());
-    }, [product.quantity])
+        setQuantity(item.quantity.toString());
+    }, [item.quantity])
 
     return (
         <div className={"relative"}>
             <div className='flex items-start mt-2 p-1'>
-                <Link href={`/products/${product.path}`} passHref>
+                <Link href={`/products/${item.path}`} passHref>
                     <a>
                         <div className='relative' onClick={onCartClose}>
-                            <Image className="rounded-md shadow-md mb-2" src={product.variant.image?.url ?? placeholderImage} width={70} height={70} alt={"test"}/>
-                            <div className='absolute -top-1 -right-1 h-6 w-6 bg-gray-700 rounded-full flex justify-center items-center shadow-md'>
-                                <p className='text-white text-sm text-center font-sans'>{product.quantity}</p>
+                            <Image className="rounded-md shadow-md mb-2" src={item.variant.image?.url ?? placeholderImage} width={70} height={70} alt={"test"}/>
+                            <div className='absolute -top-2 -right-2 h-fit w-fit bg-gray-700 rounded-full flex justify-center items-center shadow-md'>
+                                <p className='text-white text-xs text-center font-sans scale-75'>在庫数 / <span className='font-bold'>{item.variant.quantityAvailable}</span></p>
                             </div>
                         </div>
                     </a>
                 </Link>
                 <div className='pl-4 flex-1'>
-                    <h5 className='text-[15px]'>{product.name}</h5>
+                    <h5 className='text-[15px]'>{item.name}</h5>
                     {
-                        product.options && product.options![0].displayName === "Title" ? <></>:  <p className='text-sm text-gray-500'>{product.options![0].displayName} / {product.variant.name}</p>
+                        item.options && item.options![0].displayName === "Title" ? <></>:  <p className='text-sm text-gray-500'>{item.options![0].displayName} / {item.variant.name}</p>
                     }
                 </div>
             </div>
             <div className='flex items-center'>
-                <p className='w-full text-xs scale-90'>¥ <span className='text-lg font-bold'>{product.variant.price! * product.quantity}</span> 税込</p>
+                <p className='w-full text-xs scale-90'>¥ <span className='text-lg font-bold'>{item.variant.price! * item.quantity}</span> 税込</p>
                 <div className='relative w-full flex items-center justify-center space-x-1'>
                     <button onClick={increment} disabled={isUpdate}>
                         <Plus className={` h-6 w-6 transition duration-300 ease-in-out ${isUpdate ? "text-gray-400 scale-95": "text-green-400"} `}/>

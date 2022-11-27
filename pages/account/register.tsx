@@ -51,7 +51,6 @@ const Register = () => {
       }
     }
 
-    console.log(credential)
     return (
       <Container>
         <div className='relative'>
@@ -61,46 +60,49 @@ const Register = () => {
               <p className='block text-xs'>アカウントを作成してお得に買い物しよう。</p>
             </div>
             <div className='px-6 py-12 space-y-3'>
-              <Field
-                id='lastName'
-                label={"苗字"}
-                type={"text"}
-                autoComplete="family-name"
-                placeHolder={"山田"}
-                value={credential.lastName}
-                onChange={(e) => setCredential({...credential, lastName: e.target.value})}
-                required={true}
-              />
-              <Field
-                id="firstName"
-                label="名前"
-                type='text'
-                autoComplete='given-name'
-                placeHolder='太郎'
-                value={credential.firstName}
-                onChange={(e) => setCredential({...credential, firstName: e.target.value})}
-                required={true}
-              />
-              <Field
-                id='email'
-                label='メールアドレス'
-                type="email"
-                autoComplete='email'
-                placeHolder='sample@email.com'
-                value={credential.email}
-                onChange={(e) => setCredential({...credential, email: e.target.value})}
-                required={true}
-              />
-              <Field
-                id='password'
-                label='パスワード'
-                type='password'
-                autoComplete='password'
-                placeHolder='password'
-                value={credential.password}
-                onChange={(e) => setCredential({...credential, password: e.target.value})}
-                required={true}
-              />
+              <form>
+
+                <Field
+                  id='lastName'
+                  label={"苗字"}
+                  type={"text"}
+                  autoComplete="family-name"
+                  placeHolder={"山田"}
+                  value={credential.lastName}
+                  onChange={(e) => setCredential({...credential, lastName: e.target.value})}
+                  required={true}
+                />
+                <Field
+                  id="firstName"
+                  label="名前"
+                  type='text'
+                  autoComplete='given-name'
+                  placeHolder='太郎'
+                  value={credential.firstName}
+                  onChange={(e) => setCredential({...credential, firstName: e.target.value})}
+                  required={true}
+                />
+                <Field
+                  id='email'
+                  label='メールアドレス'
+                  type="email"
+                  autoComplete='email'
+                  placeHolder='sample@email.com'
+                  value={credential.email}
+                  onChange={(e) => setCredential({...credential, email: e.target.value})}
+                  required={true}
+                />
+                <Field
+                  id='password'
+                  label='パスワード'
+                  type='password'
+                  autoComplete='password'
+                  placeHolder='password'
+                  value={credential.password}
+                  onChange={(e) => setCredential({...credential, password: e.target.value})}
+                  required={true}
+                />
+              </form>
               <div className='flex justify-start items-center pt-5'>
                 <input id="acceptMarketing" className={`mr-2 h-5 w-5`} type="checkbox" value={credential.acceptMarketing} onChange={(_) => setCredential({...credential, acceptMarketing: !credential.acceptMarketing})} checked={credential.acceptMarketing}/>
                 <label htmlFor="acceptMarketing" className='text-sm text-gray-500'>メルマガを希望する</label>

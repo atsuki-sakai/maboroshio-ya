@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
     GetStaticPaths,
     GetStaticProps,
@@ -10,6 +10,7 @@ import getAllProductsPaths from '@shopify/products/get-all-product-paths'
 import { getProduct } from '@shopify/products'
 import { ProductView } from '@components/product'
 
+
 const ProductSlug = ({ product }: InferGetStaticPropsType<typeof getStaticProps>) => {
     return (
         <>
@@ -19,7 +20,6 @@ const ProductSlug = ({ product }: InferGetStaticPropsType<typeof getStaticProps>
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-
     const config = getConfig();
     const { products } = await getAllProductsPaths(config);
     return {

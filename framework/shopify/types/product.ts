@@ -32,6 +32,8 @@ export interface ProductVariant {
     name: string,
     sku: string,
     image?: ProductImage,
+    quantityAvailable: number
+    inventoryQuantity: number
     requiresShipping: boolean
     price: number
     listPrice: number

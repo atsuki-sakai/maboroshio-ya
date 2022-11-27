@@ -36,7 +36,8 @@ const normalizeLineItem = ({node: { id, title, variant, quantity, ...rest }}: Ch
             },
             requiresShipping: variant?.requiresShipping ?? false,
             price: variant?.price.amount,
-            listPrice: variant?.compareAtPrice?.amount
+            listPrice: variant?.compareAtPrice?.amount,
+            quantityAvailable: variant?.quantityAvailable ?? 0
         },
         ...rest
     }
@@ -64,13 +65,14 @@ const normarizeProductOption = ({ id, name: displayName, values }: ProductOption
 
 const normarizedProductVariants = ({ edges }: ProductVariantConnection) => {
     return edges.map(({node}) => {
-        const { id, selectedOptions, sku, title, price, compareAtPrice } = node
+        const { id, selectedOptions, sku, title, price, compareAtPrice, inventoryQuantity } = node
         return {
             id,
             sku: sku || id,
             name: title,
             price: price,
             listPrice: compareAtPrice,
+            inventoryQuantity: inventoryQuantity,
             requiresShipping: true,
             options: selectedOptions.map(({name, value}: SelectedOption) => {
                 const option = normarizeProductOption({
