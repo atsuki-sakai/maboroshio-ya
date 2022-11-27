@@ -32,6 +32,7 @@ const CartCard = ({ product }: Props) => {
         if(parseInt(e.target.value) <= 0 || parseInt(e.target.value) >= 100) return;
         setQuantity(e.target.value)
     }
+
     const increment = () => {
         if(parseInt(quantity) >= 99 || isUpdate) return;
         const newQuantity = parseInt(quantity) + 1
@@ -102,9 +103,6 @@ const CartCard = ({ product }: Props) => {
     useEffect(() => {
         setQuantity(product.quantity.toString());
     }, [product.quantity])
-
-
-    console.log("q", quantity, typeof(quantity))
 
     return (
         <div className={"relative"}>

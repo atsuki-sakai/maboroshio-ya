@@ -1,5 +1,6 @@
 
-import { getCustomer, createCustomerAccessToken } from "@shopify/auth";
+import { createCustomerAccessToken, checkoutCustomerAssociate } from "@shopify/auth";
+import { getCheckoutId } from "@shopify/cart";
 import { Customer, CustomerAccessToken } from "@shopify/shema";
 
 type ReturnType = {
@@ -8,8 +9,9 @@ type ReturnType = {
 }
 
 const loginCustomer = async (email: string, password: string): Promise<ReturnType> => {
+
     const customerAccessToken = await createCustomerAccessToken(email, password);
-    const customer = await getCustomer(customerAccessToken.accessToken)
+    const customer = await checkoutCustomerAssociate(getCheckoutId()!, customerAccessToken.accessToken)
     return { customer, customerAccessToken };
 }
 

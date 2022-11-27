@@ -1,17 +1,20 @@
 
 import React from 'react'
 import { Container } from '@components/ui'
+import { checkoutCustomerDisassociate } from "@shopify/auth"
 import { useCustomerState } from '@components/context'
 import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 import { SHOPIFY_CUSTOMER_ACCESS_TOKEN } from '@shopify/const'
+import { getCheckoutId } from '@shopify/cart'
 
 const MyPage = () => {
 
     const router = useRouter()
     const { loggedCustomer, updateCustomer } = useCustomerState()
 
-    const logout = () => {
+    const logout = async () => {
+        await checkoutCustomerDisassociate(getCheckoutId()!)
         Cookies.remove(SHOPIFY_CUSTOMER_ACCESS_TOKEN!)
         updateCustomer(undefined)
         router.push('/')

@@ -5,3 +5,5 @@ export { default as checkoutLineItemsAddMutation } from "./checkout-line-items-a
 export { default as checkoutLineItemsUpdateMutation } from "./checkout-line-items-update"
 export { default as checkoutLineItemRemoveMutation } from "./checkout-line-items-remove"
 export { default as customerAccessTokenCreateMutation } from "./customer-acdess-token-create"
+export { default as checkoutCustomerAssociateMutation } from "./checkout-customer-associate"
+export { default as checkoutCustomerDisassociateMutation } from "./checkout-customer-disassociate"
