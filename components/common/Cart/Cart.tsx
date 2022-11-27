@@ -21,7 +21,7 @@ const Cart = () => {
     const shippingFree = (shippingFreeCost - cart.totalPrice) > 0
 
     const cartTotalQuantity = () => cart.lineItems.map((item: LineItem) => item.quantity).reduce((sum, element) => sum + element, 0)
-    console.log("cart: ",cart)
+
     return (
             <motion.div
                 initial={{ x:"100%", opacity:0.0 }}
@@ -67,6 +67,12 @@ const Cart = () => {
                                         商品を購入する
                                     </p>
                                 </a>
+                            </div>
+                            <div>
+                                cart:
+                                {
+                                    JSON.stringify(cart, null, 2)
+                                }
                             </div>
                             <div className=' overflow-y-auto my-5 p-1'>
                                     {

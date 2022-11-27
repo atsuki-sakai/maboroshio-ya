@@ -1,6 +1,6 @@
 
 
-const DEVLOPMENT = false
+const DEVLOPMENT = true
 const NGROK_URL = "https://4af5-133-106-148-20.jp.ngrok.io"
 
 export const HOSTING_URL = DEVLOPMENT ? NGROK_URL :  process.env.NEXT_PUBLIC_HOSTING_URL
