@@ -32,7 +32,6 @@ const Login = () => {
       }
       try{
         setIsLoading(true)
-
         const { customer, customerAccessToken } = await loginCustomer(credential.email, credential.password);
         updateCustomer(customer)
         const options = {
