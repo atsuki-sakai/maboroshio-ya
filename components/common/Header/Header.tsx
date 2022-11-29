@@ -68,7 +68,7 @@ const Header = () => {
                             loggedCustomer !== undefined  ? 
                                             <div className='relative'>
                                                 <div className='absolute -top-1 -left-2 h-2 w-2 bg-green-400 rounded-full'></div>
-                                                <Link href='/account/my-page' passHref>
+                                                <Link href='/account/user/my-page' passHref>
                                                     <a>
                                                         <MyPage/>
                                                     </a>

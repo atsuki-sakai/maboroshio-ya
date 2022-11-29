@@ -11,7 +11,8 @@ const checkoutCustomerDisassociate = async(checkoutId: string) => {
         })
     })
 
-    const { error } = await response.json();
+    const { data, error } = await response.json();
+    console.log(data)
 
     if(error){
         throw Error(error.message)

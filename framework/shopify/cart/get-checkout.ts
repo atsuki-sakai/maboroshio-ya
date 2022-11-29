@@ -14,7 +14,6 @@ const getCheckout = async(id: string): Promise<Checkout> => {
     });
     const { data } = await response.json();
     const checkout = data.node as Checkout
-
     return checkout;
 }
 

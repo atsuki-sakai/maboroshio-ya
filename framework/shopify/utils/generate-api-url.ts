@@ -5,7 +5,7 @@ export type ApiPath = {
     type: "CREATE_CUSTOMER" | "CREATE_CHECKOUT" | "GET_CHECKOUT" | "UPDATE_CHECKOUT"
     | "CHECKOUT_LINE_ITEMS_ADD" | "CHECKOUT_LINE_ITEMS_UPDATE" | "CHECKOUT_LINE_ITEMS_REMOVE"
     | "CUSTOMER_ACCESS_TOKEN_CREATE" | "GET_CUSTOMER" | "CHECKOUT_CUSTOMER_ASSOCIATE"
-    | "CHECKOUT_CUSTOMER_DISASSOCIATE";
+    | "CHECKOUT_CUSTOMER_DISASSOCIATE" | "CUSTOMER_ADDRESS_CREATE" | "CUSTOMER_DEFAULT_ADDRESS_UPDATE";
 }
 
 
@@ -40,6 +40,12 @@ export const generateApiUrl = (apiPath: ApiPath) => {
         }
         case "CHECKOUT_CUSTOMER_DISASSOCIATE" : {
             return `${HOSTING_URL}/api/auth/checkout-customer-disassociate`
+        }
+        case "CUSTOMER_ADDRESS_CREATE" : {
+            return `${HOSTING_URL}/api/auth/customer-address-create`
+        }
+        case "CUSTOMER_DEFAULT_ADDRESS_UPDATE" : {
+            return `${HOSTING_URL}/api/auth/customer-default-address-update`
         }
         default : {
             throw Error('It is an APITYPE that does not exist...')

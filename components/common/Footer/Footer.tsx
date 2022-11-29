@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 const Footer = () => {
     return (
-        <div className=''>
+        <div className='border-t bg-gray-100'>
             <div className='p-3'>
                 <div className="-translate-x-4 font-serif w-fit pl-4">
                     <Link href={"/"} passHref>

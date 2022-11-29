@@ -10,12 +10,8 @@ type ReturnType = {
 
 const loginCustomer = async (email: string, password: string): Promise<ReturnType> => {
 
-    console.log('2')
     const customerAccessToken = await createCustomerAccessToken(email, password);
-    console.log('3')
-    console.log(getCheckoutId()!, customerAccessToken.accessToken)
     const customer = await checkoutCustomerAssociate(getCheckoutId()!, customerAccessToken.accessToken)
-    console.log('4')
     return { customer, customerAccessToken };
 }
 

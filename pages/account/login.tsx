@@ -32,9 +32,8 @@ const Login = () => {
       }
       try{
         setIsLoading(true)
-        console.log('1')
+
         const { customer, customerAccessToken } = await loginCustomer(credential.email, credential.password);
-        console.log('2')
         updateCustomer(customer)
         const options = {
           expires: SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE!
@@ -77,7 +76,7 @@ const Login = () => {
             </form>
             <div className='w-fit mx-auto pt-8'>
               <button className={`px-6 py-2 textp-center bg-gradient-to-tl to-blue-500 from-sky-400 rounded-md`} onClick={login} disabled={isLoading}>
-              <div className='flex items-center justify-between'>
+                <div className='flex items-center justify-between'>
                     <p className='text-white font-bold'>ログインする</p>
                     <motion.div className="ml-2 -translate-y-1.5" initial={{ opacity:0, height:12, width:0 }} animate={{ opacity: isLoading ? 1: 0, height:12, width: isLoading ? 12: 0 }}>
                       <LoadCircle className='text-white h-6 w-6 animate-spin'/>
