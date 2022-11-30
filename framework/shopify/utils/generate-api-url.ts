@@ -5,14 +5,15 @@ export type ApiPath = {
     type: "CREATE_CUSTOMER" | "CREATE_CHECKOUT" | "GET_CHECKOUT" | "UPDATE_CHECKOUT"
     | "CHECKOUT_LINE_ITEMS_ADD" | "CHECKOUT_LINE_ITEMS_UPDATE" | "CHECKOUT_LINE_ITEMS_REMOVE"
     | "CUSTOMER_ACCESS_TOKEN_CREATE" | "GET_CUSTOMER" | "CHECKOUT_CUSTOMER_ASSOCIATE"
-    | "CHECKOUT_CUSTOMER_DISASSOCIATE" | "CUSTOMER_ADDRESS_CREATE" | "CUSTOMER_DEFAULT_ADDRESS_UPDATE";
+    | "CHECKOUT_CUSTOMER_DISASSOCIATE" | "CUSTOMER_ADDRESS_CREATE" | "CUSTOMER_DEFAULT_ADDRESS_UPDATE"
+    | "CUSTOMER_ADDRESS_UPDATE" | "CUSTOMER_ADDRESS_DELETE";
 }
 
 
 export const generateApiUrl = (apiPath: ApiPath) => {
     switch(apiPath.type){
         case "CREATE_CUSTOMER": {
-            return `${HOSTING_URL}/api/auth/create-customer`
+            return `${HOSTING_URL}/api/customer/create-customer`
         }
         case "CREATE_CHECKOUT": {
             return `${HOSTING_URL}/api/cart/create-checkout`
@@ -30,22 +31,28 @@ export const generateApiUrl = (apiPath: ApiPath) => {
             return `${HOSTING_URL}/api/cart/checkout-line-items-remove`;
         }
         case "CUSTOMER_ACCESS_TOKEN_CREATE" : {
-            return `${HOSTING_URL}/api/auth/customer-access-token-create`;
+            return `${HOSTING_URL}/api/customer/customer-access-token-create`;
         }
         case "GET_CUSTOMER" : {
-            return `${HOSTING_URL}/api/auth/get-customer`
+            return `${HOSTING_URL}/api/customer/get-customer`
         }
         case "CHECKOUT_CUSTOMER_ASSOCIATE" : {
-            return `${HOSTING_URL}/api/auth/checkout-customer-associate`
+            return `${HOSTING_URL}/api/customer/checkout-customer-associate`
         }
         case "CHECKOUT_CUSTOMER_DISASSOCIATE" : {
-            return `${HOSTING_URL}/api/auth/checkout-customer-disassociate`
+            return `${HOSTING_URL}/api/customer/checkout-customer-disassociate`
         }
         case "CUSTOMER_ADDRESS_CREATE" : {
-            return `${HOSTING_URL}/api/auth/customer-address-create`
+            return `${HOSTING_URL}/api/customer/customer-address-create`
         }
         case "CUSTOMER_DEFAULT_ADDRESS_UPDATE" : {
-            return `${HOSTING_URL}/api/auth/customer-default-address-update`
+            return `${HOSTING_URL}/api/customer/customer-default-address-update`
+        }
+        case "CUSTOMER_ADDRESS_UPDATE" : {
+            return `${HOSTING_URL}/api/customer/customer-address-update`
+        }
+        case "CUSTOMER_ADDRESS_DELETE" : {
+            return `${HOSTING_URL}/api/customer/customer-address-delete`
         }
         default : {
             throw Error('It is an APITYPE that does not exist...')

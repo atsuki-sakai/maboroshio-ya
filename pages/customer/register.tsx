@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Container, AlertDialog, Field } from "@components/ui"
-import { createCustomer, loginCustomer } from '@shopify/auth'
+import { createCustomer, loginCustomer } from '@shopify/customer'
 import { useCustomerState } from '@components/context'
 import Cookies from 'js-cookie'
 import { SHOPIFY_CUSTOMER_ACCESS_TOKEN, SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE } from '@shopify/const'
@@ -118,7 +118,7 @@ const Register = () => {
                 </button>
               </div>
               <div className='pt-8 w-full text-center'>
-                <Link href={"/account/login"} passHref>
+                <Link href={"/customer/login"} passHref>
                   <a className='text-sm text-blue-600 underline'>
                     アカウントをすでにお持ちですか？
                   </a>

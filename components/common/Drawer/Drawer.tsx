@@ -61,7 +61,7 @@ const Drawer = () => {
                                         マイページ
                                     </div>
                                     <div onClick={onDrawerClose}>
-                                        <Link href={"/account/login"} passHref>
+                                        <Link href={"/customer/login"} passHref>
                                             <a>
                                                 会員登録 / ログイン
                                             </a>

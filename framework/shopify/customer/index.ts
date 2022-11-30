@@ -7,3 +7,6 @@ export { default as createCustomerAccessToken } from "./create-customer-access-t
 export { default as checkoutCustomerAssociate } from "./checkout-customer-associate"
 export { default as checkoutCustomerDisassociate } from "./checkout-customer-disassociate"
 export { default as customerDefaultAddressUpdate } from "./customer-default-address-update"
+export { default as customerAddressCreate } from "./customer-address-create"
+export { default as customerAddressUpdate } from "./customer-address-update"
+export { default as customerAddressDelete } from "./customer-address-delete"

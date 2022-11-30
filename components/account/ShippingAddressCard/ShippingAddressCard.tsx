@@ -1,15 +1,20 @@
 
+import { Check } from '@components/icon'
 import provinceToJP from '@lib/province-to-jp'
 import { MailingAddress } from '@shopify/shema'
 import React from 'react'
 
 interface Props {
     address: MailingAddress
+    isDefault?: boolean
 }
 
-const ShippingAddressCard = ({address}: Props) => {
+const ShippingAddressCard = ({address, isDefault = false}: Props) => {
     return (
         <div className="text-xs text-gray-500 p-3">
+            {
+                isDefault ? <div className='w-full px-2 py-0.5 flex items-center justify-center mb-1 text-green-500 bg-green-100'> <Check className='h-5 w-5'/>選択中</div>: <></>
+            }
             <p className="text-black text-sm">{address.lastName}{address.firstName}</p>
             <p>{address.company}</p>
             <p>{address.phone}</p>

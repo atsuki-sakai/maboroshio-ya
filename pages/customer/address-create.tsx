@@ -2,8 +2,8 @@
 import React, { useState } from 'react'
 import { Container, Field } from '@components/ui'
 import { useCustomerState } from "@components/context"
-import customerAddressCreate from '@shopify/auth/customer-address-create'
-import { getCustomer, getCustomerAccessToken } from '@shopify/auth'
+import customerAddressCreate from '@shopify/customer/customer-address-create'
+import { getCustomer, getCustomerAccessToken } from '@shopify/customer'
 
 
 

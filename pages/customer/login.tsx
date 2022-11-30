@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { AlertDialog, Container, Field } from "@components/ui"
-import { loginCustomer } from '@shopify/auth'
+import { loginCustomer } from '@shopify/customer'
 import { useCustomerState } from "@components/context"
 import { LoadCircle } from '@components/icon'
 import { SHOPIFY_CUSTOMER_ACCESS_TOKEN, SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE } from '@shopify/const'
@@ -84,7 +84,7 @@ const Login = () => {
               </button>
             </div>
             <div className='pt-8 w-full text-center'>
-              <Link href={"/account/register"} passHref>
+              <Link href={"/customer/register"} passHref>
                 <a className='text-sm text-blue-600 underline'>
                   アカウントをお持ちでないですか？
                 </a>

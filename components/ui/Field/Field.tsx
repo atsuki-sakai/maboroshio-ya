@@ -15,7 +15,7 @@ interface Props {
 
 const Field = ({ label, value, placeHolder, autoComplete = "", type = "text", id, required = false, onChange }: Props) => {
     return (
-        <div>
+        <>
             <div className='flex items-end mb-1'>
                 <label htmlFor={id} className='text-xs text-gray-700'>{label}</label>
                 {
@@ -25,7 +25,7 @@ const Field = ({ label, value, placeHolder, autoComplete = "", type = "text", id
                 }
             </div>
             <input id={id} className={`w-full h-10 text-base bg-gray-50 text-gray-500 pl-2 border rounded-md focus:outline-none`} type={type} autoComplete={autoComplete} placeholder={placeHolder} value={value} onChange={onChange} />
-        </div>
+        </>
     )
 }
 

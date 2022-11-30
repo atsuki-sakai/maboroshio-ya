@@ -1,6 +1,6 @@
 
 
-import { getCustomer, getCustomerAccessToken } from '@shopify/auth'
+import { getCustomer, getCustomerAccessToken } from '@shopify/customer'
 import { Customer } from '@shopify/shema'
 import React, { useContext, createContext, useMemo, useState, useEffect, ReactNode } from 'react'
 

@@ -1,7 +1,7 @@
-import { CustomerDefaultAddressUpdatePayload } from "@shopify/shema";
+import { Customer, CustomerDefaultAddressUpdatePayload } from "@shopify/shema";
 import { generateApiUrl } from "@shopify/utils/generate-api-url"
 
-const customerDefaultAddressUpdate = async(addressId: string, customerAccessToken: string) => {
+const customerDefaultAddressUpdate = async(addressId: string, customerAccessToken: string): Promise<Customer> => {
 
     const customerDefaultAddressUpdateApiUrl = generateApiUrl({type: "CUSTOMER_DEFAULT_ADDRESS_UPDATE"});
 
@@ -18,8 +18,15 @@ const customerDefaultAddressUpdate = async(addressId: string, customerAccessToke
     if(error){
         throw Error(error.message)
     }
-    
-    console.log(data)
+
+    const { customer, customerUserErrors } = data.customerDefaultAddressUpdate as CustomerDefaultAddressUpdatePayload
+    if(customerUserErrors[0]){
+        throw Error(customerUserErrors[0].message)
+    }
+    if(!customer){
+        throw Error('customer is not defined...');
+    }
+    return customer
 }
 
 export default customerDefaultAddressUpdate

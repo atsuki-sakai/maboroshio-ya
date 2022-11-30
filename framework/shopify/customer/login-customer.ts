@@ -1,5 +1,5 @@
 
-import { createCustomerAccessToken, checkoutCustomerAssociate } from "@shopify/auth";
+import { createCustomerAccessToken, checkoutCustomerAssociate } from "@shopify/customer";
 import { getCheckoutId } from "@shopify/cart";
 import { Customer, CustomerAccessToken } from "@shopify/shema";
 

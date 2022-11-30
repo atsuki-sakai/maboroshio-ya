@@ -1,3 +1,4 @@
+import { CustomerAddressCreatePayload } from "@shopify/shema"
 import { generateApiUrl } from "@shopify/utils/generate-api-url"
 
 
@@ -14,12 +15,11 @@ type CustomerAddressCreateInputType = {
         phone: string
         province: string
         zip: string
-    },
-    customerAccessToken: string
+    }
 }
 
 
-const customerAddressCreate = async(inputData: CustomerAddressCreateInputType) => {
+const customerAddressCreate = async(inputData: CustomerAddressCreateInputType, customerAccessToken: string) => {
 
     const customerAddressCreateApiUrl = generateApiUrl({type: "CUSTOMER_ADDRESS_CREATE"})
     const response = await fetch(customerAddressCreateApiUrl, {
@@ -38,15 +38,19 @@ const customerAddressCreate = async(inputData: CustomerAddressCreateInputType) =
                 province: inputData.address.province,
                 zip: inputData.address.zip
             },
-            customerAccessToken: inputData.customerAccessToken
+            customerAccessToken: customerAccessToken
         })
     })
 
-    const { error } = await response.json();
+    const { data,error } = await response.json();
     if(error){
         throw Error(error.message);
     }
 
+    const { customerUserErrors } = data.customerAddressCreate as CustomerAddressCreatePayload
+    if(customerUserErrors[0]){
+        throw Error(customerUserErrors[0].message)
+    }
 }
 
 export default customerAddressCreate
