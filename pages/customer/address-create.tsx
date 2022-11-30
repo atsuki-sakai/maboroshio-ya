@@ -56,7 +56,7 @@ const AddressCreate = () => {
       },
       customerAccessToken: getCustomerAccessToken()!
     }
-    await customerAddressCreate(createAddressInputData)
+    await customerAddressCreate(createAddressInputData, getCustomerAccessToken()!)
     const customer = await getCustomer(getCustomerAccessToken()!)
     updateCustomer(customer)
   }
