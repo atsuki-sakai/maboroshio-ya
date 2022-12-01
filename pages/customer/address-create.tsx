@@ -23,7 +23,7 @@ type AddressInputType = {
 
 const AddressCreate = () => {
 
-  const { loggedCustomer, updateCustomer } = useCustomerState()
+  const { updateCustomer } = useCustomerState()
 
   const [ addressData, setAddressData ] = useState<AddressInputType>({
     address1: "",

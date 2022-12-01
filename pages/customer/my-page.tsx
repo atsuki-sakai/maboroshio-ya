@@ -83,7 +83,18 @@ const MyPage = () => {
                                                 </Link>
                                             </div>
                                         </div>
-                                        : <div className='h-20 text-gray-500'>配送情報はありません</div>
+                                        : <div>
+                                            <div className='h-20 text-gray-500'>配送情報はありません</div>
+                                            <div>
+                                                <Link href={"/customer/address-update"}>
+                                                    <a>
+                                                        <div className='bg-green-100 w-fit px-3 py-1 rounded-md mt-3'>
+                                                            <p className='text-xs text-green-500'>配送情報を作成</p>
+                                                        </div>
+                                                    </a>
+                                                </Link>
+                                            </div>
+                                        </div>
                     }
                 </div>
             </div>
