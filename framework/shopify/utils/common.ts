@@ -1,6 +1,10 @@
 
 export const checkoutDetailFragment = `
             id
+            email
+            shippingAddress{
+                id
+            }
             webUrl
             subtotalPrice {
                 amount

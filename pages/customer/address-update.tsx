@@ -124,7 +124,7 @@ const AddressUpdate = () => {
         <div className='flex items-center justify-between px-5 pt-4 pb-8 '>
           <h2 className="font-bold">配送情報を編集する</h2>
           <div className='px-3 py-1 rounded-md bg-blue-100' onClick={showAddressCreateView}>
-            <p className="text-blue-500 text-sm">配達住所を作成</p>
+            <p className="text-blue-500 text-sm">新規住所を作成</p>
           </div>
         </div>
         <div className='grid grid-cols-2 gap-3 px-5 pb-12'>
@@ -140,7 +140,7 @@ const AddressUpdate = () => {
                                                                         </div>
                                                                       </div>
                                                                     </div> )
-                                      : <div>アドレスがありません</div>
+                                      : <div className='my-28 text-gray-500 w-full text-sm'>登録住所はありません</div>
           }
         </div>
         <div className={` ${showEdit ? "fixed top-0 left-0 w-full h-full bg-black overflow-y-auto bg-opacity-50 z-20" : "hidden"}`}>
