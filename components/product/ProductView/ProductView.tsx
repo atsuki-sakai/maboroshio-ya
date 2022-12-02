@@ -182,7 +182,7 @@ const ProductView: FC<Props> = ({ product }) => {
                             <div className='text-center h-full pb-3 pt-0.5 flex items-end justify-between px-6'>
                                 <div className='translate-y-1'>
                                     <p className='text-xs text-start'>販売価格</p>
-                                    <p className='text-xs text-red-500'>¥ <span className={`text-2xl font-sans font-bold tracking-wider ${product.totalInventory === 0 ? "line-through" : "" }`}>{variant?.price}</span> 税込</p>
+                                    <p className='text-xs text-red-500'>¥ <span className={`text-2xl font-sans font-bold tracking-wider ${product.totalInventory === 0 ? "line-through" : "" }`}>{variant?.price}</span> 税別</p>
                                 </div>
                                 <button onClick={addItem} className='w-fit h-full' disabled={isLoading || variant?.inventoryQuantity === 0}>
                                     <div className={`flex items-center text-white font-bold px-6 py-2 ${variant?.inventoryQuantity === 0 ? "bg-gray-500" : "bg-gradient-to-tl to-green-600 from-lime-600"} rounded-md shadow-md tracking-widest`}>

@@ -1,7 +1,7 @@
 import { generateApiUrl } from "@shopify/utils/generate-api-url"
 
 
-const checkoutAttributesUpdate = async(chekcoutId: string, attributes: Array<{key:string, value: any }>, allowPartialAddresses?: boolean, note?: string) => {
+const checkoutAttributesUpdate = async(chekcoutId: string, attribute: {key:string, value: string }) => {
 
     const checkoutAttributesUpdateApiUrl = generateApiUrl({type: "CHECKOUT_ATTRIBUTES_UPDATE"})
     const response = await fetch(checkoutAttributesUpdateApiUrl, {
@@ -10,39 +10,38 @@ const checkoutAttributesUpdate = async(chekcoutId: string, attributes: Array<{ke
         body: JSON.stringify({
             checkoutId: chekcoutId,
             input: {
-                allowPartialAddresses: allowPartialAddresses ?? true,
+                allowPartialAddresses: true,
                 customAttributes: [
-                    attributes.map((atrribute) => {
-                        return {
-                            key: atrribute.key,
-                            value: atrribute.value
-                        }
-                    })
-                ],
-                note: note ?? ""
-            }
+                    {
+                        key: attribute.key,
+                        value: attribute.value
+                    }
+                ]
+            },
+            note: ""
         })
     })
 
-    const _input = {
-        checkoutId: chekcoutId,
-        input: {
-            allowPartialAddresses: true,
-            customAttributes: [
-                attributes.map((atrribute) => {
-                    return {
-                        key: atrribute.key,
-                        value: atrribute.value
+    const body = {
+        body: {
+            checkoutId: chekcoutId,
+            input: {
+                allowPartialAddresses:  true,
+                customAttributes: [
+                    {
+                        key: attribute.key,
+                        value: attribute.value
                     }
-                })
-            ],
-            note: note ?? ""
+                ],
+                note: ""
+            }
         }
     }
 
-    console.log('input: ', _input)
+    console.log('body: ', JSON.stringify(body, null, 2))
 
     const { data, error } = await response.json()
+    console.log(data, error)
 
     if(error){
         throw Error(error.message)

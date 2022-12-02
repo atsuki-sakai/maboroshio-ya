@@ -10,14 +10,12 @@ export interface CheckoutAttributesUpdateType {
     checkoutId: string,
     input: {
         allowPartialAddresses: boolean
-        customAttributes: [
-            {
+        customAttributes: {
             key: string
             value: string
-            }
-        ],
-        note: string
-    }
+        }
+    },
+    note: string
 }
 
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
@@ -30,13 +28,13 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         input: {
             allowPartialAddresses: body.input.allowPartialAddresses,
             customAttributes: [
-                body.input.customAttributes.map((attribute) => {
-                    return {
-                        [attribute.key]: attribute.value
-                    }
-                })
+                {
+                    key: body.input.customAttributes.key,
+                    value: body.input.customAttributes.value
+                }
             ]
-        }
+        },
+        note: body.note
     }
 
     const response = await ShopifyApiFeatcher(

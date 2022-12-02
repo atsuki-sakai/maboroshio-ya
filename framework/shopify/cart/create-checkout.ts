@@ -31,13 +31,6 @@ const createCheckout = async (): Promise<Checkout> => {
         Cookies.set(SHOPIFY_CHECKOUT_ID_COOKIE!, checkoutId, options)
         Cookies.set(SHOPIFY_CHECKOUT_URL_COOKIE!, checkout.webUrl, options)
     }
-
-    const attribute = {
-        key: "taxesIncluded",
-        value: true
-    }
-
-    await checkoutAttributesUpdate(getCheckoutId()!,[attribute]);
     return checkout as Checkout;
 }
 

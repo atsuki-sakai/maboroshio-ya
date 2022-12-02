@@ -1,15 +1,16 @@
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useUI, useCart } from '@components/context'
-import { motion } from 'framer-motion';
-import { LineItem } from '@shopify/types/cart';
 import CartCard from './CartCard';
-import RightArrow from '@components/icon/RightArrow';
-import Check from '@components/icon/Check';
+import { Check, LoadCircle, RightArrow } from '@components/icon';
 import { useCustomerState } from '@components/context';
-import { getCheckout, getCheckoutId, checkoutToCart } from '@shopify/cart';
+import { getCheckout, getCheckoutId } from '@shopify/cart';
 import { checkoutShippingAddressUpdate } from "@shopify/cart"
 import { SHOPIFY_STORE_DOMAIN } from '@shopify/const';
+
+import { motion } from 'framer-motion';
+import type { LineItem } from '@shopify/types/cart';
+import { AlertDialog } from '@components/ui';
 
 
 type Address =  {
@@ -30,6 +31,8 @@ const Cart = () => {
     const { isCartOpen, onCartClose } = useUI();
     const { loggedCustomer } = useCustomerState();
     const { cart } = useCart()
+    const [ isLoading, setIsLoading ] = useState(false)
+    const [ errorMessage, setErrorMessage] = useState("")
     const shippingFreeCost = 10000
     const shippingFree = (shippingFreeCost - cart.lineItemsSubtotalPrice) > 0
 
@@ -54,11 +57,16 @@ const Cart = () => {
     }
 
     const checkoutCart = async() => {
-
-        await setupCheckoutShippingAddress()
-        const checkoutParam = getCheckoutId()?.split("Checkout/")[1].split('?')[0]
-        const checkoutUrl = `${SHOPIFY_STORE_DOMAIN}/checkouts/co/${checkoutParam}/information`
-        document.location.href = checkoutUrl
+        try{
+            setIsLoading(true)
+            await setupCheckoutShippingAddress()
+            const checkoutParam = getCheckoutId()?.split("Checkout/")[1].split('?')[0]
+            const checkoutUrl = `${SHOPIFY_STORE_DOMAIN}/checkouts/co/${checkoutParam}/information`
+            const checkout = await getCheckout(getCheckoutId()!)
+            document.location.href = loggedCustomer ? checkoutUrl: checkout.webUrl
+        }catch(e: any){
+            setErrorMessage(e.message)
+        }
     }
 
     return (
@@ -68,6 +76,9 @@ const Cart = () => {
                 transition={{ duration:"0.6" }}
                 className="fixed top-0 left-0 right-0 bottom-0 overflow-y-auto z-50"
             >
+                {
+                    errorMessage ? <AlertDialog title='ERROR' message={errorMessage} onClose={() => setErrorMessage('')}/>: <></> 
+                }
                 <div className="w-screen h-screen">
                     <div className='grid grid-cols-6 h-full'>
                         <div className={`col-span-1 h-full transition duration-300 ease-in-out ${isCartOpen ? "bg-black bg-opacity-50": ""}`} onClick={onCartClose} />
@@ -100,12 +111,15 @@ const Cart = () => {
                                     shippingFree ? <p className='text-xs text-blue-600 bg-blue-100 w-fit rounded-md px-3 py-1'>送料は次のステップで計算されます</p> : <></>
                                 }
                             </div>
-                            <button className='flex justify-center mt-3 w-full' onClick={ checkoutCart } disabled={cart.lineItems.length === 0}>
-                                <a className={`bg-gradient-to-tl to-green-600 from-lime-500 shadow-md w-full py-2 rounded-md`}>
+                            <button className='flex justify-center mt-3 w-full bg-gradient-to-tr to-green-500 from-lime-400 py-2 rounded-md' onClick={ checkoutCart } disabled={cart.lineItems.length === 0 || isLoading}>
+                                <div className='flex items-center justify-between'>
                                     <p className='text-white text-lg font-bold text-center tracking-wider'>
-                                        {cart.lineItems.length === 0 ? "カートは空です": "商品を購入する"}
+                                        {cart.lineItems.length === 0 ? "カートは空です": isLoading ? "決済処理中" : "商品を購入する"}
                                     </p>
-                                </a>
+                                    <motion.div className="ml-2 -translate-y-1.5" initial={{ opacity:0, height:12, width:0 }} animate={{ opacity: isLoading ? 1: 0, height:12, width: isLoading ? 12: 0 }}>
+                                    <LoadCircle className='text-white h-6 w-6 animate-spin'/>
+                                    </motion.div>
+                                </div>
                             </button>
                             <div className='overflow-y-auto my-5 p-1'>
                                     {

@@ -132,7 +132,7 @@ const CartCard = ({ item }: Props) => {
                 </div>
             </div>
             <div className='flex items-center'>
-                <p className='w-full text-xs scale-90'>¥ <span className='text-lg font-bold'>{item.variant.price! * item.quantity}</span> 税込</p>
+                <p className='w-full text-xs scale-90'>¥ <span className='text-lg font-bold'>{item.variant.price! * item.quantity}</span> 税別</p>
                 <div className='relative w-full flex items-center justify-center space-x-1'>
                     <button onClick={increment} disabled={isUpdate}>
                         <Plus className={` h-6 w-6 transition duration-300 ease-in-out ${isUpdate ? "text-gray-400 scale-95": "text-green-400"} `}/>
