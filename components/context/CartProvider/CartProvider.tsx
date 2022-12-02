@@ -2,6 +2,8 @@
 import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 import { createCheckout, getCheckoutId, getCheckout, checkoutToCart } from '@shopify/cart'
 import { Cart, LineItem } from '@shopify/types/cart'
+import Cookies from 'js-cookie'
+import { SHOPIFY_CHECKOUT_ID_COOKIE, SHOPIFY_CHECKOUT_URL_COOKIE } from '@shopify/const'
 
 interface Props  {
     children: ReactNode | ReactNode[]
@@ -53,8 +55,17 @@ export const CartProvider = ({children}: Props) => {
                     // CheckoutIdでcheckoutを取得
                     const id = getCheckoutId()
                     const checkout = await getCheckout(id!)
-                    const cart = checkoutToCart(checkout);
-                    setCart(cart)
+                    if(checkout.completedAt){
+                        alert('cart is completed.')
+                        Cookies.remove(SHOPIFY_CHECKOUT_ID_COOKIE!)
+                        Cookies.remove(SHOPIFY_CHECKOUT_URL_COOKIE!)
+                        const checkout = await createCheckout();
+                        const cart = checkoutToCart(checkout)
+                        setCart(cart)
+                    }else{
+                        const cart = checkoutToCart(checkout);
+                        setCart(cart)
+                    }
                 }else{
                     // Checkoutをを新しく作る
                     const checkout = await createCheckout();

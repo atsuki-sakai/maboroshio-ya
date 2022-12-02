@@ -10,3 +10,5 @@ export { default as customerDefaultAddressUpdate } from "./customer-default-addr
 export { default as customerAddressCreate } from "./customer-address-create"
 export { default as customerAddressUpdate } from "./customer-address-update"
 export { default as customerAddressDelete } from "./customer-address-delete"
+export { default as customerRecover } from "./customer-recover"
+export { default as customerResetPassword } from "./customer-reset-password"

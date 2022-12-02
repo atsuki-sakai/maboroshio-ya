@@ -66,14 +66,11 @@ const Cart = () => {
             document.location.href = loggedCustomer ? checkoutUrl: checkout.webUrl
         }catch(e: any){
             setErrorMessage(e.message)
+        }finally{
+            setIsLoading(false)
         }
     }
 
-    useEffect(() => {
-        return () => {
-            setIsLoading(false)
-        }
-    })
 
     return (
             <motion.div

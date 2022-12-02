@@ -13,3 +13,5 @@ export { default as customerAddressUpdateMutation } from "./customer-address-upd
 export { default as customerAddressDeleteMutation } from "./customer-address-delete"
 export { default as checkoutShippingAddressUpdateMutation } from "./checkout-shipping-address-update"
 export { default as checkoutAttributesUpdateMutation } from "./checkout-attributes-update"
+export { default as customerRecoverMutation } from "./customer-recover"
+export { default as customerResetPasswordMutation } from "./customer-reset-password"
