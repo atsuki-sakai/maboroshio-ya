@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useUI, useCart } from '@components/context'
 import CartCard from './CartCard';
 import { Check, LoadCircle, RightArrow } from '@components/icon';
@@ -68,6 +68,12 @@ const Cart = () => {
             setErrorMessage(e.message)
         }
     }
+
+    useEffect(() => {
+        return () => {
+            setIsLoading(false)
+        }
+    })
 
     return (
             <motion.div
