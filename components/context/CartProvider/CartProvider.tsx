@@ -40,7 +40,6 @@ const CartContext = createContext<State>(initialState)
 export const CartProvider = ({children}: Props) => {
 
     const [cart, setCart] = useState<Cart>(initialCart)
-
     const updateCart = (cart: Cart) => {
         setCart(cart)
     };

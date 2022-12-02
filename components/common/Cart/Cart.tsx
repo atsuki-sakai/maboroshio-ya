@@ -56,8 +56,15 @@ const Cart = () => {
 
         await setupCheckoutShippingAddress()
         const checkout = await getCheckout(getCheckoutId()!)
-        document.location.href = checkout.webUrl
+        // document.location.href = checkout.webUrl
+        console.log(checkout)
+        console.log(checkout.webUrl)
+
     }
+
+    //"https://xn-68jwdf5d1604a.myshopify.com/67052536124/checkouts/4dffd7a090d796ff58a19ff3579fa611?key=2db4440ece221c4308ca653e11d428ba"
+    //"https://xn-68jwdf5d1604a.myshopify.com/67052536124/checkouts/4dffd7a090d796ff58a19ff3579fa611?key=2db4440ece221c4308ca653e11d428ba"
+     //https://xn-68jwdf5d1604a.myshopify.com/checkouts/co/4dffd7a090d796ff58a19ff3579fa611/information
 
     return (
             <motion.div
