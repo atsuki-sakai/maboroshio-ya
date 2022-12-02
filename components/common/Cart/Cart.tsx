@@ -6,23 +6,59 @@ import { LineItem } from '@shopify/types/cart';
 import CartCard from './CartCard';
 import RightArrow from '@components/icon/RightArrow';
 import Check from '@components/icon/Check';
-import { getCheckout, getCheckoutId } from '@shopify/cart';
+import { useCustomerState } from '@components/context';
+import { getCheckout, getCheckoutId, checkoutToCart } from '@shopify/cart';
+import { checkoutShippingAddressUpdate } from "@shopify/cart"
+
+
+type Address =  {
+    address1: string
+    address2: string
+    city: string
+    company: string
+    country: string
+    firstName: string
+    lastName: string
+    phone: string
+    province: string
+    zip: string
+}
 
 const Cart = () => {
 
     const { isCartOpen, onCartClose } = useUI();
+    const { loggedCustomer } = useCustomerState();
     const { cart } = useCart()
     const shippingFreeCost = 10000
-    const shippingFree = (shippingFreeCost - cart.totalPrice) > 0
+    const shippingFree = (shippingFreeCost - cart.lineItemsSubtotalPrice) > 0
 
     const cartTotalQuantity = () => cart.lineItems.map((item: LineItem) => item.quantity).reduce((sum, element) => sum + element, 0)
 
-
+    const setupCheckoutShippingAddress = async() => {
+        if(loggedCustomer?.defaultAddress){
+            const updateAddress: Address = {
+                address1: loggedCustomer.defaultAddress.address1 ?? "",
+                address2: loggedCustomer.defaultAddress.address2 ?? "",
+                city: loggedCustomer.defaultAddress.city ?? "",
+                company: loggedCustomer.defaultAddress.company ?? "",
+                country: loggedCustomer.defaultAddress.country ?? "",
+                firstName: loggedCustomer.defaultAddress.firstName ?? "",
+                lastName: loggedCustomer.defaultAddress.lastName ?? "",
+                phone: loggedCustomer.defaultAddress.phone ?? "",
+                province: loggedCustomer.defaultAddress.province ?? "",
+                zip: loggedCustomer.defaultAddress.zip ?? ""
+            }
+            await checkoutShippingAddressUpdate(getCheckoutId()!, updateAddress);
+        }
+    }
 
     const checkoutCart = async() => {
+
+        await setupCheckoutShippingAddress()
         const checkout = await getCheckout(getCheckoutId()!)
-        console.log(checkout)
+        document.location.href = checkout.webUrl
     }
+
     return (
             <motion.div
                 initial={{ x:"100%", opacity:0.0 }}
@@ -50,7 +86,7 @@ const Cart = () => {
                                 </div>
                                 <div className='grid grid-cols-7 items-end justify-between mt-2 py-2 px-2 rounded-md bg-gray-100'>
                                     <div className="col-span-4 text-gray-500 text-sm font-noto">
-                                        合計 <span className="font-sans text-black text-3xl">¥{Math.floor(cart.totalPrice)}</span>
+                                        合計 <span className="font-sans text-black text-3xl">¥{Math.floor(cart.lineItemsSubtotalPrice)}</span>
                                     </div>
                                     <div className='col-span-3'>
                                         <p className='text-sm text-end text-gray-500'><span className='text-lg font-semibold text-black'>{cartTotalQuantity()}</span> 点の商品</p>
@@ -62,13 +98,13 @@ const Cart = () => {
                                     shippingFree ? <p className='text-xs text-blue-600 bg-blue-100 w-fit rounded-md px-3 py-1'>送料は次のステップで計算されます</p> : <></>
                                 }
                             </div>
-                            <div className='flex justify-center mt-3' onClick={checkoutCart}>
+                            <button className='flex justify-center mt-3 w-full' onClick={ checkoutCart } disabled={cart.lineItems.length === 0}>
                                 <a className={`bg-gradient-to-tl to-green-600 from-lime-500 shadow-md w-full py-2 rounded-md`}>
                                     <p className='text-white text-lg font-bold text-center tracking-wider'>
-                                        商品を購入する
+                                        {cart.lineItems.length === 0 ? "カートは空です": "商品を購入する"}
                                     </p>
                                 </a>
-                            </div>
+                            </button>
                             <div className='overflow-y-auto my-5 p-1'>
                                     {
                                         cart.lineItems.length === 0

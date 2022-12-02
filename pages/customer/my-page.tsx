@@ -6,10 +6,11 @@ import { checkoutCustomerDisassociate } from "@shopify/customer"
 import { useCustomerState } from '@components/context'
 import { useRouter } from 'next/router'
 import { SHOPIFY_CUSTOMER_ACCESS_TOKEN } from '@shopify/const'
-import { getCheckoutId } from '@shopify/cart'
+import { checkoutShippingAddressUpdate, getCheckoutId } from '@shopify/cart'
 import { LoadCircle } from '@components/icon'
 import Cookies from 'js-cookie'
 import { motion } from 'framer-motion'
+import provinceToJP from '@lib/province-to-jp'
 
 
 const MyPage = () => {
@@ -23,6 +24,7 @@ const MyPage = () => {
     const logout = async () => {
         try{
             setIsLoading(true)
+            await checkoutShippingAddressUpdate(getCheckoutId()!)
             await checkoutCustomerDisassociate(getCheckoutId()!)
             Cookies.remove(SHOPIFY_CUSTOMER_ACCESS_TOKEN!)
             updateCustomer(undefined)
@@ -38,7 +40,6 @@ const MyPage = () => {
 
     const defaultAddress = loggedCustomer && loggedCustomer!.defaultAddress
     const orders = loggedCustomer && loggedCustomer!.orders.edges.map(({node: order}) => order);
-    console.log("mypage default address: ",defaultAddress?.id)
 
     return (
         <Container>
@@ -46,9 +47,9 @@ const MyPage = () => {
             <div className="px-8">
                 <div className='flex items-end justify-between pt-6 pb-4'>
                     <h3 className='font-bold'>お客様の注文履歴</h3>
-                    <button className="px-3 py-1 textp-center bg-gray-500 rounded-md" onClick={logout} disabled={isLoading}>
+                    <button className="px-3 py-1 textp-center bg-gray-300 rounded-md" onClick={logout} disabled={isLoading}>
                         <div className='flex items-center text-center w-full justify-between'>
-                            <p className='text-white text-sm font-bold'>ログアウト</p>
+                            <p className='text-gray-500 text-xs font-bold'>ログアウト</p>
                             <motion.div className="ml-1 mr-1 -translate-y-1" initial={{ opacity:0, height:6, width:0 }} animate={{ opacity: isLoading ? 1: 0, height:12, width: isLoading ? 12: 0 }}>
                             <LoadCircle className='text-white h-5 w-5 animate-spin'/>
                             </motion.div>
@@ -57,7 +58,7 @@ const MyPage = () => {
                 </div>
                 <div className='pt-3 grid grid-cols-2 gap-3'>
                     {
-                        orders?.length !== 0 ? "ok": <div className='col-span-2 text-gray-500 text-sm h-20'>まだ注文履歴はありません</div>
+                        orders ? orders.length === 0 ?  <div className='col-span-2 text-gray-500 text-sm h-20'>まだ注文履歴はありません</div>: <div className='h-20'>ORDER COOUNT: { orders.length }</div> : <div className="col-span-2 text-gray-500 text-sm h-20">まだ注文履歴はありません</div>
                     }
                 </div>
                 <div className="py-12">
@@ -68,7 +69,7 @@ const MyPage = () => {
                                                 <p>{defaultAddress?.lastName}{defaultAddress?.firstName}</p>
                                                 <p>{defaultAddress?.company}</p>
                                                 <p>{defaultAddress?.phone}</p>
-                                                <p>{defaultAddress?.province}</p>
+                                                <p>{provinceToJP(defaultAddress?.province!)}</p>
                                                 <p>{defaultAddress?.city}</p>
                                                 <p>{defaultAddress?.address1}</p>
                                                 <p>{defaultAddress?.address2}</p>
@@ -84,7 +85,7 @@ const MyPage = () => {
                                             </div>
                                         </div>
                                         : <div>
-                                            <div className='h-20 text-gray-500'>配送情報はありません</div>
+                                            <div className='pt-5 h-20 text-gray-500 text-sm'>配送情報はありません</div>
                                             <div>
                                                 <Link href={"/customer/address-update"}>
                                                     <a>

@@ -11,3 +11,4 @@ export { default as customerAddressCreateMutation } from "./customer-address-cre
 export { default as customerDefaultAddressUpdateMutation } from "./customer-default-address-update"
 export { default as customerAddressUpdateMutation } from "./customer-address-update"
 export { default as customerAddressDeleteMutation } from "./customer-address-delete"
+export { default as checkoutShippingAddressUpdateMutation } from "./checkout-shipping-address-update"

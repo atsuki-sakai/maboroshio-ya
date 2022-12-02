@@ -3,9 +3,11 @@ import React, { useEffect, useState } from 'react'
 import { AlertDialog, Container, Field } from '@components/ui'
 import { useCustomerState } from "@components/context"
 import { ShippingAddressCard } from '@components/account'
+import { checkoutShippingAddressUpdate } from "@shopify/cart"
 import { customerDefaultAddressUpdate, getCustomerAccessToken, customerAddressDelete, customerAddressUpdate, customerAddressCreate, getCustomer } from "@shopify/customer"
 import provinceToJP from '@lib/province-to-jp'
 import { MailingAddress } from '@shopify/shema'
+import { getCheckoutId, getCheckout } from '@shopify/cart'
 
 const AddressUpdate = () => {
 
@@ -25,7 +27,6 @@ const AddressUpdate = () => {
       try{
         setIsLoading(true)
         const newAddress = {
-          address: {
             address1: editAddress.address1 ?? "",
             address2: editAddress.address2 ?? "",
             city: editAddress.city ?? "",
@@ -36,12 +37,10 @@ const AddressUpdate = () => {
             phone: editAddress.phone ?? "",
             province: editAddress.province ?? "",
             zip: editAddress.zip ?? ""
-          }
         }
         await customerAddressUpdate(newAddress, getCustomerAccessToken()!, address.id!)
         let customer
         if(address.id !== defaultAddress?.id){
-          console.log('not match')
           customer = await customerDefaultAddressUpdate(address.id!, getCustomerAccessToken()!)
         }else{
           customer = await getCustomer(getCustomerAccessToken()!)
@@ -56,12 +55,15 @@ const AddressUpdate = () => {
     }
 
     const deleteAddress = async (address: MailingAddress) => {
+      
+      await checkoutShippingAddressUpdate(getCheckoutId()!)
       await customerAddressDelete(getCustomerAccessToken()!, address.id)
       const customer = await getCustomer(getCustomerAccessToken()!)
       updateCustomer(customer);
     }
 
     const closeEditView = () => {
+      setEditAddress({})
       setShowEdit(false)
       setIsUpdateAddress(false)
     }
@@ -75,12 +77,12 @@ const AddressUpdate = () => {
     const showAddressCreateView = async () => {
       setShowEdit(true)
       setIsNewAddress(true)
-      setEditAddress({})
     }
+
     const closeAddressCreateView = async () => {
+      setEditAddress({})
       setShowEdit(false)
       setIsNewAddress(false)
-      setEditAddress({})
     }
 
     const createNewAddress = async (e: any) => {
@@ -97,13 +99,22 @@ const AddressUpdate = () => {
             firstName: editAddress.firstName ?? "",
             lastName: editAddress.lastName ?? "",
             phone: editAddress.phone ?? "",
-            province: editAddress.province ?? "",
+            province: provinceToJP(editAddress.province!) ?? "",
             zip: editAddress.zip ?? ""
           }
         }
-        await customerAddressCreate(newAddress, getCustomerAccessToken()!)
-        const customer = await getCustomer(getCustomerAccessToken()!)
-        updateCustomer(customer)
+        // デフォルトの住所に指定の場合
+        if(isUpdateAddress){
+          const _address = await customerAddressCreate(newAddress, getCustomerAccessToken()!)
+          if(_address.id !== defaultAddress?.id){
+            const customer = await customerDefaultAddressUpdate(_address.id!, getCustomerAccessToken()!)
+            updateCustomer(customer)
+          }
+        }else{
+          await customerAddressCreate(newAddress, getCustomerAccessToken()!)
+          const customer = await getCustomer(getCustomerAccessToken()!)
+          updateCustomer(customer)
+        }
         closeAddressCreateView()
       }catch(e: any){
         setErrorMessage(e.message)
@@ -117,17 +128,17 @@ const AddressUpdate = () => {
 
   return (
     <Container>
-      <div className='relative'>
+      <div className='relative px-8 pt-6 pb-4'>
         {
           errorMessage ? <AlertDialog title='ERROR' message={errorMessage} onClose={() => setErrorMessage("")}/>: <></>
         }
-        <div className='flex items-center justify-between px-5 pt-4 pb-8 '>
+        <div className='flex items-center justify-between'>
           <h2 className="font-bold">配送情報を編集する</h2>
           <div className='px-3 py-1 rounded-md bg-blue-100' onClick={showAddressCreateView}>
             <p className="text-blue-500 text-sm">新規住所を作成</p>
           </div>
         </div>
-        <div className='grid grid-cols-2 gap-3 px-5 pb-12'>
+        <div className='grid grid-cols-2 gap-3 pt-8 pb-12'>
           {
               addresses?.length !== 0 ? addresses?.map((_address) => <div key={_address.id} className="border shadow-sm pb-3 flex flex-col justify-between">
                                                                       <ShippingAddressCard key={_address.id} isDefault={_address.id === defaultAddress?.id} address={_address}/>
@@ -140,11 +151,11 @@ const AddressUpdate = () => {
                                                                         </div>
                                                                       </div>
                                                                     </div> )
-                                      : <div className='my-28 text-gray-500 w-full text-sm'>登録住所はありません</div>
+                                      : <div className='my-28 text-gray-500 w-full text-sm'>配送情報はありません</div>
           }
         </div>
         <div className={` ${showEdit ? "fixed top-0 left-0 w-full h-full bg-black overflow-y-auto bg-opacity-50 z-20" : "hidden"}`}>
-          <div className='h-fit bg-white rounded-md shadow-md mx-8 my-16 p-5'>
+          <div className='h-fit bg-white rounded-md shadow-md mx-8 mb-16 mt-28 p-5'>
             <div className='flex items-center justify-between mb-4'>
               <p className="font-bold">配送情報</p>
               <div className='px-3 py-1 bg-gray-700 rounded-md' onClick={isNewAddress ? closeAddressCreateView : closeEditView} >

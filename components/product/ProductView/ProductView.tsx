@@ -39,6 +39,14 @@ const ProductView: FC<Props> = ({ product }) => {
 
     const [ quantity, setQuantity ] = useState<number>(variant?.inventoryQuantity! === 0 ? 0: 1)
 
+
+    const updateChoices = (option: any, value: any, index: number) => {
+        setChoices({
+            ...choices,
+            [option.displayName.toLocaleLowerCase()]: value.label.toLocaleLowerCase(),
+            price: String(product.variants[index].price)
+        })
+    }
     const addItem = async () => {
         setIsLoading(true)
         try{
@@ -160,6 +168,7 @@ const ProductView: FC<Props> = ({ product }) => {
                                                                     [option.displayName.toLocaleLowerCase()]: value.label.toLocaleLowerCase(),
                                                                     price: String(product.variants[index].price)
                                                                 })
+                                                                setQuantity(1)
                                                             }}
                                                         >
                                                             <p className='font-sans'><span className='text-sm'>{ value.label }</span></p>
