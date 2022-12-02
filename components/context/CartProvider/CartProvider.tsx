@@ -55,7 +55,7 @@ export const CartProvider = ({children}: Props) => {
                     const id = getCheckoutId()
                     const checkout = await getCheckout(id!)
                     if(checkout.completedAt){
-                        alert('このチェックアウトは完了しています 時刻:', checkout.completedAt)
+                        alert(`このチェックアウトは完了しています 時刻: ${checkout.completedAt}`)
                     }
                     const cart = checkoutToCart(checkout);
                     setCart(cart)
