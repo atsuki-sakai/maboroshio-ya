@@ -1,7 +1,10 @@
 
 
-const DEVLOPMENT = true
+const DEVLOPMENT = false
 const NGROK_URL = "https://51ad-219-122-209-55.jp.ngrok.io"
+
+// .envに移す
+export const SHOPIFY_STORE_DOMAIN = "https://xn-68jwdf5d1604a.myshopify.com"
 
 export const HOSTING_URL = DEVLOPMENT ? NGROK_URL :  process.env.NEXT_PUBLIC_HOSTING_URL
 export const SHOPIFY_ADMIN_API_URL = process.env.NEXT_PUBLIC_SHOPIFY_ADMIN_API_URL

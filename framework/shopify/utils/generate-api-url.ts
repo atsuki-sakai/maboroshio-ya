@@ -6,7 +6,7 @@ export type ApiPath = {
     | "CHECKOUT_LINE_ITEMS_ADD" | "CHECKOUT_LINE_ITEMS_UPDATE" | "CHECKOUT_LINE_ITEMS_REMOVE"
     | "CUSTOMER_ACCESS_TOKEN_CREATE" | "GET_CUSTOMER" | "CHECKOUT_CUSTOMER_ASSOCIATE"
     | "CHECKOUT_CUSTOMER_DISASSOCIATE" | "CUSTOMER_ADDRESS_CREATE" | "CUSTOMER_DEFAULT_ADDRESS_UPDATE"
-    | "CUSTOMER_ADDRESS_UPDATE" | "CUSTOMER_ADDRESS_DELETE" | "CHECKOUT_SHIPPING_ADDRESS_UPDATE";
+    | "CUSTOMER_ADDRESS_UPDATE" | "CUSTOMER_ADDRESS_DELETE" | "CHECKOUT_SHIPPING_ADDRESS_UPDATE" | "CHECKOUT_ATTRIBUTES_UPDATE";
 }
 
 
@@ -56,6 +56,9 @@ export const generateApiUrl = (apiPath: ApiPath) => {
         }
         case "CHECKOUT_SHIPPING_ADDRESS_UPDATE" : {
             return `${HOSTING_URL}/api/cart/checkout-shipping-address-update`
+        }
+        case "CHECKOUT_ATTRIBUTES_UPDATE" : {
+            return `${HOSTING_URL}/api/cart/checkout-attributes-update`
         }
         default : {
             throw Error('It is an APITYPE that does not exist...')

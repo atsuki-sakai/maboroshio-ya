@@ -9,6 +9,7 @@ import Check from '@components/icon/Check';
 import { useCustomerState } from '@components/context';
 import { getCheckout, getCheckoutId, checkoutToCart } from '@shopify/cart';
 import { checkoutShippingAddressUpdate } from "@shopify/cart"
+import { SHOPIFY_STORE_DOMAIN } from '@shopify/const';
 
 
 type Address =  {
@@ -55,16 +56,10 @@ const Cart = () => {
     const checkoutCart = async() => {
 
         await setupCheckoutShippingAddress()
-        const checkout = await getCheckout(getCheckoutId()!)
-        // document.location.href = checkout.webUrl
-        console.log(checkout)
-        console.log(checkout.webUrl)
-
+        const checkoutParam = getCheckoutId()?.split("Checkout/")[1].split('?')[0]
+        const checkoutUrl = `${SHOPIFY_STORE_DOMAIN}/checkouts/co/${checkoutParam}/information`
+        document.location.href = checkoutUrl
     }
-
-    //"https://xn-68jwdf5d1604a.myshopify.com/67052536124/checkouts/4dffd7a090d796ff58a19ff3579fa611?key=2db4440ece221c4308ca653e11d428ba"
-    //"https://xn-68jwdf5d1604a.myshopify.com/67052536124/checkouts/4dffd7a090d796ff58a19ff3579fa611?key=2db4440ece221c4308ca653e11d428ba"
-     //https://xn-68jwdf5d1604a.myshopify.com/checkouts/co/4dffd7a090d796ff58a19ff3579fa611/information
 
     return (
             <motion.div
@@ -88,7 +83,7 @@ const Cart = () => {
                             <div className='mt-5'>
                                 <div className='w-full flex items-center justify-end rounded-md text-center'>
                                     {
-                                        shippingFree ? <p className='bg-indigo-100 text-xs text-indigo-600 rounded-md px-2 py-0.5'>あと<span className='text-base font-bold'>¥{shippingFreeCost - cart.totalPrice}</span>で<span className='text-sm font-bold'>送料無料</span></p> : <div className='bg-green-100 flex items-center space-x-2 px-3 py-1 rounded-md'><Check className='text-green-500 w-5 h-5'/><span className='text-green-500 text-sm font-bold'>送料無料</span></div>
+                                        shippingFree ? <p className='bg-indigo-100 text-xs text-indigo-600 rounded-md px-2 py-0.5'>あと<span className='text-base font-bold'>¥{shippingFreeCost - cart.lineItemsSubtotalPrice}</span>で<span className='text-sm font-bold'>送料無料</span></p> : <div className='bg-green-100 flex items-center space-x-2 px-3 py-1 rounded-md'><Check className='text-green-500 w-5 h-5'/><span className='text-green-500 text-sm font-bold'>送料無料</span></div>
                                     }
                                 </div>
                                 <div className='grid grid-cols-7 items-end justify-between mt-2 py-2 px-2 rounded-md bg-gray-100'>
