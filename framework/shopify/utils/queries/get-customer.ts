@@ -1,3 +1,4 @@
+import { checkoutDetailFragment } from "../common"
 
 const getCustomer = `
     query getCustomer($accessToken: String!){
@@ -7,6 +8,9 @@ const getCustomer = `
             lastName
             acceptsMarketing
             email
+            lastIncompleteCheckout {
+                ${ checkoutDetailFragment }
+            }
             defaultAddress {
                 id
                 address1

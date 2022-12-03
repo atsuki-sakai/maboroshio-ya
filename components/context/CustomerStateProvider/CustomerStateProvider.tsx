@@ -1,7 +1,7 @@
 
 
 import { checkoutToCart } from '@shopify/cart'
-import { SHOPIFY_CHECKOUT_ID_COOKIE, SHOPIFY_CHECKOUT_URL_COOKIE } from '@shopify/const'
+import { SHOPIFY_CHECKOUT_ID_COOKIE, SHOPIFY_CHECKOUT_URL_COOKIE, SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE } from '@shopify/const'
 import { getCustomer, getCustomerAccessToken } from '@shopify/customer'
 import { useCart } from "@components/context"
 import { Customer } from '@shopify/shema'
@@ -29,34 +29,33 @@ export const CustomerStateProvider = ({ children }: Props) => {
     const [ loggedCustomer, setLoggedCustomer ] = useState<Customer | undefined>()
     const { updateCart } = useCart()
 
+    const loggedCustomerRecoverCheckout = (customer: Customer) => {
+
+        console.log("loggedd customer :", customer)
+        if(customer.lastIncompleteCheckout){
+            console.log("lastcheccjout: ",customer.lastIncompleteCheckout)
+            const options = {
+                expires: SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE
+            }
+            Cookies.set(SHOPIFY_CHECKOUT_ID_COOKIE!, customer.lastIncompleteCheckout.id, options)
+            Cookies.set(SHOPIFY_CHECKOUT_URL_COOKIE!, customer.lastIncompleteCheckout.webUrl, options)
+            const cart = checkoutToCart(customer.lastIncompleteCheckout)
+            updateCart(cart)
+        }
+    }
+
     const updateCustomer = (customer?: Customer) => {
-        console.log("customer: ",customer)
         setLoggedCustomer(customer)
     }
 
     useEffect(() => {
         (async() => {
             const setUpLoginState = async () => {
-                if(getCustomerAccessToken()){
-
+                if(getCustomerAccessToken()!){
                     // setupCustomer
                     const customer = await getCustomer(getCustomerAccessToken()!)
                     setLoggedCustomer(customer)
-                    // ログインしたユーザーのカートを復元
-                    if(customer.lastIncompleteCheckout){
-
-                        Cookies.remove(SHOPIFY_CHECKOUT_ID_COOKIE!)
-                        Cookies.remove(SHOPIFY_CHECKOUT_URL_COOKIE!)
-
-                        const options = {
-                            expires: 90
-                        }
-                        Cookies.set(SHOPIFY_CHECKOUT_ID_COOKIE!, customer.lastIncompleteCheckout.id, options)
-                        Cookies.set(SHOPIFY_CHECKOUT_URL_COOKIE!, customer.lastIncompleteCheckout.webUrl, options)
-                        const cart = checkoutToCart(customer.lastIncompleteCheckout)
-                        updateCart(cart)
-                    }
-
+                    loggedCustomerRecoverCheckout(customer)
                 }
             }
             setUpLoginState()

@@ -56,11 +56,8 @@ export const CartProvider = ({children}: Props) => {
                     const id = getCheckoutId()
                     const checkout = await getCheckout(id!)
                     if(checkout.completedAt){
-                        alert('cart is completed.')
-                        Cookies.remove(SHOPIFY_CHECKOUT_ID_COOKIE!)
-                        Cookies.remove(SHOPIFY_CHECKOUT_URL_COOKIE!)
-                        const checkout = await createCheckout();
-                        const cart = checkoutToCart(checkout)
+                        const _checkout = await createCheckout();
+                        const cart = checkoutToCart(_checkout)
                         setCart(cart)
                     }else{
                         const cart = checkoutToCart(checkout);

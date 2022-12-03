@@ -4,15 +4,17 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { AlertDialog, Container, Field } from "@components/ui"
 import { loginCustomer } from '@shopify/customer'
-import { useCustomerState } from "@components/context"
+import { useCustomerState, useCart } from "@components/context"
 import { LoadCircle } from '@components/icon'
 import { SHOPIFY_CUSTOMER_ACCESS_TOKEN, SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE } from '@shopify/const'
 import { motion } from "framer-motion"
 import Cookies from 'js-cookie'
+import { checkoutToCart } from '@shopify/cart'
 
 const Login = () => {
 
     const router = useRouter()
+    const { updateCart } = useCart()
     const { updateCustomer } = useCustomerState()
 
     const [ credential, setCredential ] = useState<{[key:string]: any}>({
@@ -32,12 +34,12 @@ const Login = () => {
       }
       try{
         setIsLoading(true)
-        const { customer, customerAccessToken } = await loginCustomer(credential.email, credential.password);
-        updateCustomer(customer)
-        const options = {
-          expires: SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE!
+        const { customer, checkout } = await loginCustomer(credential.email, credential.password);
+        if(checkout){
+          const cart = checkoutToCart(checkout)
+          updateCart(cart)
         }
-        Cookies.set(SHOPIFY_CUSTOMER_ACCESS_TOKEN!, customerAccessToken.accessToken, options)
+        updateCustomer(customer)
         router.push("/")
       }catch(e: any){
         setErrorMessage(e.message)
