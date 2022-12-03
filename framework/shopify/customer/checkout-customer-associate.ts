@@ -19,7 +19,7 @@ const checkoutCustomerAssociate = async(checkoutId: string, customerAccessToken:
         throw Error(error.message)
     }
 
-    const { customer, checkout } = data.checkoutCustomerAssociateV2 as CheckoutCustomerAssociateV2Payload
+    const { customer } = data.checkoutCustomerAssociateV2 as CheckoutCustomerAssociateV2Payload
     if(!customer){
         throw Error('Customer is not fined...')
     }

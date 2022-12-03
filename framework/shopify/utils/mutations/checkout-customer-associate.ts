@@ -4,7 +4,7 @@ const checkoutCustomerAssociate = `
     mutation checkoutCustomerAssociate($checkoutId: ID!, $customerAccessToken: String!) {
         checkoutCustomerAssociateV2(checkoutId: $checkoutId, customerAccessToken: $customerAccessToken) {
             checkout {
-                ${checkoutDetailFragment}
+                ${ checkoutDetailFragment }
             }
             checkoutUserErrors {
                 message
@@ -15,6 +15,9 @@ const checkoutCustomerAssociate = `
                 lastName
                 acceptsMarketing
                 email
+                lastIncompleteCheckout {
+                    ${ checkoutDetailFragment }
+                }
                 defaultAddress {
                     id
                     address1
