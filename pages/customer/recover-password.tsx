@@ -32,12 +32,12 @@ const RecoverPassword = () => {
                     {
                         errorText ? <AlertDialog title={ sended ? "復旧用リンクを送信しました。" : "Error" } message={errorText} onClose={() => setErrorText('')} /> : <></>
                     }
-                    <h1 className='text-xl font-bold mb-6'>パスワードを再設定</h1>
+                    <h1 className='text-xl font-bold mb-6'>パスワード復旧</h1>
                     <Field id={"email"} autoComplete="email" label={"メールアドレス"} value={email} onChange={(e) => setEmail(e.target.value)} placeHolder={"sample@email.com"} />
                     <div className='w-fit mx-auto pt-8'>
                         <button className={`px-6 py-2 textp-center bg-gradient-to-tl to-blue-500 from-sky-400 rounded-md`} onClick={recoverPassword} disabled={isLoading}>
                             <div className='flex items-center justify-between'>
-                                <p className='text-white font-bold'>復旧する</p>
+                                <p className='text-white font-bold'>復旧リンクを送信</p>
                                 <motion.div className="ml-2 -translate-y-1.5" initial={{ opacity:0, height:12, width:0 }} animate={{ opacity: isLoading ? 1: 0, height:12, width: isLoading ? 12: 0 }}>
                                 <LoadCircle className='text-white h-6 w-6 animate-spin'/>
                                 </motion.div>
