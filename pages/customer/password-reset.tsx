@@ -5,13 +5,19 @@ import { customerResetByUrl, customerResetPassword } from "@shopify/customer"
 import { motion } from 'framer-motion'
 import { LoadCircle } from '@components/icon'
 import { HOSTING_URL } from '@shopify/const'
+import { getStaticProps } from 'pages'
+import { GetStaticProps } from 'next'
+import { useRouter } from 'next/router'
 
 const PasswordReset = () => {
 
+    const router = useRouter()
     const [ password, setPassword ] = useState("")
     const [ confirmPassword, setConfirmPassword ] = useState("")
     const [ isLoading, setIsLoading ] = useState(false)
     const [ errorText, setErrorText ] = useState("")
+    console.log("path: ",router.asPath)
+
     const resetPassword = async() => {
 
         try{
@@ -20,6 +26,7 @@ const PasswordReset = () => {
             if(!(password === confirmPassword)){
                 setErrorText('パスワードが一致していません。再度ご確認ください。')
             }
+
             
         }catch(e: any){
             setErrorText(e.message)

@@ -22,6 +22,7 @@ const RecoverPassword = () => {
             setErrorText(e.message)
         }finally{
             setIsLoading(false)
+            setErrorText('')
         }
     }
 
