@@ -1,6 +1,6 @@
 
 import { createCustomerAccessToken, checkoutCustomerAssociate, getCustomerAccessToken } from "@shopify/customer";
-import { checkoutToCart, getCheckoutId } from "@shopify/cart";
+import { checkoutToCart, getCheckout, getCheckoutId } from "@shopify/cart";
 import { Checkout, Customer, CustomerAccessToken } from "@shopify/shema";
 import Cookies from "js-cookie";
 import { SHOPIFY_CHECKOUT_ID_COOKIE, SHOPIFY_CHECKOUT_URL_COOKIE, SHOPIFY_COOKIE_EXPIRE, SHOPIFY_CUSTOMER_ACCESS_TOKEN, SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE } from "@shopify/const";
@@ -9,8 +9,19 @@ import { Check } from "@components/icon";
 
 type ReturnType = {
     customer: Customer,
-    customerAccessToken: CustomerAccessToken
     checkout: Checkout | undefined
+}
+const updateCustomerCheckoutCookies = (checkout: Checkout) => {
+
+    const options = {
+        expires: SHOPIFY_COOKIE_EXPIRE
+    }
+
+    Cookies.remove(SHOPIFY_CHECKOUT_ID_COOKIE!)
+    Cookies.remove(SHOPIFY_CHECKOUT_URL_COOKIE!)
+    Cookies.set(SHOPIFY_CHECKOUT_ID_COOKIE!, checkout.id, options)
+    Cookies.set(SHOPIFY_CHECKOUT_URL_COOKIE!, checkout.webUrl, options)
+
 }
 
 const loginCustomer = async (email: string, password: string): Promise<ReturnType> => {
@@ -20,19 +31,18 @@ const loginCustomer = async (email: string, password: string): Promise<ReturnTyp
 
     let checkout: Checkout | undefined
     if(customer.lastIncompleteCheckout){
-        console.log('update checkout.')
-        const options = {
-            expires: SHOPIFY_COOKIE_EXPIRE
-        }
-        Cookies.set(SHOPIFY_CHECKOUT_ID_COOKIE!, customer.lastIncompleteCheckout.id, options)
-        Cookies.set(SHOPIFY_CHECKOUT_URL_COOKIE!, customer.lastIncompleteCheckout.webUrl, options)
+
         checkout = customer.lastIncompleteCheckout as Checkout
+        updateCustomerCheckoutCookies(checkout)
     }
+
     const options = {
         expires: SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE
     }
+
     Cookies.set(SHOPIFY_CUSTOMER_ACCESS_TOKEN!, customerAccessToken.accessToken, options)
-    return { customer, customerAccessToken, checkout }
+
+    return { customer, checkout }
 }
 
 export default loginCustomer

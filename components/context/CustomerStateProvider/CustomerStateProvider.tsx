@@ -33,7 +33,7 @@ export const CustomerStateProvider = ({ children }: Props) => {
 
         console.log("loggedd customer :", customer)
         if(customer.lastIncompleteCheckout){
-            console.log("lastcheccjout: ",customer.lastIncompleteCheckout)
+            console.log("lastIncomplatedCheckout: ",customer.lastIncompleteCheckout)
             const options = {
                 expires: SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE
             }
