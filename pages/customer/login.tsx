@@ -6,10 +6,11 @@ import { AlertDialog, Container, Field } from "@components/ui"
 import { loginCustomer } from '@shopify/customer'
 import { useCustomerState, useCart } from "@components/context"
 import { LoadCircle } from '@components/icon'
-import { SHOPIFY_CUSTOMER_ACCESS_TOKEN, SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE } from '@shopify/const'
 import { motion } from "framer-motion"
-import Cookies from 'js-cookie'
 import { checkoutToCart } from '@shopify/cart'
+import Cookies from 'js-cookie'
+import { SHOPIFY_CHECKOUT_ID_COOKIE, SHOPIFY_CHECKOUT_URL_COOKIE, SHOPIFY_COOKIE_EXPIRE } from '@shopify/const'
+import { Checkout, Customer } from '@shopify/shema'
 
 const Login = () => {
 
@@ -23,8 +24,23 @@ const Login = () => {
     })
     const [ errorMessage, setErrorMessage ] = useState('')
     const [ isLoading, setIsLoading ] = useState(false)
+    const [ firstError, setFirstError ] = useState(false)
 
     const completedFields = credential.email !== "" && credential.password !== ""
+
+
+    const checkoutRecover = (checkout: Checkout) => {
+        const options = {
+            expires: SHOPIFY_COOKIE_EXPIRE
+        }
+
+        Cookies.remove(SHOPIFY_CHECKOUT_ID_COOKIE!)
+        Cookies.remove(SHOPIFY_CHECKOUT_URL_COOKIE!)
+        Cookies.set(SHOPIFY_CHECKOUT_ID_COOKIE!, checkout.id, options)
+        Cookies.set(SHOPIFY_CHECKOUT_URL_COOKIE!, checkout.webUrl, options)
+        const cart = checkoutToCart(checkout)
+        updateCart(cart)
+    }
 
     const login = async() => {
 
@@ -34,15 +50,16 @@ const Login = () => {
       }
       try{
         setIsLoading(true)
-        const { customer, checkout } = await loginCustomer(credential.email, credential.password);
-        if(checkout){
-          const cart = checkoutToCart(checkout)
-          updateCart(cart)
-        }
+        const { customer } = await loginCustomer(credential.email, credential.password);
         updateCustomer(customer)
+        if(customer.lastIncompleteCheckout){
+          checkoutRecover(customer.lastIncompleteCheckout)
+        }
+
         router.push("/")
       }catch(e: any){
         setErrorMessage(e.message)
+        setFirstError(true)
       }finally{
         setIsLoading(false)
       }
@@ -85,6 +102,15 @@ const Login = () => {
                   </div>
               </button>
             </div>
+            {
+              firstError ?  <div className='pt-8 w-full text-center'>
+                              <Link href={"/customer/recover-password"} passHref>
+                                <a className='text-sm text-red-500 underline'>
+                                  パスワードをお忘れですか？
+                                </a>
+                              </Link>
+                            </div> : <></>
+            }
             <div className='pt-8 w-full text-center'>
               <Link href={"/customer/register"} passHref>
                 <a className='text-sm text-blue-600 underline'>

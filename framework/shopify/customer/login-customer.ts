@@ -8,8 +8,7 @@ import { Cart } from "@shopify/types/cart";
 import { Check } from "@components/icon";
 
 type ReturnType = {
-    customer: Customer,
-    checkout: Checkout | undefined
+    customer: Customer
 }
 const updateCustomerCheckoutCookies = (checkout: Checkout) => {
 
@@ -29,20 +28,13 @@ const loginCustomer = async (email: string, password: string): Promise<ReturnTyp
     const customerAccessToken = await createCustomerAccessToken(email, password);
     const customer = await checkoutCustomerAssociate(getCheckoutId()!, customerAccessToken.accessToken)
 
-    let checkout: Checkout | undefined
-    if(customer.lastIncompleteCheckout){
-
-        checkout = customer.lastIncompleteCheckout as Checkout
-        updateCustomerCheckoutCookies(checkout)
-    }
-
     const options = {
         expires: SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE
     }
 
     Cookies.set(SHOPIFY_CUSTOMER_ACCESS_TOKEN!, customerAccessToken.accessToken, options)
 
-    return { customer, checkout }
+    return { customer }
 }
 
 export default loginCustomer

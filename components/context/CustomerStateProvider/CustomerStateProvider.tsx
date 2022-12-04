@@ -1,5 +1,4 @@
 
-
 import { checkoutToCart } from '@shopify/cart'
 import { SHOPIFY_CHECKOUT_ID_COOKIE, SHOPIFY_CHECKOUT_URL_COOKIE, SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE } from '@shopify/const'
 import { getCustomer, getCustomerAccessToken } from '@shopify/customer'
@@ -29,17 +28,14 @@ export const CustomerStateProvider = ({ children }: Props) => {
     const [ loggedCustomer, setLoggedCustomer ] = useState<Customer | undefined>()
     const { updateCart } = useCart()
 
-    const loggedCustomerRecoverCheckout = (customer: Customer) => {
-
-        console.log("loggedd customer :", customer)
-        if(customer.lastIncompleteCheckout){
-            console.log("lastIncomplatedCheckout: ",customer.lastIncompleteCheckout)
+    const loggedCustomerRecoverCheckout = () => {
+        if(loggedCustomer?.lastIncompleteCheckout){
             const options = {
                 expires: SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE
             }
-            Cookies.set(SHOPIFY_CHECKOUT_ID_COOKIE!, customer.lastIncompleteCheckout.id, options)
-            Cookies.set(SHOPIFY_CHECKOUT_URL_COOKIE!, customer.lastIncompleteCheckout.webUrl, options)
-            const cart = checkoutToCart(customer.lastIncompleteCheckout)
+            Cookies.set(SHOPIFY_CHECKOUT_ID_COOKIE!,loggedCustomer.lastIncompleteCheckout.id, options)
+            Cookies.set(SHOPIFY_CHECKOUT_URL_COOKIE!, loggedCustomer.lastIncompleteCheckout.id, options)
+            const cart = checkoutToCart(loggedCustomer.lastIncompleteCheckout)
             updateCart(cart)
         }
     }
@@ -55,7 +51,7 @@ export const CustomerStateProvider = ({ children }: Props) => {
                     // setupCustomer
                     const customer = await getCustomer(getCustomerAccessToken()!)
                     setLoggedCustomer(customer)
-                    loggedCustomerRecoverCheckout(customer)
+                    loggedCustomerRecoverCheckout()
                 }
             }
             setUpLoginState()

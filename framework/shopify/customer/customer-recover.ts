@@ -1,3 +1,4 @@
+import { CustomerRecoverPayload } from "@shopify/shema"
 import { generateApiUrl } from "@shopify/utils/generate-api-url"
 
 const customerRecover = async(email: string) => {
@@ -15,7 +16,10 @@ const customerRecover = async(email: string) => {
     if(error){
         throw Error(error.message)
     }
-    console.log("data: ",data)
+    const { customerUserErrors } =  data.customerRecover as CustomerRecoverPayload
+    if(customerUserErrors[0]){
+        throw Error(customerUserErrors[0].message)
+    }
 }
 
 export default customerRecover

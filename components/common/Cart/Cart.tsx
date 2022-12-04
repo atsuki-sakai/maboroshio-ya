@@ -1,16 +1,14 @@
 
-import React, { useEffect, useState } from 'react'
-import { useUI, useCart } from '@components/context'
-import CartCard from './CartCard';
+import React, {useState } from 'react'
+import { useUI, useCart, useCustomerState } from '@components/context'
+import { AlertDialog } from '@components/ui';
+import CartCard  from '@components/common/Cart/CartCard';
 import { Check, LoadCircle, RightArrow } from '@components/icon';
-import { useCustomerState } from '@components/context';
 import { getCheckout, getCheckoutId } from '@shopify/cart';
 import { checkoutShippingAddressUpdate } from "@shopify/cart"
-import { SHOPIFY_STORE_DOMAIN } from '@shopify/const';
 
 import { motion } from 'framer-motion';
 import type { LineItem } from '@shopify/types/cart';
-import { AlertDialog } from '@components/ui';
 
 
 type Address =  {
@@ -31,10 +29,11 @@ const Cart = () => {
     const { isCartOpen, onCartClose } = useUI();
     const { loggedCustomer } = useCustomerState();
     const { cart } = useCart()
+
     const [ isLoading, setIsLoading ] = useState(false)
     const [ errorMessage, setErrorMessage] = useState("")
-    const shippingFreeCost = 10000
-    const shippingFree = (shippingFreeCost - cart.lineItemsSubtotalPrice) > 0
+
+    const applicableAmount = 10000 - cart.lineItemsSubtotalPrice
 
     const cartTotalQuantity = () => cart.lineItems.map((item: LineItem) => item.quantity).reduce((sum, element) => sum + element, 0)
 
@@ -56,14 +55,13 @@ const Cart = () => {
         }
     }
 
-    const checkoutCart = async() => {
+    const pushCheckoutWeburl = async() => {
         try{
             setIsLoading(true)
             await setupCheckoutShippingAddress()
-            const checkoutParam = getCheckoutId()?.split("Checkout/")[1].split('?')[0]
-            const checkoutUrl = `${SHOPIFY_STORE_DOMAIN}/checkouts/co/${checkoutParam}/information`
             const checkout = await getCheckout(getCheckoutId()!)
-            document.location.href = loggedCustomer ? checkoutUrl: checkout.webUrl
+            document.location.href = checkout.webUrl
+
         }catch(e: any){
             setErrorMessage(e.message)
         }finally{
@@ -97,7 +95,7 @@ const Cart = () => {
                             <div className='mt-5'>
                                 <div className='w-full flex items-center justify-end rounded-md text-center'>
                                     {
-                                        shippingFree ? <p className='bg-indigo-100 text-xs text-indigo-600 rounded-md px-2 py-0.5'>あと<span className='text-base font-bold'>¥{shippingFreeCost - cart.lineItemsSubtotalPrice}</span>で<span className='text-sm font-bold'>送料無料</span></p> : <div className='bg-green-100 flex items-center space-x-2 px-3 py-1 rounded-md'><Check className='text-green-500 w-5 h-5'/><span className='text-green-500 text-sm font-bold'>送料無料</span></div>
+                                        applicableAmount > 0 ? <p className='bg-indigo-100 text-xs text-indigo-600 rounded-md px-2 py-0.5'>あと<span className='text-base font-bold'>¥{applicableAmount}</span>で<span className='text-sm font-bold'>送料無料</span></p> : <div className='bg-green-100 flex items-center space-x-2 px-3 py-1 rounded-md'><Check className='text-green-500 w-5 h-5'/><span className='text-green-500 text-sm font-bold'>送料無料</span></div>
                                     }
                                 </div>
                                 <div className='grid grid-cols-7 items-end justify-between mt-2 py-2 px-2 rounded-md bg-gray-100'>
@@ -111,10 +109,10 @@ const Cart = () => {
                             </div>
                             <div className='w-full mt-1 flex items-center justify-end'>
                                 {
-                                    shippingFree ? <p className='text-xs text-blue-600 bg-blue-100 w-fit rounded-md px-3 py-1'>送料は次のステップで計算されます</p> : <></>
+                                    applicableAmount > 0 ? <p className='text-xs text-blue-600 bg-blue-100 w-fit rounded-md px-3 py-1'>送料は次のステップで計算されます</p> : <></>
                                 }
                             </div>
-                            <button className='flex justify-center mt-3 w-full bg-gradient-to-tr to-green-500 from-lime-400 py-2 rounded-md' onClick={ checkoutCart } disabled={cart.lineItems.length === 0 || isLoading}>
+                            <button className='flex justify-center mt-3 w-full bg-gradient-to-tr to-green-500 from-lime-400 py-2 rounded-md' onClick={ pushCheckoutWeburl } disabled={cart.lineItems.length === 0 || isLoading}>
                                 <div className='flex items-center justify-between'>
                                     <p className='text-white text-lg font-bold text-center tracking-wider'>
                                         {cart.lineItems.length === 0 ? "カートは空です": isLoading ? "決済処理中" : "商品を購入する"}
