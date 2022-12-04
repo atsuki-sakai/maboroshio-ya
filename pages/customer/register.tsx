@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Container, AlertDialog, Field } from "@components/ui"
-import { createCustomer, loginCustomer } from '@shopify/customer'
+import { createCustomer, getCustomerAccessToken, loginCustomer } from '@shopify/customer'
 import { useCustomerState } from '@components/context'
 import Cookies from 'js-cookie'
 import { SHOPIFY_CUSTOMER_ACCESS_TOKEN, SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE } from '@shopify/const'
@@ -37,12 +37,12 @@ const Register = () => {
         if(customerUserErrors[0]){
           throw Error(customerUserErrors[0].message)
         }
-        const { customer, customerAccessToken } = await loginCustomer(credential.email, credential.password);
+        const { customer } = await loginCustomer(credential.email, credential.password);
         updateCustomer(customer)
         const options = {
           expires: SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE!
         }
-        Cookies.set(SHOPIFY_CUSTOMER_ACCESS_TOKEN!, customerAccessToken.accessToken, options)
+        Cookies.set(SHOPIFY_CUSTOMER_ACCESS_TOKEN!, getCustomerAccessToken()!, options)
         router.push('/')
       }catch(e: any){
         setErrorMessage(e.message)
