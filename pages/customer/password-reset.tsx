@@ -27,7 +27,8 @@ const PasswordReset = () => {
             }
             console.log('reset_url: ', resetUrl)
             await customerResetByUrl(password, String(resetUrl))
-
+            setErrorText('パスワードが変更されました。')
+            router.push('/customer/login')
         }catch(e: any){
             setErrorText(e.message)
         }finally{
