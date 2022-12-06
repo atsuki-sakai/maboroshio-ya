@@ -12,12 +12,11 @@ const RecoverPassword = () => {
     const [ errorText, setErrorText ] = useState("")
     const [ sended, setSended ] = useState(false)
     const recoverPassword = async() => {
-
         try{
             setIsLoading(true)
             await customerRecover(email)
             setSended(true)
-            setErrorText('メールアドレスにパスワード復旧リンクを送信しました。そちらからパスワードを再設定してください。')
+            alert('メールアドレスにパスワード復旧リンクを送信しました。そちらからパスワードを再設定してください。')
         }catch(e: any){
             setErrorText(e.message)
         }finally{
@@ -31,7 +30,7 @@ const RecoverPassword = () => {
             <div className='my-32'>
                 <div className=' px-8'>
                     {
-                        errorText ? <AlertDialog title={ sended ? "復旧用リンクを送信しました。" : "Error" } message={errorText} onClose={() => setErrorText('')} /> : <></>
+                        errorText !== "" ? <AlertDialog title={ sended ? "復旧用リンクを送信しました。" : "Error" } message={errorText} onClose={() => setErrorText('')} /> : <></>
                     }
                     <h1 className='text-xl font-bold mb-6'>パスワード復旧</h1>
                     <Field id={"email"} autoComplete="email" label={"メールアドレス"} value={email} onChange={(e) => setEmail(e.target.value)} placeHolder={"sample@email.com"} />

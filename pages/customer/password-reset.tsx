@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react'
 import { AlertDialog, Container, Field } from '@components/ui'
-import { customerResetByUrl, customerResetPassword } from "@shopify/customer"
+import { customerResetByUrl } from "@shopify/customer"
 import { motion } from 'framer-motion'
 import { LoadCircle } from '@components/icon'
 import { useRouter } from 'next/router'
@@ -19,15 +19,13 @@ const PasswordReset = () => {
     console.log(router.query)
 
     const resetPassword = async() => {
-
         try{
             setIsLoading(true)
             if(!(password === confirmPassword)){
                 setErrorText('パスワードが一致していません。再度ご確認ください。')
             }
-            console.log('reset_url: ', resetUrl)
             await customerResetByUrl(password, String(resetUrl))
-            setErrorText('パスワードが変更されました。')
+            alert('パスワードが変更されました。')
             router.push('/customer/login')
         }catch(e: any){
             setErrorText(e.message)
@@ -41,7 +39,7 @@ const PasswordReset = () => {
              <div className='my-32'>
                 <div className=' px-8'>
                     {
-                        errorText ? <AlertDialog title={"Error"} message={errorText} onClose={() => setErrorText('')} /> : <></>
+                        errorText !== "" ? <AlertDialog title={"Error"} message={errorText} onClose={() => setErrorText('')} /> : <></>
                     }
                     <h1 className='text-xl font-bold mb-6'>パスワードを再設定する</h1>
 
