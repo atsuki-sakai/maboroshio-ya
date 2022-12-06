@@ -8,9 +8,8 @@ type ReturnType = {
 
 
 const customerUpdate = async(newCustomer: {[key: string]: any}, accessToken: string): Promise<ReturnType> => {
-    
-    const customerUpdateApiUrl = generateApiUrl({type: "CUSTOMER_UPDATE"})
 
+    const customerUpdateApiUrl = generateApiUrl({type: "CUSTOMER_UPDATE"})
     const response = await fetch(customerUpdateApiUrl, {
         method: "POST",
         mode: "no-cors",

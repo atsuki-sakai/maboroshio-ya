@@ -49,7 +49,7 @@ const CustomerUpdate = () => {
         }
     }
 
-    console.log(updateCredential)
+    console.log("update credential: ",updateCredential)
 
     return (
         <Container>

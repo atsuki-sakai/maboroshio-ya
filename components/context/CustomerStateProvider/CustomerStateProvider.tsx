@@ -45,7 +45,7 @@ export const CustomerStateProvider = ({ children }: Props) => {
             }
             setUpLoginState()
         })()
-
+        console.log('setup customer.')
     }, [])
 
     const value = useMemo(() => {

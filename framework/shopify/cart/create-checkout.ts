@@ -2,8 +2,7 @@ import { SHOPIFY_CHECKOUT_ID_COOKIE, SHOPIFY_CHECKOUT_URL_COOKIE, SHOPIFY_COOKIE
 import { Checkout, CheckoutCreatePayload } from "@shopify/shema"
 import { generateApiUrl } from "@shopify/utils/generate-api-url"
 import Cookies from "js-cookie"
-import { checkoutAttributesUpdate } from "@shopify/cart"
-import getCheckoutId from "./get-checkout-id"
+
 
 const createCheckout = async (): Promise<Checkout> => {
 

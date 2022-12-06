@@ -47,7 +47,6 @@ export const CartProvider = ({children}: Props) => {
     };
 
     useEffect(() => {
-
         (async() => {
             const setupCheckout = async () => {
                 // CookieにcheckoutIdがなければ
@@ -72,7 +71,7 @@ export const CartProvider = ({children}: Props) => {
             }
             setupCheckout()
         })()
-
+        console.log('setUp Cart')
     },[])
 
     const value = useMemo(() => {
