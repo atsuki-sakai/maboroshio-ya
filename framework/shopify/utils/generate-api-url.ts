@@ -7,7 +7,7 @@ export type ApiPath = {
     | "CUSTOMER_ACCESS_TOKEN_CREATE" | "GET_CUSTOMER" | "CHECKOUT_CUSTOMER_ASSOCIATE"
     | "CHECKOUT_CUSTOMER_DISASSOCIATE" | "CUSTOMER_ADDRESS_CREATE" | "CUSTOMER_DEFAULT_ADDRESS_UPDATE"
     | "CUSTOMER_ADDRESS_UPDATE" | "CUSTOMER_ADDRESS_DELETE" | "CHECKOUT_SHIPPING_ADDRESS_UPDATE" | "CHECKOUT_ATTRIBUTES_UPDATE"
-    | "CUSTOMER_RECOVER" | "CUSTOMER_RESET_PASSWORD" | "CUSTOMER_RESET_BY_URL";
+    | "CUSTOMER_RECOVER" | "CUSTOMER_RESET_PASSWORD" | "CUSTOMER_RESET_BY_URL" | "CUSTOMER_UPDATE";
 }
 
 
@@ -69,6 +69,9 @@ export const generateApiUrl = (apiPath: ApiPath) => {
         }
         case "CUSTOMER_RESET_BY_URL" : {
             return `${HOSTING_URL}/api/customer/customer-reset-by-url`
+        }
+        case "CUSTOMER_UPDATE" : {
+            return `${HOSTING_URL}/api/customer/customer-update`
         }
         default : {
             throw Error('It is an APITYPE that does not exist...')

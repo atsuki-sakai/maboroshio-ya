@@ -16,3 +16,4 @@ export { default as checkoutAttributesUpdateMutation } from "./checkout-attribut
 export { default as customerRecoverMutation } from "./customer-recover"
 export { default as customerResetPasswordMutation } from "./customer-reset-password"
 export { default as customerResetByUrlMutation } from "./customer-reset-by-url"
+export { default as customerUpdateMutation } from "./customer-update"
