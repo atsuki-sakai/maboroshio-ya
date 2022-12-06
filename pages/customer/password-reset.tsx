@@ -24,6 +24,7 @@ const PasswordReset = () => {
                 setErrorText('パスワードが一致していません。再度ご確認ください。')
             }
             console.log('query: ', query)
+            await customerResetByUrl(password, query)
 
         }catch(e: any){
             setErrorText(e.message)

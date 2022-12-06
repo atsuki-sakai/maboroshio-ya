@@ -17,7 +17,7 @@ const customerResetByUrl = async(password: string, resetUrl: string) => {
     }
     console.log(data, error)
 
-    console.log(data)
+    console.log("data: ",data)
 }
 
 export default customerResetByUrl
