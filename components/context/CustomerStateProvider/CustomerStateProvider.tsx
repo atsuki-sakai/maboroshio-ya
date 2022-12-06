@@ -30,12 +30,18 @@ export const CustomerStateProvider = ({ children }: Props) => {
 
     const loggedCustomerRecoverCheckout = () => {
         if(loggedCustomer?.lastIncompleteCheckout){
+
+            Cookies.remove(SHOPIFY_CHECKOUT_ID_COOKIE!)
+            Cookies.remove(SHOPIFY_CHECKOUT_URL_COOKIE!)
+
             const options = {
                 expires: SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE
             }
+
             Cookies.set(SHOPIFY_CHECKOUT_ID_COOKIE!,loggedCustomer.lastIncompleteCheckout.id, options)
             Cookies.set(SHOPIFY_CHECKOUT_URL_COOKIE!, loggedCustomer.lastIncompleteCheckout.id, options)
             const cart = checkoutToCart(loggedCustomer.lastIncompleteCheckout)
+
             updateCart(cart)
         }
     }

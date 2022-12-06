@@ -8,19 +8,6 @@ import { SHOPIFY_CHECKOUT_ID_COOKIE, SHOPIFY_CHECKOUT_URL_COOKIE, SHOPIFY_COOKIE
 type ReturnType = {
     customer: Customer
 }
-const updateCustomerCheckoutCookies = (checkout: Checkout) => {
-
-    const options = {
-        expires: SHOPIFY_COOKIE_EXPIRE
-    }
-
-    Cookies.remove(SHOPIFY_CHECKOUT_ID_COOKIE!)
-    Cookies.remove(SHOPIFY_CHECKOUT_URL_COOKIE!)
-    Cookies.set(SHOPIFY_CHECKOUT_ID_COOKIE!, checkout.id, options)
-    Cookies.set(SHOPIFY_CHECKOUT_URL_COOKIE!, checkout.webUrl, options)
-
-
-}
 
 const setCustomerAccessToken = (token: string) => {
     const options = {
@@ -36,9 +23,7 @@ const loginCustomer = async (email: string, password: string): Promise<ReturnTyp
     const customer = await checkoutCustomerAssociate(getCheckoutId()!, customerAccessToken.accessToken)
 
     setCustomerAccessToken(customerAccessToken.accessToken)
-    if(customer.lastIncompleteCheckout){
-        updateCustomerCheckoutCookies(customer.lastIncompleteCheckout)
-    }
+
     return { customer }
 }
 

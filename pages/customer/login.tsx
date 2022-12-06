@@ -28,21 +28,6 @@ const Login = () => {
 
     const completedFields = credential.email !== "" && credential.password !== ""
 
-
-    const checkoutRecover = (checkout: Checkout) => {
-        const options = {
-            expires: SHOPIFY_COOKIE_EXPIRE
-        }
-
-        Cookies.remove(SHOPIFY_CHECKOUT_ID_COOKIE!)
-        Cookies.remove(SHOPIFY_CHECKOUT_URL_COOKIE!)
-        Cookies.set(SHOPIFY_CHECKOUT_ID_COOKIE!, checkout.id, options)
-        Cookies.set(SHOPIFY_CHECKOUT_URL_COOKIE!, checkout.webUrl, options)
-        const cart = checkoutToCart(checkout)
-        updateCart(cart)
-        console.log("update cart: ",cart)
-    }
-
     const login = async() => {
 
       if(!completedFields){
@@ -53,9 +38,6 @@ const Login = () => {
         setIsLoading(true)
         const { customer } = await loginCustomer(credential.email, credential.password);
         updateCustomer(customer)
-        if(customer.lastIncompleteCheckout){
-          checkoutRecover(customer.lastIncompleteCheckout)
-        }
         router.push("/")
       }catch(e: any){
         setErrorMessage(e.message)
