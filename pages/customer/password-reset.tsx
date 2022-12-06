@@ -14,7 +14,9 @@ const PasswordReset = () => {
 
     const [ isLoading, setIsLoading ] = useState(false)
     const [ errorText, setErrorText ] = useState("")
-    const query = router.query;
+    const resetUrl = router.query.reset_url;
+
+    console.log(router.query)
 
     const resetPassword = async() => {
 
@@ -23,8 +25,8 @@ const PasswordReset = () => {
             if(!(password === confirmPassword)){
                 setErrorText('パスワードが一致していません。再度ご確認ください。')
             }
-            console.log('query: ', query)
-            await customerResetByUrl(password, String(query))
+            console.log('reset_url: ', resetUrl)
+            await customerResetByUrl(password, String(resetUrl))
 
         }catch(e: any){
             setErrorText(e.message)
