@@ -10,7 +10,7 @@ import { motion } from "framer-motion"
 import { checkoutToCart } from '@shopify/cart'
 import Cookies from 'js-cookie'
 import { SHOPIFY_CHECKOUT_ID_COOKIE, SHOPIFY_CHECKOUT_URL_COOKIE, SHOPIFY_COOKIE_EXPIRE } from '@shopify/const'
-import { Checkout, Customer } from '@shopify/shema'
+import { Checkout } from '@shopify/shema'
 
 const Login = () => {
 
@@ -40,6 +40,7 @@ const Login = () => {
         Cookies.set(SHOPIFY_CHECKOUT_URL_COOKIE!, checkout.webUrl, options)
         const cart = checkoutToCart(checkout)
         updateCart(cart)
+        console.log("update cart: ",cart)
     }
 
     const login = async() => {
@@ -55,7 +56,6 @@ const Login = () => {
         if(customer.lastIncompleteCheckout){
           checkoutRecover(customer.lastIncompleteCheckout)
         }
-
         router.push("/")
       }catch(e: any){
         setErrorMessage(e.message)

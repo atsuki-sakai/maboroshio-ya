@@ -19,6 +19,7 @@ const updateCustomerCheckoutCookies = (checkout: Checkout) => {
     Cookies.set(SHOPIFY_CHECKOUT_ID_COOKIE!, checkout.id, options)
     Cookies.set(SHOPIFY_CHECKOUT_URL_COOKIE!, checkout.webUrl, options)
 
+
 }
 
 const setCustomerAccessToken = (token: string) => {
