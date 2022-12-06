@@ -16,7 +16,7 @@ const CustomerUpdate = () => {
         lastName: loggedCustomer?.lastName ?? "",
         firstName: loggedCustomer?.firstName ?? "",
         email: loggedCustomer?.email ?? "",
-        acceptMarketing: loggedCustomer?.acceptsMarketing ?? false
+        acceptsMarketing: loggedCustomer?.acceptsMarketing ?? false
     })
     const [ errorMessage, setErrorMessage ] = useState("")
     const [ isLoading, setIsLoading ] = useState(false)
@@ -28,7 +28,7 @@ const CustomerUpdate = () => {
                 lastName: updateCredential.lastName,
                 firstName: updateCredential.firstName,
                 email: updateCredential.email,
-                acceptMarketing: updateCredential.acceptMarketing
+                acceptsMarketing: updateCredential.acceptsMarketing
             }
             const { customer, customerAccessToken } = await customerUpdate(newCustomer, getCustomerAccessToken()!)
             if(customerAccessToken) {
@@ -49,6 +49,8 @@ const CustomerUpdate = () => {
         }
     }
 
+    console.log(updateCredential)
+
     return (
         <Container>
             {
@@ -61,7 +63,7 @@ const CustomerUpdate = () => {
                     <Field id="firstName" label="名前" type='text' autoComplete='given-name' placeHolder='太郎' value={updateCredential.firstName} onChange={(e) => setUpdateCredential({...updateCredential, firstName: e.target.value})} />
                     <Field id={"email"} label={"メールアドレス"} type={"email"} autoComplete={"email"} value={updateCredential.email} placeHolder={"株式会社 〇〇建設"} onChange={(e) => setUpdateCredential({...updateCredential, email: e.target.value})}/>
                     <div className="flex items-center justify-center pt-2">
-                        <input id='defaultAddress' type="checkbox" checked={updateCredential.acceptMarketing} onChange={() => setUpdateCredential({...updateCredential, acceptMarketing: !updateCredential.acceptMarketing})} />
+                        <input id='defaultAddress' type="checkbox" checked={updateCredential.acceptsMarketing} onChange={() => setUpdateCredential({...updateCredential, acceptsMarketing: !updateCredential.acceptsMarketing})} />
                         <label className="ml-3 text-sm" htmlFor="defaultAddress">メルマガを購読する</label>
                     </div>
                 </div>
