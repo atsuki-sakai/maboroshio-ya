@@ -41,6 +41,8 @@ const MyPage = () => {
     const defaultAddress = loggedCustomer && loggedCustomer!.defaultAddress
     const orders = loggedCustomer && loggedCustomer!.orders?.edges.map(({node: order}) => order);
 
+    console.log(loggedCustomer)
+
     return (
         <Container>
             { errorText ? <AlertDialog title='エラー' message={errorText} onClose={() => setErrorText("")} /> : <></>}
@@ -58,9 +60,18 @@ const MyPage = () => {
                         </button>
                     </div>
                 </div>
-                <div className='pt-3 grid grid-cols-2 gap-3'>
+                <div className='pt-3'>
                     {
-                        orders ? orders.length === 0 ?  <div className='col-span-2 text-gray-500 text-sm h-20'>まだ注文履歴はありません</div>: <div className='h-20'>ORDER COOUNT: { orders.length }</div> : <div className="col-span-2 text-gray-500 text-sm h-20">まだ注文履歴はありません</div>
+                        orders ? orders.length === 0 ?  <div className='col-span-2 text-gray-500 text-sm h-20'>まだ注文履歴はありません</div>
+                        :   <div className='grid grid-cols-2 gap-3'>
+                                {
+                                    orders.map((order, index) => {
+                                        return  <div key={index}>
+                                                    <p>{order.id}</p>
+                                                </div>
+                                    })
+                                }
+                            </div> : <div className="col-span-2 text-gray-500 text-sm h-20">まだ注文履歴はありません</div>
                     }
                 </div>
                 <div className="flex items-start justiry-between py-12">
@@ -104,9 +115,9 @@ const MyPage = () => {
                     <div className='w-full'>
                         <p className="font-bold mb-3">アカウント情報</p>
                         <div className='text-xs font-gray-500 space-y-3'>
-                            <p>NAME: {loggedCustomer?.lastName}{loggedCustomer?.firstName}</p>
-                            <p>EMAIL: {loggedCustomer?.email}</p>
-                            <p>メルマガ購読: {loggedCustomer?.acceptsMarketing ? "購読中" : "未購読"}</p>
+                            <p>{loggedCustomer?.lastName}{loggedCustomer?.firstName}</p>
+                            <p>{loggedCustomer?.email}</p>
+                            <p>メルマガ{loggedCustomer?.acceptsMarketing ? "購読中" : "未購読"}</p>
                         </div>
                         <div>
                             <Link href={"/customer/customer-update"}>
