@@ -21,6 +21,7 @@ const initialState: LoginState = {
     updateCustomer: (customer?: Customer) => {}
 
 }
+
 const CustomerStateProviderContext = createContext<LoginState>(initialState)
 
 export const CustomerStateProvider = ({ children }: Props) => {
@@ -63,7 +64,7 @@ export const CustomerStateProvider = ({ children }: Props) => {
             setUpLoginState()
         })()
 
-    }, [])
+    }, [loggedCustomer])
 
     const value = useMemo(() => {
         return {
