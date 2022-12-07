@@ -70,7 +70,7 @@ const OrderCard = ({order}: Props) => {
 
     return (
         <div className='border rounded-md'>
-            <div className='relative h-full w-full'>
+            <div className='relative h-full w-full rounded-md overflow-hidden'>
                 <Image
                     src={firstItem?.image?.url ?? placeholderImage}
                     width={firstItem?.image?.width ?? "320"}
