@@ -1,4 +1,4 @@
-import { checkoutDetailFragment } from "../common"
+import { checkoutDetailFragment, addressDetailFragment } from "../common"
 
 const customerUpdate = `
     mutation customerUpdate($customer: CustomerUpdateInput!, $customerAccessToken: String!) {
@@ -13,32 +13,12 @@ const customerUpdate = `
                     ${ checkoutDetailFragment }
                 }
                 defaultAddress {
-                    id
-                    address1
-                    address2
-                    city
-                    company
-                    country
-                    firstName
-                    lastName
-                    phone
-                    province
-                    zip
+                    ${ addressDetailFragment }
                 }
                 addresses(first: 5){
                     edges {
                         node {
-                            id
-                            address1
-                            address2
-                            city
-                            company
-                            country
-                            firstName
-                            lastName
-                            phone
-                            province
-                            zip
+                            ${ addressDetailFragment }
                         }
                     }
                 }

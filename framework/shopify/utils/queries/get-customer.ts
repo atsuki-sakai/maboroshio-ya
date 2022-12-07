@@ -1,4 +1,4 @@
-import { checkoutDetailFragment } from "../common"
+import { checkoutDetailFragment, orderDetailFragment, addressDetailFragment } from "../common"
 
 const getCustomer = `
     query getCustomer($accessToken: String!){
@@ -12,39 +12,19 @@ const getCustomer = `
                 ${ checkoutDetailFragment }
             }
             defaultAddress {
-                id
-                address1
-                address2
-                city
-                company
-                country
-                firstName
-                lastName
-                phone
-                province
-                zip
+                ${ addressDetailFragment }
             }
             addresses(first: 5){
                 edges {
                     node {
-                        id
-                        address1
-                        address2
-                        city
-                        company
-                        country
-                        firstName
-                        lastName
-                        phone
-                        province
-                        zip
+                        ${ addressDetailFragment }
                     }
                 }
             }
             orders(first: 10) {
                 edges {
                     node {
-                        id
+                        ${orderDetailFragment}
                     }
                 }
             }

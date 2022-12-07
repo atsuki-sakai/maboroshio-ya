@@ -12,6 +12,7 @@ const getCustomer =  async (accessToken: string): Promise<Customer> => {
     })
 
     const { data, error } = await response.json();
+    console.log(data, error)
     if(error){
         throw Error(error.message)
     }

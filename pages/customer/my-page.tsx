@@ -11,6 +11,7 @@ import { LoadCircle } from '@components/icon'
 import Cookies from 'js-cookie'
 import { motion } from 'framer-motion'
 import provinceToJP from '@lib/province-to-jp'
+import { OrderCard } from '@components/account'
 
 
 const MyPage = () => {
@@ -41,7 +42,7 @@ const MyPage = () => {
     const defaultAddress = loggedCustomer && loggedCustomer!.defaultAddress
     const orders = loggedCustomer && loggedCustomer!.orders?.edges.map(({node: order}) => order);
 
-    console.log(loggedCustomer)
+    console.log(orders)
 
     return (
         <Container>
@@ -67,7 +68,7 @@ const MyPage = () => {
                                 {
                                     orders.map((order, index) => {
                                         return  <div key={index}>
-                                                    <p>{order.id}</p>
+                                                    <OrderCard order={order}/>
                                                 </div>
                                     })
                                 }
