@@ -66,12 +66,14 @@ const financialStatus = (states: string ) => {
 }
 
 const OrderCard = ({order}: Props) => {
+    console.log(order)
     const firstItem = order.lineItems.edges[0].node.variant
 
     return (
         <div className='border rounded-md'>
             <Link
-                href={`/customer/orders/${order.orderNumber}`}
+                as={`/customer/orders/${order.orderNumber}`}
+                href={{ pathname:`/customer/orders/[number]`, query: {id: order.id}}}
                 passHref
             >
                 <a>
