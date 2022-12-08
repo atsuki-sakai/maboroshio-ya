@@ -11,7 +11,7 @@ const checkoutLineItemRemove = `
         message
       }
       checkout {
-       ${checkoutDetailFragment}
+        ${checkoutDetailFragment}
       }
     }
   }

@@ -42,8 +42,6 @@ const MyPage = () => {
     const defaultAddress = loggedCustomer && loggedCustomer!.defaultAddress
     const orders = loggedCustomer && loggedCustomer!.orders?.edges.map(({node: order}) => order);
 
-    console.log(orders)
-
     return (
         <Container>
             { errorText ? <AlertDialog title='エラー' message={errorText} onClose={() => setErrorText("")} /> : <></>}
@@ -67,9 +65,7 @@ const MyPage = () => {
                         :   <div className='grid grid-cols-2 gap-3'>
                                 {
                                     orders.map((order, index) => {
-                                        return  <div key={index}>
-                                                    <OrderCard order={order}/>
-                                                </div>
+                                        return  <OrderCard key={index} order={order}/>
                                     })
                                 }
                             </div> : <div className="col-span-2 text-gray-500 text-sm h-20">まだ注文履歴はありません</div>

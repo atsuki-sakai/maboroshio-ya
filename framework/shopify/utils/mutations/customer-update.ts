@@ -1,4 +1,4 @@
-import { checkoutDetailFragment, addressDetailFragment } from "../common"
+import { checkoutDetailFragment, addressDetailFragment, orderDetailFragment } from "../common"
 
 const customerUpdate = `
     mutation customerUpdate($customer: CustomerUpdateInput!, $customerAccessToken: String!) {
@@ -25,7 +25,7 @@ const customerUpdate = `
                 orders(first: 10) {
                     edges {
                         node {
-                            id
+                            ${ orderDetailFragment } 
                         }
                     }
                 }
