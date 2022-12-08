@@ -21,7 +21,7 @@ const OrderDetail = () => {
             const order = await getOrder(orderId)
             setOrder(order)
         }) ()
-    }, [orderId])
+    }, [])
 
     if(!order) {
         return  <div className="h-screen w-screen">
