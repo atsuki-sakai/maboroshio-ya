@@ -16,8 +16,6 @@ const PasswordReset = () => {
     const [ errorText, setErrorText ] = useState("")
     const resetUrl = router.query.reset_url;
 
-    console.log(router.query)
-
     const resetPassword = async() => {
         try{
             setIsLoading(true)

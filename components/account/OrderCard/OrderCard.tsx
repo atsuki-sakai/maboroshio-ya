@@ -66,7 +66,6 @@ const financialStatus = (states: string ) => {
 }
 
 const OrderCard = ({order}: Props) => {
-    console.log(order)
     const firstItem = order.lineItems.edges[0].node.variant
 
     return (

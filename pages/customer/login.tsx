@@ -63,7 +63,6 @@ const Login = () => {
         setIsLoading(false)
       }
     }
-    console.log('new cart: ',cart)
 
     return (
       <Container>

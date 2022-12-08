@@ -71,7 +71,6 @@ export const CartProvider = ({children}: Props) => {
             }
             setupCheckout()
         })()
-        console.log('setUp Cart')
     },[])
 
     const value = useMemo(() => {

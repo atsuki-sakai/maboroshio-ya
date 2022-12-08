@@ -13,6 +13,8 @@ const OrderDetail = () => {
     const orderId = query.id as string
     const [ order, setOrder ] = useState<Order>()
 
+    console.log('orderId: ', orderId)
+
     useEffect(() => {
 
         ( async() => {

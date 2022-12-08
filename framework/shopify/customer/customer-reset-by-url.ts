@@ -11,13 +11,10 @@ const customerResetByUrl = async(password: string, resetUrl: string) => {
             resetUrl: resetUrl
         })
     })
-    const { data, error } = await response.json()
+    const { error } = await response.json()
     if(error){
         throw Error(error.message)
     }
-    console.log(data, error)
-
-    console.log("data: ",data)
 }
 
 export default customerResetByUrl

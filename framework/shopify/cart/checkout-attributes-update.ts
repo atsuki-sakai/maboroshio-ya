@@ -38,10 +38,7 @@ const checkoutAttributesUpdate = async(chekcoutId: string, attribute: {key:strin
         }
     }
 
-    console.log('body: ', JSON.stringify(body, null, 2))
-
     const { data, error } = await response.json()
-    console.log(data, error)
 
     if(error){
         throw Error(error.message)

@@ -49,8 +49,6 @@ const CustomerUpdate = () => {
         }
     }
 
-    console.log("update credential: ",updateCredential)
-
     return (
         <Container>
             {
