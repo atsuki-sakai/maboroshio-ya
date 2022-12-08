@@ -27,6 +27,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
         fallback: false
     }
 }
+
 export const getStaticProps:GetStaticProps = async (context) => {
     const config = getConfig()
     const { product } = await getProduct({ config, variables: { slug: context.params?.slug } })

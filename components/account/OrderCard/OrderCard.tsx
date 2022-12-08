@@ -2,6 +2,7 @@
 import { Order } from '@shopify/shema'
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 interface Props {
     order: Order
 }
@@ -65,37 +66,39 @@ const financialStatus = (states: string ) => {
 }
 
 const OrderCard = ({order}: Props) => {
-
     const firstItem = order.lineItems.edges[0].node.variant
 
     return (
         <div className='border rounded-md'>
-            <div className='relative h-full w-full rounded-md overflow-hidden'>
-                <Image
-                    src={firstItem?.image?.url ?? placeholderImage}
-                    width={firstItem?.image?.width ?? "320"}
-                    height={firstItem?.image?.height ?? "180"}
-                    alt={firstItem?.image?.altText ?? "Product Image"}
-                />
-                <div className='p-1'>
-                    <p className='text-xs text-gray-500 mb-1'>注文番号 <span className='font-bold'>{order.orderNumber}</span></p>
-                    <div className='flex items-center justify-between'>
-                        <div className='border border-green-500 rounded-full w-fit px-2 py-0.5'>
-                            <p className='text-xs scale-90 text-green-500'>{fulfillmentToJp(order.fulfillmentStatus)}</p>
-                        </div>
-                        <div className='border border-blue-500 rounded-full w-fit px-2 py-0.5'>
-                            <p className='text-xs scale-90 text-blue-500'>{financialStatus(order.financialStatus!)}</p>
+            <Link
+                href={`/customer/orders/${order.orderNumber}`}
+                passHref
+            >
+                <a>
+                    <div className='relative h-full w-full rounded-md overflow-hidden'>
+                        <Image
+                            src={firstItem?.image?.url ?? placeholderImage}
+                            width={firstItem?.image?.width ?? "320"}
+                            height={firstItem?.image?.height ?? "180"}
+                            alt={firstItem?.image?.altText ?? "Product Image"}
+                        />
+                        <div className='p-1'>
+                            <p className='text-xs text-gray-500 mb-1'>注文番号 <span className='font-bold'>{order.orderNumber}</span></p>
+                            <div className='flex items-center justify-between'>
+                                <div className='border border-green-500 rounded-full w-fit px-2 py-0.5'>
+                                    <p className='text-xs scale-90 text-green-500'>{fulfillmentToJp(order.fulfillmentStatus)}</p>
+                                </div>
+                                <div className='border border-blue-500 rounded-full w-fit px-2 py-0.5'>
+                                    <p className='text-xs scale-90 text-blue-500'>{financialStatus(order.financialStatus!)}</p>
+                                </div>
+                            </div>
+                            <p className="text-base mt-1 w-full">
+                                ¥ { Math.floor(order.totalPrice.amount) }
+                            </p>
                         </div>
                     </div>
-                    <p className="text-base mt-1 w-full">
-                        ¥ { Math.floor(order.totalPrice.amount) }
-                    </p>
-                    {/* <div>
-                        <p>合計 {Math.floor(order.subtotalPrice.amount)} + 税 {Math.floor(order.totalTax.amount)}</p>
-                        <p>送料 {Math.floor(order.totalShippingPrice.amount)}</p>
-                    </div> */}
-                </div>
-            </div>
+                </a>
+            </Link>
         </div>
     )
 }

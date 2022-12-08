@@ -83,6 +83,7 @@ export const orderDetailFragment = `
     email
     fulfillmentStatus
     financialStatus
+    processedAt
     orderNumber
     statusUrl
     totalShippingPrice{
