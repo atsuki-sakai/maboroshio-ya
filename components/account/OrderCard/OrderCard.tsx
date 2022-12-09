@@ -71,7 +71,6 @@ const OrderCard = ({order}: Props) => {
     return (
         <div className='border rounded-md'>
             <Link
-                as={`/customer/orders/${order.orderNumber}`}
                 href={`/customer/orders/[number]`}
                 passHref
             >
