@@ -25,14 +25,5 @@ const OrderDetail = () => {
 }
 
 
-export const getStaticProps: GetStaticProps = async(context) => {
-
-    document.location.pathname
-    return {
-        props: {
-            data: ""
-        }
-    }
-}
 
 export default OrderDetail
