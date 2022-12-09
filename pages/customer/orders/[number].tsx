@@ -13,7 +13,6 @@ const OrderDetail = () => {
 
     const router = useRouter()
     console.log(router.asPath)
-    console.log(document.location.pathname)
     return (
         <Container>
             <div className='px-8'>
