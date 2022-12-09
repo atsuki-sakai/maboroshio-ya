@@ -1,7 +1,7 @@
 
 
 const DEVLOPMENT = false
-const NGROK_URL = "https://96a2-219-122-209-55.jp.ngrok.io"
+const NGROK_URL = "https://7b7e-219-122-209-55.jp.ngrok.io"
 
 // .envに移す
 export const SHOPIFY_STORE_DOMAIN = "https://xn-68jwdf5d1604a.myshopify.com"

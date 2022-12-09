@@ -22,22 +22,6 @@ const checkoutAttributesUpdate = async(chekcoutId: string, attribute: {key:strin
         })
     })
 
-    const body = {
-        body: {
-            checkoutId: chekcoutId,
-            input: {
-                allowPartialAddresses:  true,
-                customAttributes: [
-                    {
-                        key: attribute.key,
-                        value: attribute.value
-                    }
-                ],
-                note: ""
-            }
-        }
-    }
-
     const { data, error } = await response.json()
 
     if(error){
