@@ -37,22 +37,30 @@ const OrderId = () => {
     return (
         <Container>
             <div className='px-8'>
-                <p className='text-xs text-gray-500 mb-1'>注文番号 <span className='font-bold'>{order.orderNumber}</span></p>
-                <p className='text-xs text-gray-500 mb-1'>注文日 <span className='font-bold'>{order.processedAt.split('T')[0]}</span></p>
-                <div className='flex items-center justify-between'>
-                    <div className='border border-green-500 rounded-full w-fit px-2 py-0.5'>
-                        <p className='text-xs scale-90 text-green-500'>{fulfillmentToJp(order.fulfillmentStatus)}</p>
-                    </div>
-                    <div className='border border-blue-500 rounded-full w-fit px-2 py-0.5'>
-                        <p className='text-xs scale-90 text-blue-500'>{financialStatusToJp(order.financialStatus!)}</p>
-                    </div>
+                <div className='flex items-center justify-between mb-3'>
+                    <p className='text-sm font-bold'>注文番号 <span className=''>{order.orderNumber}</span></p>
+                    <p className='text-xs text-gray-500'>注文日 <span className=''>{order.processedAt.split('T')[0]}</span></p>
                 </div>
-                <div className='text-xs text-gray-500'>
-                    <p>合計注文数 {order.lineItems.edges.length}点</p>
-                    <p>小計 ¥{Math.floor(order.subtotalPrice.amount)}</p>
-                    <p>送料 ¥{Math.floor(order.totalShippingPrice.amount)}</p>
-                    <p>税 ¥{Math.floor(order.totalTax.amount)}</p>
-                    <p>合計金額 ¥{Math.floor(order.totalPrice.amount)}</p>
+                <div className='text-sm font-bold'>
+                    <p className='text-xs font-normal text-gray-500'>合計注文数 {order.lineItems.edges.length}点</p>
+                    <div className='grid grid-cols-4 gap-2 mt-5'>
+                        <div>
+                            <p>小計</p>
+                            <p className='text-gray-500 font-normal'>¥{Math.floor(order.subtotalPrice.amount)}</p>
+                        </div>
+                        <div>
+                            <p>送料</p>
+                            <p className='text-gray-500 font-normal'>¥{Math.floor(order.totalShippingPrice.amount)}</p>
+                        </div>
+                        <div>
+                            <p>税</p>
+                            <p className='text-gray-500 font-normal'>¥{Math.floor(order.totalTax.amount)}</p>
+                        </div>
+                        <div>
+                            <p>合計金額</p>
+                            <p className='text-gray-500 font-normal'>¥{Math.floor(order.totalPrice.amount)}</p>
+                        </div>
+                    </div>
                 </div>
                 <div className='py-3 '>
                     {
@@ -82,7 +90,7 @@ const OrderId = () => {
                         })
                     }
                 </div>
-                <div className='py-6'>
+                <div className='pt-6 pb-12'>
                     <p className='font-bold text-sm  mb-2'>配達住所</p>
                     <div className='text-xs text-gray-500'>
                         <p>{order.shippingAddress?.country === "Japan" ? "日本" : "海外"}</p>
@@ -92,7 +100,6 @@ const OrderId = () => {
                     <p className='font-bold text-sm mb-2 mt-4'>支払い情報</p>
                     <div className='text-xs text-gray-500'>
                         <p>{financialStatusToJp(order.financialStatus!)}</p>
-                        <p>{fulfillmentToJp(order.fulfillmentStatus!)}</p>
                     </div>
                     <p className='font-bold text-sm mb-2 mt-4'>発送情報</p>
                     <div className='text-xs text-gray-500'>
