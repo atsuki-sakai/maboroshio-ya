@@ -33,7 +33,7 @@ const OrderId = () => {
                     </div>
                 </Container>
     }
-    
+
     return (
         <Container>
             <div className='px-8'>
@@ -54,23 +54,23 @@ const OrderId = () => {
                     <p>税 ¥{Math.floor(order.totalTax.amount)}</p>
                     <p>合計金額 ¥{Math.floor(order.totalPrice.amount)}</p>
                 </div>
-                <div className='px-8 py-3'>
+                <div className='py-3 '>
                     {
                         order.lineItems.edges.map(({node: lineItem}, index) => {
-                            return  <div key={index}>
+                            return  <div key={index} className="border p-2 rounded-md">
                                         <div className='relative'>
                                             <Image src={lineItem.variant?.image?.url ?? placeholderImage} width={lineItem.variant?.image?.width ?? 350} height={lineItem.variant?.image?.height ?? 350} alt={lineItem.variant?.image?.altText ?? "Product Image"}  />
                                         </div>
-                                        <p className=''>{lineItem.title}</p>
+                                        <p className='my-2 font-bold'>{lineItem.title}</p>
                                         <table className="table-auto w-full border text-left p-3 text-sm">
-                                            <thead className='text-gray-500'>
+                                            <thead>
                                                 <tr>
                                                     <th>小計</th>
                                                     <th className='border-l border-r'>数量</th>
                                                     <th>合計</th>
                                                 </tr>
                                             </thead>
-                                            <tbody className='text-left border-t text-xs text-gray-500'>
+                                            <tbody className='text-left border-t text-xs'>
                                                 <tr>
                                                     <td>{Math.floor(lineItem.variant?.price.amount)}</td>
                                                     <td className='border-l border-r'>{Math.floor(lineItem.quantity)}</td>
@@ -83,19 +83,19 @@ const OrderId = () => {
                     }
                 </div>
                 <div className='py-6'>
-                    <p className='font-bold text-sm text-gray-500 mb-2'>配達住所</p>
-                    <div className='text-xs'>
+                    <p className='font-bold text-sm  mb-2'>配達住所</p>
+                    <div className='text-xs text-gray-500'>
                         <p>{order.shippingAddress?.country === "Japan" ? "日本" : "海外"}</p>
                         <p>{order.shippingAddress?.zip}</p>
                         <p>{provinceToJP(order.shippingAddress?.province!)}{order.shippingAddress?.city}{order.shippingAddress?.address1}{order.shippingAddress?.address2}</p>
                     </div>
-                    <p className='font-bold text-sm text-gray-500 mb-2 mt-4'>支払い情報</p>
-                    <div className='text-xs'>
+                    <p className='font-bold text-sm mb-2 mt-4'>支払い情報</p>
+                    <div className='text-xs text-gray-500'>
                         <p>{financialStatusToJp(order.financialStatus!)}</p>
                         <p>{fulfillmentToJp(order.fulfillmentStatus!)}</p>
                     </div>
-                    <p className='font-bold text-sm text-gray-500 mb-2 mt-4'>発送情報</p>
-                    <div className='text-xs'>
+                    <p className='font-bold text-sm mb-2 mt-4'>発送情報</p>
+                    <div className='text-xs text-gray-500'>
                         {
                             order.successfulFulfillments ?  <div>
                                                                 <div className='flex items-center space-x-3'>

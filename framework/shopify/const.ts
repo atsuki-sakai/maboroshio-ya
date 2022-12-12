@@ -1,6 +1,6 @@
 
 
-const DEVLOPMENT = false
+const DEVLOPMENT = true
 const NGROK_URL = "https://7bb3-219-122-209-55.jp.ngrok.io"
 
 // .envに移す
