@@ -86,6 +86,20 @@ export const orderDetailFragment = `
     processedAt
     orderNumber
     statusUrl
+    shippingAddress{
+        id
+        address1
+        address2
+        city
+        company
+        country
+        firstName
+        lastName
+        province
+        phone
+        provinceCode
+        zip
+    }
     totalShippingPrice{
         amount
     }
