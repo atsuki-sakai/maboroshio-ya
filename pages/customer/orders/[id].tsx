@@ -104,7 +104,7 @@ const OrderId = () => {
                     <p className='font-bold text-sm mb-2 mt-4'>発送情報</p>
                     <div className='text-xs text-gray-500'>
                         {
-                            order.successfulFulfillments ?  <div>
+                            order.successfulFulfillments![0] ?  <div>
                                                                 <div className='flex items-center space-x-3'>
                                                                     <p>{order.successfulFulfillments![0].trackingCompany}</p>
                                                                     <p>追跡番号 {order.successfulFulfillments![0].trackingInfo[0].number}</p>
