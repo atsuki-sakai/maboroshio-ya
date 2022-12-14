@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Product } from '@shopify/types/product'
+import { Product } from '@shopify/shema'
 import { truncate } from '@lib/truncate'
 interface Props {
     product: Product
@@ -12,16 +12,16 @@ const placeholderImage = "/images/product-image-placeholder.svg"
 const ProductCard = ({product} : Props) => {
     return (
         <div key={product.id} className="rounded-md overflow-hidden">
-            <Link href={`/products/${product.slug}`} passHref>
+            <Link href={`/products/${product.handle}`} passHref>
                 <a>
                     <h4 className='text-sm font-serif text-gray-800 text-center pb-1'>
-                        { truncate(product.name, 25) }
+                        { truncate(product.title, 25) }
                     </h4>
                     {
                         product.images && <div className='relative'>
                                             <Image
-                                                alt={product.name ?? "Product Image"}
-                                                src={product.images[0]?.url ?? placeholderImage}
+                                                alt={product.title ?? "Product Image"}
+                                                src={product.images.edges[0].node.url ?? placeholderImage}
                                                 height={320}
                                                 width={320}
                                                 quality="85"

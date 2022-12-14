@@ -24,6 +24,8 @@ query productById($slug: String!) {
             pageInfo {
                 hasNextPage
                 hasPreviousPage
+                startCursor
+                endCursor
             }
             edges {
                 node {
@@ -44,6 +46,8 @@ query productById($slug: String!) {
             pageInfo {
                 hasNextPage
                 hasPreviousPage
+                startCursor
+                endCursor
             }
             edges {
                 node {

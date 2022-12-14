@@ -1,29 +1,58 @@
 
 
-import React from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
-import { getAllProducts } from '@shopify/products'
+import { getAllProducts, getProductsPagenation } from '@shopify/products'
 import { getConfig } from "@shopify/api/config"
 import { Hero, Container } from "@components/ui"
 import { ProductCard  } from "@components/product"
-import type { Product } from '@shopify/types/product'
 import { MetaHead } from '@components/common'
+import { PageInfo, Product } from '@shopify/shema'
 
+
+
+const numProducts = 20
 
 export const getStaticProps: GetStaticProps = async() =>  {
 
-  const config = getConfig()
-  const products = await getAllProducts(config)
+  const featureProductsInfo = await getProductsPagenation(numProducts)
   return {
     props: {
-      products
+      featureProductsInfo
     },
     revalidate: 4 * 60 * 60
   }
 }
 
+const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticProps>) => {
 
-const Home = ({products}: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const [ featureProducts, setFeatureProducts ] = useState<Array<Product>>(featureProductsInfo.products.edges.map((connection: any) => connection.node))
+  const [ featureProductsPagination, setFeatureProductsPagiantion ] = useState<PageInfo>(featureProductsInfo.products.pageInfo)
+
+  const featureProductsRef = React.useRef<HTMLDivElement>()
+
+  const scrollToFeatureProducts = (behavior: any = 'smooth') => featureProductsRef.current?.scrollIntoView({behavior})
+
+  const prevProducts = async() => {
+
+    if(!featureProductsPagination.hasPreviousPage) return
+    const newProductsInfo = await getProductsPagenation(numProducts, {type: "PREVIOUS", cursor: featureProductsPagination.startCursor!})
+    setFeatureProducts(newProductsInfo.products.edges.map((connection: any) => connection.node))
+    setFeatureProductsPagiantion(newProductsInfo.products.pageInfo)
+    scrollToFeatureProducts()
+  }
+
+  const nextProducts = async() => {
+
+    if(!featureProductsPagination.hasNextPage) return
+    const newProductsInfo = await getProductsPagenation(numProducts, { type: "NEXT", cursor: featureProductsPagination.endCursor! })
+    setFeatureProducts(newProductsInfo.products.edges.map((connection: any) => connection.node))
+    setFeatureProductsPagiantion(newProductsInfo.products.pageInfo)
+    scrollToFeatureProducts()
+  }
+
+  useEffect(() => {
+  }, [featureProducts, featureProductsPagination])
 
   return (
     <>
@@ -35,14 +64,26 @@ const Home = ({products}: InferGetStaticPropsType<typeof getStaticProps>) => {
             <p>売り対象品をプッシュする</p>
           </div>
         </div>
-        <div>
-        <div className='px-8 py-12'>
-          <div className='grid grid-cols-2 md:grid-cols-3 gap-8 items-center justify-center'>
+        <div ref={featureProductsRef as any}>
+          <div className='px-8 py-12'>
+            <div className='grid grid-cols-2 md:grid-cols-3 gap-8 items-center justify-center'>
               {
-                products.map((product: Product) => {
+                featureProducts.map((product) => {
                   return <ProductCard key={product.id} product={product} />
                 })
               }
+            </div>
+            <div className='flex items-center justify-between my-6 text-sm text-white font-bold'>
+              <button className='w-full text-center' onClick={prevProducts}>
+                <p className='py-2 bg-gray-500'>
+                  前
+                </p>
+              </button>
+              <button className='w-full text-center' onClick={nextProducts}>
+                <p className='py-2 bg-blue-500'>
+                  次
+                </p>
+              </button>
             </div>
           </div>
         </div>

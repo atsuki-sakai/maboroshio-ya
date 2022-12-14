@@ -36,6 +36,8 @@ export const checkoutDetailFragment = `
                 pageInfo {
                     hasNextPage
                     hasPreviousPage
+                    startCursor
+                    endCursor
                 }
                 edges {
                     node {

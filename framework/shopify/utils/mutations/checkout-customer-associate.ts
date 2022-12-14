@@ -21,7 +21,7 @@ const checkoutCustomerAssociate = `
                 defaultAddress {
                     ${ addressDetailFragment }
                 }
-                addresses(first: 5){
+                addresses(first: 4){
                     edges {
                         node {
                             ${ addressDetailFragment }
@@ -29,6 +29,12 @@ const checkoutCustomerAssociate = `
                     }
                 }
                 orders(first: 10) {
+                    pageInfo {
+                        hasNextPage
+                        hasPreviousPage
+                        startCursor
+                        endCursor
+                    }
                     edges {
                         node {
                             ${ orderDetailFragment }

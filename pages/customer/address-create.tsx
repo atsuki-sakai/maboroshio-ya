@@ -23,7 +23,7 @@ type AddressInputType = {
 
 const AddressCreate = () => {
 
-  const { updateCustomer } = useCustomerState()
+  const { loggedCustomer, updateCustomer } = useCustomerState()
 
   const [ addressData, setAddressData ] = useState<AddressInputType>({
     address1: "",
@@ -41,6 +41,10 @@ const AddressCreate = () => {
 
   const createCustomerAddress = async() => {
 
+    if(!loggedCustomer) return;
+    if(loggedCustomer.addresses.edges.length === 4){
+      alert('登録できる住所は四つまでです。')
+    }
     const createAddressInputData = {
       address: {
         address1: addressData.address1,

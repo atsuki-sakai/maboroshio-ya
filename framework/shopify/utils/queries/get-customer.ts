@@ -22,6 +22,12 @@ const getCustomer = `
                 }
             }
             orders(first: 10) {
+                pageInfo {
+                    hasNextPage
+                    hasPreviousPage
+                    startCursor
+                    endCursor
+                }
                 edges {
                     node {
                         ${orderDetailFragment}

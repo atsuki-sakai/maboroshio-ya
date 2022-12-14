@@ -3,6 +3,8 @@ const productConnect = `
 pageInfo {
     hasNextPage
     hasPreviousPage
+    startCursor
+    endCursor
 }
 edges {
     node {
@@ -20,8 +22,10 @@ edges {
         }
         images(first: 1) {
             pageInfo {
-            hasNextPage
-            hasPreviousPage
+                hasNextPage
+                hasPreviousPage
+                startCursor
+                endCursor
             }
             edges {
                 node {
@@ -38,7 +42,7 @@ edges {
 
 // TODO: - 100を超えるとgraphqlのコストを超えてエラーを吐く
 const getAllProductsQuery = `
-query getAllProducts($first: Int = 100) {
+query getAllProducts($first: Int = 20) {
     products(first: $first) {
         ${productConnect}
     }
