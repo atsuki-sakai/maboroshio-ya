@@ -1,9 +1,8 @@
 
 
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useState} from 'react'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
-import { getAllProducts, getProductsPagenation } from '@shopify/products'
-import { getConfig } from "@shopify/api/config"
+import { getProductsPagenation } from '@shopify/products'
 import { Hero, Container } from "@components/ui"
 import { ProductCard  } from "@components/product"
 import { MetaHead } from '@components/common'
@@ -13,7 +12,7 @@ const numProducts = 20
 
 export const getStaticProps: GetStaticProps = async() =>  {
 
-  const featureProductsInfo = await getProductsPagenation(20)
+  const featureProductsInfo = await getProductsPagenation(numProducts)
   return {
     props: {
       featureProductsInfo
@@ -27,27 +26,16 @@ const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticPro
   const [ featureProducts, setFeatureProducts ] = useState<Array<Product>>(featureProductsInfo.products.edges.map((connection: any) => connection.node))
   const [ featureProductsPageInfo, setFeatureProductsPageInfo ] = useState<PageInfo>(featureProductsInfo.products.pageInfo)
 
-  const featureProductsRef = React.useRef<HTMLDivElement>()
-
-  const scrollToFeatureProducts = (behavior: any = 'smooth') => featureProductsRef.current?.scrollIntoView({behavior})
-
-  const prevProducts = async() => {
-
-    if(!featureProductsPageInfo.hasPreviousPage) return
-    const newProductsInfo = await getProductsPagenation(20, {type: "PREVIOUS", cursor: featureProductsPageInfo.startCursor!})
-    setFeatureProducts(newProductsInfo.products.edges.map((connection: any) => connection.node))
-    setFeatureProductsPageInfo(newProductsInfo.products.pageInfo)
-    scrollToFeatureProducts()
-  }
-
-  const nextProducts = async() => {
+  const showMoreProducts = async() => {
 
     if(!featureProductsPageInfo.hasNextPage) return
-    const newProductsInfo = await getProductsPagenation(20, { type: "NEXT", cursor: featureProductsPageInfo.endCursor! })
-    setFeatureProducts(newProductsInfo.products.edges.map((connection: any) => connection.node))
+
+    const newProductsInfo = await getProductsPagenation(numProducts, { type: "NEXT", cursor: featureProductsPageInfo.endCursor! })
+    setFeatureProducts(featureProducts.concat(newProductsInfo.products.edges.map((connection: any) => connection.node)))
     setFeatureProductsPageInfo(newProductsInfo.products.pageInfo)
-    scrollToFeatureProducts()
   }
+
+  console.log('new: ', featureProducts)
 
   return (
     <>
@@ -59,7 +47,7 @@ const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticPro
             <p>売り対象品をプッシュする</p>
           </div>
         </div>
-        <div ref={featureProductsRef as any}>
+        <div>
           <div className='px-8 py-12'>
             <div className='grid grid-cols-2 md:grid-cols-3 gap-8 items-center justify-center'>
               {
@@ -68,17 +56,14 @@ const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticPro
                 })
               }
             </div>
-            <div className='flex items-center justify-between my-6 text-sm text-white font-bold'>
-              <button className='w-full text-center' onClick={prevProducts}>
-                <p className='py-2 bg-gray-500'>
-                  前
-                </p>
-              </button>
-              <button className='w-full text-center' onClick={nextProducts}>
-                <p className='py-2 bg-blue-500'>
-                  次
-                </p>
-              </button>
+            <div className='flex items-center justify-between my-6'>
+              {
+                featureProductsPageInfo.hasNextPage ? <button className='w-full text-center rounded-md bg-gradient-to-tr to-green-500 from-lime-400 py-2' onClick={showMoreProducts}>
+                                                        <p className='text-sm text-white'>
+                                                          さらに商品を表示
+                                                        </p>
+                                                      </button> : <></>
+              }
             </div>
           </div>
         </div>

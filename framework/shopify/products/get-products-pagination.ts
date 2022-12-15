@@ -21,7 +21,6 @@ const getProductsPagenation = async(numProducts: number, pagination?: Pagination
 
 
     const { data, error } = await response.json();
-    console.log('data: ', data)
     if(error){
         throw Error(error.message)
     }
