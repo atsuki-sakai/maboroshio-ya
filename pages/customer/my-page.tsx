@@ -43,7 +43,6 @@ const MyPage = () => {
     }
 
     const fetchMoreOrders = async() => {
-
         if(!loggedCustomer?.orders.pageInfo.hasNextPage) return
         const newOrdersInfo = await getOrdersPagenation(6, getCustomerAccessToken()!, {type: "NEXT", cursor: ordersPagination?.endCursor!})
         setOrders(orders?.concat(newOrdersInfo.edges.map((order: any) => order.node)))
