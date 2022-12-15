@@ -1,5 +1,4 @@
 
-import { getProductsPagenationQuery } from "@shopify/utils"
 import { generateApiUrl } from "@shopify/utils/generate-api-url"
 
 
@@ -20,8 +19,9 @@ const getProductsPagenation = async(numProducts: number, pagination?: Pagination
         })
     })
 
-    const { data, error } = await response.json();
 
+    const { data, error } = await response.json();
+    console.log('data: ', data)
     if(error){
         throw Error(error.message)
     }
