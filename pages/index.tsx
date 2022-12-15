@@ -10,12 +10,9 @@ import { MetaHead } from '@components/common'
 import { PageInfo, Product } from '@shopify/shema'
 
 
-
-const numProducts = 20
-
 export const getStaticProps: GetStaticProps = async() =>  {
 
-  const featureProductsInfo = await getProductsPagenation(numProducts)
+  const featureProductsInfo = await getProductsPagenation(20)
   return {
     props: {
       featureProductsInfo
@@ -36,7 +33,7 @@ const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticPro
   const prevProducts = async() => {
 
     if(!featureProductsPagination.hasPreviousPage) return
-    const newProductsInfo = await getProductsPagenation(numProducts, {type: "PREVIOUS", cursor: featureProductsPagination.startCursor!})
+    const newProductsInfo = await getProductsPagenation(20, {type: "PREVIOUS", cursor: featureProductsPagination.startCursor!})
     setFeatureProducts(newProductsInfo.products.edges.map((connection: any) => connection.node))
     setFeatureProductsPagiantion(newProductsInfo.products.pageInfo)
     scrollToFeatureProducts()
@@ -45,7 +42,7 @@ const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticPro
   const nextProducts = async() => {
 
     if(!featureProductsPagination.hasNextPage) return
-    const newProductsInfo = await getProductsPagenation(numProducts, { type: "NEXT", cursor: featureProductsPagination.endCursor! })
+    const newProductsInfo = await getProductsPagenation(20, { type: "NEXT", cursor: featureProductsPagination.endCursor! })
     setFeatureProducts(newProductsInfo.products.edges.map((connection: any) => connection.node))
     setFeatureProductsPagiantion(newProductsInfo.products.pageInfo)
     scrollToFeatureProducts()
