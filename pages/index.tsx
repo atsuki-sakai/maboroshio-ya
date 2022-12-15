@@ -25,7 +25,7 @@ export const getStaticProps: GetStaticProps = async() =>  {
 const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticProps>) => {
 
   const [ featureProducts, setFeatureProducts ] = useState<Array<Product>>(featureProductsInfo.products.edges.map((connection: any) => connection.node))
-  const [ featureProductsPagination, setFeatureProductsPagiantion ] = useState<PageInfo>(featureProductsInfo.products.pageInfo)
+  const [ featureProductsPageInfo, setFeatureProductsPageInfo ] = useState<PageInfo>(featureProductsInfo.products.pageInfo)
 
   const featureProductsRef = React.useRef<HTMLDivElement>()
 
@@ -33,26 +33,26 @@ const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticPro
 
   const prevProducts = async() => {
 
-    if(!featureProductsPagination.hasPreviousPage) return
-    const newProductsInfo = await getProductsPagenation(numProducts, {type: "PREVIOUS", cursor: featureProductsPagination.startCursor!})
+    if(!featureProductsPageInfo.hasPreviousPage) return
+    const newProductsInfo = await getProductsPagenation(numProducts, {type: "PREVIOUS", cursor: featureProductsPageInfo.startCursor!})
     setFeatureProducts(newProductsInfo.products.edges.map((connection: any) => connection.node))
-    setFeatureProductsPagiantion(newProductsInfo.products.pageInfo)
+    setFeatureProductsPageInfo(newProductsInfo.products.pageInfo)
     scrollToFeatureProducts()
   }
 
   const nextProducts = async() => {
 
-    if(!featureProductsPagination.hasNextPage) return
-    const newProductsInfo = await getProductsPagenation(numProducts, { type: "NEXT", cursor: featureProductsPagination.endCursor! })
+    if(!featureProductsPageInfo.hasNextPage) return
+    const newProductsInfo = await getProductsPagenation(numProducts, { type: "NEXT", cursor: featureProductsPageInfo.endCursor! })
     setFeatureProducts(newProductsInfo.products.edges.map((connection: any) => connection.node))
-    setFeatureProductsPagiantion(newProductsInfo.products.pageInfo)
+    setFeatureProductsPageInfo(newProductsInfo.products.pageInfo)
     scrollToFeatureProducts()
   }
 
   return (
     <>
       <MetaHead/>
-      {/* <Container>
+      <Container>
         <div className='w-full h-[320px] flex justify-center items-center bg-red-200'>
           <div>
             <p>バナーをスライドで表示</p>
@@ -96,7 +96,7 @@ const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticPro
         <div className='w-full h-[320px] flex justify-center items-center bg-yellow-200'>
           <p>お知らせ</p>
         </div>
-      </Container> */}
+      </Container>
     </>
   )
 }
