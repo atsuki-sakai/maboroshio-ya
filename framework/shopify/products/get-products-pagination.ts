@@ -1,7 +1,6 @@
 
 import { generateApiUrl } from "@shopify/utils/generate-api-url"
 
-
 type PaginationType = {
     type: "NEXT" | "PREVIOUS",
     cursor: string
@@ -18,7 +17,6 @@ const getProductsPagenation = async(numProducts: number, pagination?: Pagination
             pagination: pagination
         })
     })
-
 
     const { data, error } = await response.json();
     if(error){

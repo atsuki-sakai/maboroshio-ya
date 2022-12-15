@@ -1,8 +1,8 @@
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Container, AlertDialog } from '@components/ui'
-import { checkoutCustomerDisassociate } from "@shopify/customer"
+import { checkoutCustomerDisassociate, getCustomerAccessToken } from "@shopify/customer"
 import { useCustomerState } from '@components/context'
 import { useRouter } from 'next/router'
 import { SHOPIFY_CUSTOMER_ACCESS_TOKEN } from '@shopify/const'
@@ -12,6 +12,8 @@ import Cookies from 'js-cookie'
 import { motion } from 'framer-motion'
 import provinceToJP from '@lib/province-to-jp'
 import { OrderCard } from '@components/account'
+import getOrdersPagenation from '@shopify/customer/get-orders-pagination'
+import { PageInfo } from '@shopify/shema'
 
 
 const MyPage = () => {
@@ -21,6 +23,9 @@ const MyPage = () => {
 
     const [ isLoading, setIsLoading ] = useState(false)
     const [ errorText, setErrorText ] = useState("")
+    const [ orders, setOrders ] = useState(loggedCustomer?.orders?.edges.map(({node: order}) => order))
+    const [ ordersPagination, setOrdersPagination] = useState<PageInfo | undefined>(loggedCustomer?.orders?.pageInfo)
+    const [ defaultAddress, setDefaultAddress ] = useState(loggedCustomer?.defaultAddress)
 
     const logout = async () => {
         try{
@@ -29,9 +34,7 @@ const MyPage = () => {
             await checkoutCustomerDisassociate(getCheckoutId()!)
             Cookies.remove(SHOPIFY_CUSTOMER_ACCESS_TOKEN!)
             updateCustomer(undefined)
-            setTimeout(() => {
-                router.push('/')
-            }, 300)
+            router.push('/')
         }catch(e: any){
             setErrorText(e.message)
         }finally{
@@ -39,8 +42,13 @@ const MyPage = () => {
         }
     }
 
-    const defaultAddress = loggedCustomer && loggedCustomer!.defaultAddress
-    const orders = loggedCustomer && loggedCustomer!.orders?.edges.map(({node: order}) => order);
+    const fetchMoreOrders = async() => {
+
+        if(!loggedCustomer?.orders.pageInfo.hasNextPage) return
+        const newOrdersInfo = await getOrdersPagenation(6, getCustomerAccessToken()!, {type: "NEXT", cursor: ordersPagination?.endCursor!})
+        setOrders(orders?.concat(newOrdersInfo.edges.map((order: any) => order.node)))
+        setOrdersPagination(newOrdersInfo.pageInfo)
+    }
 
     return (
         <Container>
@@ -65,7 +73,16 @@ const MyPage = () => {
                         :   <div className='grid grid-cols-2 gap-3'>
                                 {
                                     orders.map((order, index) => {
-                                        return  <OrderCard key={index} order={order}/>
+                                        return  <div key={index}>
+                                                    <OrderCard order={order}/>
+                                                    {
+                                                        ordersPagination?.hasNextPage ? <button className='w-full text-center rounded-md bg-gradient-to-tr to-green-500 from-lime-400 py-2' onClick={fetchMoreOrders} >
+                                                                                            <p className='text-sm text-white'>
+                                                                                                さらに注文を表示
+                                                                                            </p>
+                                                                                        </button> : <></>
+                                                    }
+                                                </div>
                                     })
                                 }
                             </div> : <div className="col-span-2 text-gray-500 text-sm h-20">まだ注文履歴はありません</div>

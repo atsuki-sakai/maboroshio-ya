@@ -8,11 +8,11 @@ import { ProductCard  } from "@components/product"
 import { MetaHead } from '@components/common'
 import { PageInfo, Product } from '@shopify/shema'
 
-const numProducts = 20
+const numFeatureProducts = 20
 
 export const getStaticProps: GetStaticProps = async() =>  {
 
-  const featureProductsInfo = await getProductsPagenation(numProducts)
+  const featureProductsInfo = await getProductsPagenation(numFeatureProducts)
   return {
     props: {
       featureProductsInfo
@@ -23,19 +23,19 @@ export const getStaticProps: GetStaticProps = async() =>  {
 
 const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticProps>) => {
 
-  const [ featureProducts, setFeatureProducts ] = useState<Array<Product>>(featureProductsInfo.products.edges.map((connection: any) => connection.node))
-  const [ featureProductsPageInfo, setFeatureProductsPageInfo ] = useState<PageInfo>(featureProductsInfo.products.pageInfo)
+  const [ featureProducts, setFeatureProducts ] = useState<Array<Product>>(featureProductsInfo.products.edges.map((product: any) => product.node))
+  const [ featureProductsPagination, setFeatureProductsPagination ] = useState<PageInfo>(featureProductsInfo.products.pageInfo)
 
   const showMoreProducts = async() => {
-
-    if(!featureProductsPageInfo.hasNextPage) return
-
-    const newProductsInfo = await getProductsPagenation(numProducts, { type: "NEXT", cursor: featureProductsPageInfo.endCursor! })
-    setFeatureProducts(featureProducts.concat(newProductsInfo.products.edges.map((connection: any) => connection.node)))
-    setFeatureProductsPageInfo(newProductsInfo.products.pageInfo)
+    if(!featureProductsPagination.hasNextPage) return
+    try{
+      const newProductsInfo = await getProductsPagenation(numFeatureProducts, { type: "NEXT", cursor: featureProductsPagination.endCursor! })
+      setFeatureProducts(featureProducts.concat(newProductsInfo.products.edges.map((product: any) => product.node)))
+      setFeatureProductsPagination(newProductsInfo.products.pageInfo)
+    }catch(error: any){
+      alert(error.message)
+    }
   }
-
-  console.log('new: ', featureProducts)
 
   return (
     <>
@@ -58,7 +58,7 @@ const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticPro
             </div>
             <div className='flex items-center justify-between my-6'>
               {
-                featureProductsPageInfo.hasNextPage ? <button className='w-full text-center rounded-md bg-gradient-to-tr to-green-500 from-lime-400 py-2' onClick={showMoreProducts}>
+                featureProductsPagination.hasNextPage ? <button className='w-full text-center rounded-md bg-gradient-to-tr to-green-500 from-lime-400 py-2' onClick={showMoreProducts} >
                                                         <p className='text-sm text-white'>
                                                           さらに商品を表示
                                                         </p>

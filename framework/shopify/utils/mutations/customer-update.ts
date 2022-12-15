@@ -22,7 +22,13 @@ const customerUpdate = `
                         }
                     }
                 }
-                orders(first: 10) {
+                orders(first: 4) {
+                    pageInfo {
+                        hasNextPage
+                        hasPreviousPage
+                        startCursor
+                        endCursor
+                    }
                     edges {
                         node {
                             ${ orderDetailFragment } 
