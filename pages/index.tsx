@@ -9,10 +9,11 @@ import { ProductCard  } from "@components/product"
 import { MetaHead } from '@components/common'
 import { PageInfo, Product } from '@shopify/shema'
 
+const numProducts = 20
 
 export const getStaticProps: GetStaticProps = async() =>  {
 
-  const featureProductsInfo = await getProductsPagenation(20)
+  const featureProductsInfo = await getProductsPagenation(numProducts)
   return {
     props: {
       featureProductsInfo
@@ -33,7 +34,7 @@ const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticPro
   const prevProducts = async() => {
 
     if(!featureProductsPagination.hasPreviousPage) return
-    const newProductsInfo = await getProductsPagenation(20, {type: "PREVIOUS", cursor: featureProductsPagination.startCursor!})
+    const newProductsInfo = await getProductsPagenation(numProducts, {type: "PREVIOUS", cursor: featureProductsPagination.startCursor!})
     setFeatureProducts(newProductsInfo.products.edges.map((connection: any) => connection.node))
     setFeatureProductsPagiantion(newProductsInfo.products.pageInfo)
     scrollToFeatureProducts()
@@ -42,19 +43,16 @@ const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticPro
   const nextProducts = async() => {
 
     if(!featureProductsPagination.hasNextPage) return
-    const newProductsInfo = await getProductsPagenation(20, { type: "NEXT", cursor: featureProductsPagination.endCursor! })
+    const newProductsInfo = await getProductsPagenation(numProducts, { type: "NEXT", cursor: featureProductsPagination.endCursor! })
     setFeatureProducts(newProductsInfo.products.edges.map((connection: any) => connection.node))
     setFeatureProductsPagiantion(newProductsInfo.products.pageInfo)
     scrollToFeatureProducts()
   }
 
-  useEffect(() => {
-  }, [featureProducts, featureProductsPagination])
-
   return (
     <>
       <MetaHead/>
-      <Container>
+      {/* <Container>
         <div className='w-full h-[320px] flex justify-center items-center bg-red-200'>
           <div>
             <p>バナーをスライドで表示</p>
@@ -98,7 +96,7 @@ const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticPro
         <div className='w-full h-[320px] flex justify-center items-center bg-yellow-200'>
           <p>お知らせ</p>
         </div>
-      </Container>
+      </Container> */}
     </>
   )
 }
