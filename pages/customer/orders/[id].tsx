@@ -84,18 +84,8 @@ const OrderId = () => {
                                 order.successfulFulfillments![0] ?  <div>
                                                                     <div className='flex items-center'>
                                                                         <p className='pr-2'>{order.successfulFulfillments![0].trackingCompany ?? "指定無し"}</p>
-                                                                        <p>{order.successfulFulfillments![0].trackingInfo[0] ? order.successfulFulfillments![0].trackingInfo[0].number : "追跡番号はありません。"}</p>
+                                                                        <p>{order.successfulFulfillments![0].trackingInfo[0] ? <a className='text-blue-500 underline' href={order.successfulFulfillments![0].trackingInfo[0] ? order.successfulFulfillments![0].trackingInfo[0].url : "/" }>order.successfulFulfillments![0].trackingInfo[0].number</a> : "追跡番号はありません。"}</p>
                                                                     </div>
-                                                                    <button className='mt-2'>
-                                                                        {
-                                                                            order.successfulFulfillments![0].trackingInfo[0] ?  <a className='text-blue-500 underline' href={order.successfulFulfillments![0].trackingInfo[0] ? order.successfulFulfillments![0].trackingInfo[0].url : "" }>
-                                                                                                                                    商品を追跡する
-                                                                                                                                </a> 
-                                                                                                                            : <div>
-                                                                                                                                配送業者は登録されていません。
-                                                                                                                            </div>
-                                                                        }
-                                                                    </button>
                                                                 </div> : "未発送"
                             }
                         </div>
