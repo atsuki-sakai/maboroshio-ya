@@ -57,7 +57,7 @@ const OrderId = () => {
                     </div>
                 </div>
                 <div className='text-sm font-bold'>
-                    <p className='text-xs font-normal text-gray-500'>合計注文数 <span className='text-2xl text-black'>{order.lineItems.edges.length}</span> 点</p>
+                    <p className='text-xs font-normal text-gray-500'>合計注文数 <span className='text-2xl text-black'>{order.lineItems.edges.map((edge: any) => edge.node.quantity).reduce((sum, value) => sum += value)}</span> 点</p>
                     <div className='grid grid-cols-4 gap-2 mt-5 bg-blue-100 px-3 py-1 text-blue-500 rounded-md'>
                         <div>
                             <p>小計</p>
