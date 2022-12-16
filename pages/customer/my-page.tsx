@@ -42,6 +42,7 @@ const MyPage = () => {
 
     const fetchMoreOrders = async() => {
         if(!loggedCustomer?.orders.pageInfo.hasNextPage) return
+
         const newOrdersInfo = await getOrdersPagenation(6, getCustomerAccessToken()!, {type: "NEXT", cursor: ordersPagination?.endCursor!})
         setOrders(orders?.concat(newOrdersInfo.edges.map((order: any) => order.node)))
         setOrdersPagination(newOrdersInfo.pageInfo)
@@ -49,8 +50,10 @@ const MyPage = () => {
 
     useEffect(() => {
         setOrders(loggedCustomer?.orders?.edges.map(({node: order}) => order))
+        setOrdersPagination(loggedCustomer?.orders.pageInfo)
         setDefaultAddress(loggedCustomer?.defaultAddress)
     }, [loggedCustomer])
+
 
     return (
         <Container>
@@ -82,11 +85,13 @@ const MyPage = () => {
                                 }
                             </div> : <div className="col-span-2 text-gray-500 text-sm h-20">まだ注文履歴はありません</div>
                     }
-                    <button className='w-full text-center rounded-md bg-gradient-to-tr to-green-500 from-lime-400 py-2 mt-6' onClick={fetchMoreOrders} >
-                        <p className='text-sm text-white'>
-                            さらに注文を表示
-                        </p>
-                    </button>
+                    {
+                        ordersPagination?.hasNextPage ? <button className='w-full text-center rounded-md bg-gradient-to-tr to-green-500 from-lime-400 py-2 mt-6' onClick={fetchMoreOrders} >
+                                                            <p className='text-sm text-white'>
+                                                                さらに注文を表示
+                                                            </p>
+                                                        </button> : <></>
+                    }
                 </div>
                 <div className="flex items-start justiry-between py-12">
                     <div className='w-full'>
