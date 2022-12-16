@@ -8,6 +8,7 @@ import { ProductCard  } from "@components/product"
 import { MetaHead } from '@components/common'
 import { PageInfo, Product } from '@shopify/shema'
 import { normalizeProduct } from '@shopify/utils'
+import getProductsPaths from '@shopify/products/get-all-product-paths'
 
 const numFeatureProducts = 20
 

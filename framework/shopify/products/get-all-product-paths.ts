@@ -1,7 +1,7 @@
 
 import { generateApiUrl } from "@shopify/utils/generate-api-url"
 
-const getProductsPaths = async() => {
+const getProductsPaths = async(): Promise<string[]> => {
 
     const getProductsPathsApiUrl = generateApiUrl({type:"GET_PRODUCTS_PATHS"})
     const response = await fetch(getProductsPathsApiUrl, {
@@ -13,7 +13,8 @@ const getProductsPaths = async() => {
     if(error){
         throw Error(error.message)
     }
-    return data.products.edges.map((p: any) => p.node.handle)
+    const paths: Array<string> =  data.products.edges.map((edge: any) => edge.node.handle)
+    return paths
 }
 
 export default getProductsPaths
