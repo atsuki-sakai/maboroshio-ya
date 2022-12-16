@@ -1,12 +1,13 @@
 
 
-import React, { useState} from 'react'
+import React, { useEffect, useState} from 'react'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
-import { getProductsPagenation } from '@shopify/products'
+import { getProduct, getProductsPagenation } from '@shopify/products'
 import { Hero, Container } from "@components/ui"
 import { ProductCard  } from "@components/product"
 import { MetaHead } from '@components/common'
 import { PageInfo, Product } from '@shopify/shema'
+import { normalizeProduct } from '@shopify/utils'
 
 const numFeatureProducts = 20
 
@@ -52,7 +53,8 @@ const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticPro
             <div className='grid grid-cols-2 md:grid-cols-3 gap-8 items-center justify-center'>
               {
                 featureProducts.map((product) => {
-                  return <ProductCard key={product.id} product={product} />
+                  const normarizedProduct = normalizeProduct(product)
+                  return <ProductCard key={product.id} product={normarizedProduct} />
                 })
               }
             </div>

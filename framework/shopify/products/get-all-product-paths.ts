@@ -1,23 +1,19 @@
-import { ApiConfig } from "@shopify/types/api"
-import { Product } from "@shopify/types/product"
-import { ProductConnection } from "@shopify/shema"
-import { getAllProductsPathsQuery } from "@shopify/utils/queries"
 
-type ReturnType = {
-    products: Pick<Product, "slug">[]
-}
+import { generateApiUrl } from "@shopify/utils/generate-api-url"
 
-const getAllProductsPaths = async (config: ApiConfig): Promise<ReturnType> => {
-    const { data } = await config.fetch<{products: ProductConnection}>({
-        query: getAllProductsPathsQuery,
+const getProductsPaths = async() => {
+
+    const getProductsPathsApiUrl = generateApiUrl({type:"GET_PRODUCTS_PATHS"})
+    const response = await fetch(getProductsPathsApiUrl, {
+        method: "POST",
+        mode: "no-cors"
     })
 
-    const products = data.products.edges.map(( { node : {handle}} ) => {
-        return {
-            slug: handle
-        }
-    })
-    return { products }
+    const { data, error } = await response.json();
+    if(error){
+        throw Error(error.message)
+    }
+    return data.products.edges.map((p: any) => p.node.handle)
 }
 
-export default getAllProductsPaths
+export default getProductsPaths

@@ -2,7 +2,6 @@
 
 import { FC, useEffect, useState } from 'react'
 import Image from 'next/image';
-import { Product } from '@shopify/types/product'
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import '@splidejs/splide/css';
 import { Container } from "@components/ui";
@@ -13,6 +12,7 @@ import { checkoutToCart, getCheckoutId } from '@shopify/cart';
 import { motion } from 'framer-motion';
 import LoadCircle from '@components/icon/LoadCircle';
 import { Minus, Plus } from '@components/icon';
+import { Product } from '@shopify/types/product';
 
 interface Props {
     product: Product

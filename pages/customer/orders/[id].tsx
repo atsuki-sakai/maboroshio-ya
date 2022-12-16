@@ -39,8 +39,6 @@ const OrderId = () => {
                 </Container>
     }
 
-    console.log(order)
-
     return (
         <Container>
             <div className='px-8'>

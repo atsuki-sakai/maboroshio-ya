@@ -1,26 +1,28 @@
 
-import { ApiConfig, Variables } from "@shopify/types/api"
-import { Product } from "@shopify/types/product"
+import { Product as ShopifyProduct } from "@shopify/shema" 
+import type { Product } from "@shopify/types/product"
 import { normalizeProduct } from "@shopify/utils"
-import getProductQuery from "@shopify/utils/queries/get-product"
+import { generateApiUrl } from "@shopify/utils/generate-api-url"
 
-type ReturnType = {
-    product: Product | null
-}
+const getProduct = async(slug: string) => {
 
-type FetchType = {
-    productByHandle: any
-}
-const getProduct = async (options: { config: ApiConfig, variables: Variables}): Promise<ReturnType> => {
-    const { config, variables } = options
-    const { data } = await config.fetch<FetchType>({
-        query: getProductQuery,
-        variables
+    const getProductApiUrl = generateApiUrl({type:"GET_PRODUCT"})
+    console.log(getProductApiUrl)
+    const response = await fetch(getProductApiUrl, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify({
+            slug: slug
+        })
     })
-    const { productByHandle } = data
-    return {
-        product: productByHandle ? normalizeProduct(productByHandle) : null
+
+    const { data, error } = await response.json();
+    if(error){
+        throw Error(error.message)
     }
+    const _product = data.productByHandle as ShopifyProduct
+    const product = normalizeProduct(_product) as Product
+    return product
 }
 
 export default getProduct

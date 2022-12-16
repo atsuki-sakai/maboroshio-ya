@@ -7,7 +7,8 @@ export type ApiPath = {
     | "CUSTOMER_ACCESS_TOKEN_CREATE" | "GET_CUSTOMER" | "CHECKOUT_CUSTOMER_ASSOCIATE"
     | "CHECKOUT_CUSTOMER_DISASSOCIATE" | "CUSTOMER_ADDRESS_CREATE" | "CUSTOMER_DEFAULT_ADDRESS_UPDATE"
     | "CUSTOMER_ADDRESS_UPDATE" | "CUSTOMER_ADDRESS_DELETE" | "CHECKOUT_SHIPPING_ADDRESS_UPDATE" | "CHECKOUT_ATTRIBUTES_UPDATE"
-    | "CUSTOMER_RECOVER" | "CUSTOMER_RESET_BY_URL" | "CUSTOMER_UPDATE" | "GET_ORDER" | "GET_PRODUCTS_PAGINATION" | "GET_ORDERS_PAGINATION";
+    | "CUSTOMER_RECOVER" | "CUSTOMER_RESET_BY_URL" | "CUSTOMER_UPDATE" | "GET_ORDER" | "GET_PRODUCTS_PAGINATION" | "GET_ORDERS_PAGINATION"
+    | "GET_PRODUCTS_PATHS" | "GET_PRODUCT";
 }
 
 
@@ -76,8 +77,11 @@ export const generateApiUrl = (apiPath: ApiPath) => {
         case "GET_PRODUCTS_PAGINATION" : {
             return `${HOSTING_URL}/api/products/get-products-pagination`
         }
-        case "GET_ORDERS_PAGINATION" : {
-            return `${HOSTING_URL}/api/customer/get-orders-pagination`
+        case "GET_PRODUCT" : {
+            return `${HOSTING_URL}/api/products/get-product`
+        }
+        case "GET_PRODUCTS_PATHS" : {
+            return `${HOSTING_URL}/api/products/get-products-paths`
         }
         default : {
             throw Error('It is an APITYPE that does not exist...')

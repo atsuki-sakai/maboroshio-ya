@@ -1,6 +1,6 @@
 
 const getProductQuery = `
-query productById($slug: String!) {
+query productHandle($slug: String!) {
     productByHandle(handle: $slug) {
         id
         handle
@@ -32,13 +32,17 @@ query productById($slug: String!) {
                     id
                     title
                     sku
-                    inventoryQuantity
+                    quantityAvailable
                     selectedOptions {
                         name
                         value
                     }
-                    price
-                    compareAtPrice
+                    price{
+                        amount
+                    }
+                    compareAtPrice {
+                        amount
+                    }
                 }
             }
         }

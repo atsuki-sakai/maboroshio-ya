@@ -5,7 +5,6 @@ import {
     GetStaticProps,
     InferGetStaticPropsType
 } from 'next'
-import { getConfig } from '@shopify/api/config'
 import getAllProductsPaths from '@shopify/products/get-all-product-paths'
 import { getProduct } from '@shopify/products'
 import { ProductView } from '@components/product'
@@ -20,17 +19,16 @@ const ProductSlug = ({ product }: InferGetStaticPropsType<typeof getStaticProps>
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const config = getConfig();
-    const { products } = await getAllProductsPaths(config);
+    const paths = await getAllProductsPaths();
     return {
-        paths: products.map(p => `/products/${p.slug}`),
+        paths: paths.map((path: string) => `/products/${path}`),
         fallback: false
     }
 }
 
 export const getStaticProps:GetStaticProps = async (context) => {
-    const config = getConfig()
-    const { product } = await getProduct({ config, variables: { slug: context.params?.slug } })
+
+    const product = await getProduct(String(context.params?.slug))
     return {
         props: {
             product: product

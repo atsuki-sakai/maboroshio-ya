@@ -65,14 +65,15 @@ const normarizeProductOption = ({ id, name: displayName, values }: ProductOption
 
 const normarizedProductVariants = ({ edges }: ProductVariantConnection) => {
     return edges.map(({node}) => {
-        const { id, selectedOptions, sku, title, price, compareAtPrice, inventoryQuantity } = node
+        const { id, selectedOptions, sku, title, price, compareAtPrice, quantityAvailable } = node
+
         return {
             id,
             sku: sku || id,
             name: title,
-            price: price,
+            price: price.amount,
             listPrice: compareAtPrice,
-            inventoryQuantity: inventoryQuantity,
+            quantityAvailable: quantityAvailable,
             requiresShipping: true,
             options: selectedOptions.map(({name, value}: SelectedOption) => {
                 const option = normarizeProductOption({
@@ -133,5 +134,6 @@ export function normalizeProduct(productNode: any): Product {
         variants: variants ? normarizedProductVariants(variants) : [],
         ...rest
     }
+
     return product;
 }
