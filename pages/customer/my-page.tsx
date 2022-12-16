@@ -13,8 +13,6 @@ import { motion } from 'framer-motion'
 import provinceToJP from '@lib/province-to-jp'
 import { OrderCard } from '@components/account'
 import getOrdersPagenation from '@shopify/customer/get-orders-pagination'
-import { PageInfo } from '@shopify/shema'
-
 
 const MyPage = () => {
 
@@ -24,7 +22,7 @@ const MyPage = () => {
     const [ isLoading, setIsLoading ] = useState(false)
     const [ errorText, setErrorText ] = useState("")
     const [ orders, setOrders ] = useState(loggedCustomer?.orders?.edges.map(({node: order}) => order))
-    const [ ordersPagination, setOrdersPagination] = useState<PageInfo | undefined>(loggedCustomer?.orders?.pageInfo)
+    const [ ordersPagination, setOrdersPagination] = useState(loggedCustomer?.orders?.pageInfo)
     const [ defaultAddress, setDefaultAddress ] = useState(loggedCustomer?.defaultAddress)
 
     const logout = async () => {
@@ -49,6 +47,11 @@ const MyPage = () => {
         setOrdersPagination(newOrdersInfo.pageInfo)
     }
 
+    useEffect(() => {
+        setOrders(loggedCustomer?.orders?.edges.map(({node: order}) => order))
+        setDefaultAddress(loggedCustomer?.defaultAddress)
+    }, [loggedCustomer])
+
     return (
         <Container>
             { errorText ? <AlertDialog title='エラー' message={errorText} onClose={() => setErrorText("")} /> : <></>}
@@ -56,9 +59,9 @@ const MyPage = () => {
                 <div className='flex items-end justify-between pt-6 pb-4'>
                     <h3 className='font-bold'>お客様の注文履歴</h3>
                     <div>
-                        <button className="px-3 py-1 textp-center bg-gray-300 rounded-md" onClick={logout} disabled={isLoading}>
+                        <button className="px-3 py-1 textp-center bg-blue-100 rounded-md" onClick={logout} disabled={isLoading}>
                             <div className='flex items-center text-center w-full justify-between'>
-                                <p className='text-gray-500 text-xs font-bold'>ログアウト</p>
+                                <p className='text-blue-500 text-sm font-bold'>ログアウト</p>
                                 <motion.div className="ml-1 mr-1 -translate-y-1" initial={{ opacity:0, height:6, width:0 }} animate={{ opacity: isLoading ? 1: 0, height:12, width: isLoading ? 12: 0 }}>
                                 <LoadCircle className='text-white h-5 w-5 animate-spin'/>
                                 </motion.div>
@@ -74,18 +77,16 @@ const MyPage = () => {
                                     orders.map((order, index) => {
                                         return  <div key={index}>
                                                     <OrderCard order={order}/>
-                                                    {
-                                                        ordersPagination?.hasNextPage ? <button className='w-full text-center rounded-md bg-gradient-to-tr to-green-500 from-lime-400 py-2' onClick={fetchMoreOrders} >
-                                                                                            <p className='text-sm text-white'>
-                                                                                                さらに注文を表示
-                                                                                            </p>
-                                                                                        </button> : <></>
-                                                    }
                                                 </div>
                                     })
                                 }
                             </div> : <div className="col-span-2 text-gray-500 text-sm h-20">まだ注文履歴はありません</div>
                     }
+                    <button className='w-full text-center rounded-md bg-gradient-to-tr to-green-500 from-lime-400 py-2 mt-6' onClick={fetchMoreOrders} >
+                        <p className='text-sm text-white'>
+                            さらに注文を表示
+                        </p>
+                    </button>
                 </div>
                 <div className="flex items-start justiry-between py-12">
                     <div className='w-full'>

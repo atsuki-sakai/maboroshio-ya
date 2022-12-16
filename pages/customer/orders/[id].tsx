@@ -32,7 +32,7 @@ const OrderId = () => {
                     <div className='flex items-center justify-center'>
                         <div className='h-screen w-screen'>
                             <div className='flex justify-center'>
-                                <p className='font-bold text-xl'>読み込み中...</p>
+                                <p className='text-gray-500 text-xl mt-24'>読み込み中...</p>
                             </div>
                         </div>
                     </div>
