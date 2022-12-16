@@ -37,7 +37,7 @@ const ProductView: FC<Props> = ({ product }) => {
     const [isLoading, setIsLoading] = useState(false);
     const variant = getVariant(product, choices)
 
-    const [ quantity, setQuantity ] = useState<number>(variant?.inventoryQuantity! === 0 ? 0: 1)
+    const [ quantity, setQuantity ] = useState<number>(variant?.quantityAvailable! === 0 ? 0: 1)
 
     const addItem = async () => {
         setIsLoading(true)
@@ -66,8 +66,8 @@ const ProductView: FC<Props> = ({ product }) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(parseInt(e.target.value) <= 0 || parseInt(e.target.value) >= 100) return;
-        if(parseInt(e.target.value) >= variant?.inventoryQuantity!) {
-            setQuantity(variant?.inventoryQuantity!);
+        if(parseInt(e.target.value) >= variant?.quantityAvailable!) {
+            setQuantity(variant?.quantityAvailable!);
             return;
         }
         setQuantity(parseInt(e.target.value))
@@ -79,8 +79,8 @@ const ProductView: FC<Props> = ({ product }) => {
     }
     const incrementQuantity = () => {
         if(quantity >= 99) return;
-        if(quantity >= variant?.inventoryQuantity!) {
-            setQuantity(variant?.inventoryQuantity!);
+        if(quantity >= variant?.quantityAvailable!) {
+            setQuantity(variant?.quantityAvailable!);
             return;
         }
         setQuantity(quantity + 1)
@@ -121,21 +121,21 @@ const ProductView: FC<Props> = ({ product }) => {
                             <h1 className='font-bold text-2xl my-3'>{product.name}</h1>
                             <div className='flex items-end justify-between'>
                                 <div className='mb-2'>
-                                    <p className='text-xs w-full text-start text-gray-800'>購入数量</p>
+                                    <p className='text-sm w-full text-start text-gray-800'>購入数量</p>
                                     <div className='flex items-center'>
-                                        <div className='w-full flex items-center space-x-2'>
+                                        <div className='w-full flex items-center space-x-3'>
                                             <button onClick={incrementQuantity}>
-                                                <Plus className='text-green-400 h-7 w-7'/>
+                                                <Plus className='text-green-400 h-8 w-8'/>
                                             </button>
                                             <input className='w-16 h-8 font-sans text-[17px] bg-white text-gray-700 border text-center rounded-md focus:outline-none' id='quantity' type="number" value={quantity} onChange={handleChange} />
                                             <button onClick={decrementQuantity}>
-                                                <Minus className='text-red-400 h-7 w-7'/>
+                                                <Minus className='text-red-400 h-8 w-8'/>
                                             </button>
                                         </div>
                                     </div>
                                 </div>
-                                <div className={`${variant?.inventoryQuantity! < 10 ? "bg-red-100" : "bg-green-100"} rounded-md px-3 py-1`}>
-                                    <p className={`font-sans text-xs ${variant?.inventoryQuantity! < 10 ? " text-red-500": "text-green-500"}`}>残り<span className='text-sm font-bold'>{variant?.inventoryQuantity}</span>点</p>
+                                <div className={`${variant?.quantityAvailable! < 10 ? "bg-red-100" : "bg-green-100"} rounded-md px-3 py-1`}>
+                                    <p className={`font-sans text-xs ${variant?.quantityAvailable! < 10 ? " text-red-500": "text-green-500"}`}>残り<span className='text-sm font-bold'>{variant?.quantityAvailable}</span>点</p>
                                 </div>
                             </div>
                         </div>
@@ -182,11 +182,11 @@ const ProductView: FC<Props> = ({ product }) => {
                             <div className='text-center h-full pb-3 pt-0.5 flex items-end justify-between px-6'>
                                 <div className='translate-y-1'>
                                     <p className='text-xs text-start'>販売価格</p>
-                                    <p className='text-xs text-red-500'>¥ <span className={`text-2xl font-sans font-bold tracking-wider ${product.totalInventory === 0 ? "line-through" : "" }`}>{variant?.price}</span> 税別</p>
+                                    <p className='text-xs text-red-500'>¥ <span className={`text-2xl font-sans font-bold tracking-wider ${product.totalInventory === 0 ? "line-through" : "" }`}>{Math.floor(variant?.price ?? 0)}</span> 税別</p>
                                 </div>
-                                <button onClick={addItem} className='w-fit h-full' disabled={isLoading || variant?.inventoryQuantity === 0}>
-                                    <div className={`flex items-center text-white font-bold px-6 py-2 ${variant?.inventoryQuantity === 0 ? "bg-gray-500" : "bg-gradient-to-tl to-green-600 from-lime-600"} rounded-md shadow-md tracking-widest`}>
-                                        <p>{variant?.inventoryQuantity === 0 ? "売り切れ" : "カートへ追加"}</p>
+                                <button onClick={addItem} className='w-fit h-full' disabled={isLoading || variant?.quantityAvailable === 0}>
+                                    <div className={`flex items-center text-white font-bold px-6 py-2 ${variant?.quantityAvailable === 0 ? "bg-gray-500" : "bg-gradient-to-tl to-green-600 from-lime-600"} rounded-md shadow-md tracking-widest`}>
+                                        <p>{variant?.quantityAvailable === 0 ? "売り切れ" : "カートへ追加"}</p>
                                         <motion.div className='-translate-y-1 pl-1' initial={{width:0 , height:0, opacity:0}} animate={{width: isLoading ? 20: 0, height: isLoading ? 12: 12, opacity: isLoading ? 1: 0}}>
                                             <LoadCircle className='animate-spin text-white h-5 w-5' />
                                         </motion.div>
