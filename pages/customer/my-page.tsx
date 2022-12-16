@@ -54,6 +54,8 @@ const MyPage = () => {
         setDefaultAddress(loggedCustomer?.defaultAddress)
     }, [loggedCustomer])
 
+    console.log("orders: ",orders)
+
 
     return (
         <Container>

@@ -8,24 +8,32 @@ import Image from 'next/image'
 import provinceToJP from '@lib/province-to-jp'
 import { fulfillmentToJp } from '@lib/fulfillment-status-to-jp'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { root } from 'cheerio'
+import getOrdersPagenation from '@shopify/customer/get-orders-pagination'
+import { getCustomerAccessToken, getOrder } from '@shopify/customer'
+import getCustomerAllOrdersId from '@shopify/customer/get-customer-all-orders-id'
 
 const placeholderImage = "/images/product-image-placeholder.svg"
 
 const OrderId = () => {
 
-    const { loggedCustomer } = useCustomerState()
     const [order, setOrder] = useState<Order | undefined>()
 
     useEffect(() => {
-        const orderNumber = document.location.pathname.split('orders/')[1]
-        if(loggedCustomer?.orders){
-            loggedCustomer.orders.edges.map(({node: order}) => {
-                if(orderNumber === String(order.orderNumber)){
-                    setOrder(order)
+
+        (async() => {
+            const orderNumber = document.location.pathname.split('orders/')[1]
+            const orders = await getCustomerAllOrdersId(getCustomerAccessToken()!)
+            orders.map(async(order) => {
+                if(String(order.orderNumber) === orderNumber){
+                    const matchOrder = await getOrder(order.id)
+                    setOrder(matchOrder)
                 }
             })
-        }
-    },[loggedCustomer])
+
+        })()
+    },[])
 
     if(!order){
         return  <Container>
@@ -84,7 +92,7 @@ const OrderId = () => {
                                 order.successfulFulfillments![0] ?  <div>
                                                                     <div className='flex items-center'>
                                                                         <p className='pr-2'>{order.successfulFulfillments![0].trackingCompany ?? "指定無し"}</p>
-                                                                        <p>{order.successfulFulfillments![0].trackingInfo[0] ? <a className='text-blue-500 underline' href={order.successfulFulfillments![0].trackingInfo[0] ? order.successfulFulfillments![0].trackingInfo[0].url : "/" }>order.successfulFulfillments![0].trackingInfo[0].number</a> : "追跡番号はありません。"}</p>
+                                                                        <p>{order.successfulFulfillments![0].trackingInfo[0] ? <a className='text-blue-500 underline' href={order.successfulFulfillments![0].trackingInfo[0] ? order.successfulFulfillments![0].trackingInfo[0].url : "/" }>{order.successfulFulfillments![0].trackingInfo[0].number}</a> : "追跡番号はありません。"}</p>
                                                                     </div>
                                                                 </div> : "未発送"
                             }

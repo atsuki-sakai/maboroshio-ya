@@ -24,6 +24,8 @@ const getOrdersPagenation = async(numOrders: number, accessToken: string, pagina
         throw Error(error.message)
     }
 
+    console.log(data)
+
     return data.customer.orders
 }
 
