@@ -74,6 +74,9 @@ export const generateApiUrl = (apiPath: ApiPath) => {
         case "GET_ORDER" : {
             return `${HOSTING_URL}/api/customer/get-order`
         }
+        case "GET_ORDERS_PAGINATION" : {
+            return `${HOSTING_URL}/api/customer/get-orders-pagination`
+        }
         case "GET_PRODUCTS_PAGINATION" : {
             return `${HOSTING_URL}/api/products/get-products-pagination`
         }
