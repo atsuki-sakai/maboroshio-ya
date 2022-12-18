@@ -32,7 +32,7 @@ yarn-error.log*
 .vercel
 
 #firebase service account
-firebase-serviceAccount.json
+# firebase-serviceAccount.json
 
 # typescript
 *.tsbuildinfo
