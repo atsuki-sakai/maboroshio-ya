@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 const { cert } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
-const serviceAccount = require('../../maboroshi-ya-firebase-adminsdk-ozjn2-926c84e2e3.json'); // 秘密鍵を取得
+const serviceAccount = require('../../../../firebase-serviceAccount.json'); // 秘密鍵を取得
 const admin = require('firebase-admin');
 
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
