@@ -32,7 +32,7 @@ yarn-error.log*
 .vercel
 
 #firebase service account
-maboroshi-ya-firebase-adminsdk-ozjn2-926c84e2e3.json
+# maboroshi-ya-firebase-adminsdk-ozjn2-926c84e2e3.json
 
 # typescript
 *.tsbuildinfo
