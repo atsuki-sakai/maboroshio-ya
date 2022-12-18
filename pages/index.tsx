@@ -42,10 +42,10 @@ const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticPro
   }
 
   const insertUser = async () => {
-    await axios.post('/api/user');
+    await axios.post('/api/products/review/get-product-review');
   };
   const updateUser = async () => {
-    await axios.patch('/api/user');
+    await axios.patch('/api/products/review/get-product-review');
   };
 
   return (
