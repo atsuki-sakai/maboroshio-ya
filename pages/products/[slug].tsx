@@ -12,6 +12,8 @@ import { getProductReviews } from '@firebase/firestore/review'
 
 
 const ProductSlug = ({ product, reviews }: InferGetStaticPropsType<typeof getStaticProps>) => {
+    console.log('reviews: ', reviews)
+    console.log('product: ', product)
     return (
         <>
             <ProductView product={product} reviews={reviews}/>

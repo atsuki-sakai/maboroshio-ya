@@ -21,7 +21,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         const body = JSON.parse(req.body) as { productId: string, limit: number }
 
         const db = getFirestore();
-        const docRef = await db.collection(REVIEW_COLLLECTION).doc(body.productId);
+        const docRef = db.collection(REVIEW_COLLLECTION).doc(body.productId);
         const productDoc = await docRef.get()
         let reviews: Review[] = []
         if(productDoc.exists){
@@ -30,7 +30,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         }
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
-        res.end(JSON.stringify({ data: reviews }))
+        res.end(JSON.stringify({reviews}))
 
     }catch(e: any){
 
