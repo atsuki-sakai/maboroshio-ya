@@ -13,13 +13,16 @@ import { motion } from 'framer-motion';
 import LoadCircle from '@components/icon/LoadCircle';
 import { Minus, Plus } from '@components/icon';
 import { Product } from '@shopify/types/product';
+import { Review } from '@shopify/types/review';
 
 interface Props {
-    product: Product
+    product: Product,
+    reviews: Array<Review>
 }
 
-const ProductView: FC<Props> = ({ product }) => {
+const ProductView: FC<Props> = ({ product, reviews }) => {
 
+    console.log("reviews: ", reviews)
     const { updateCart } = useCart()
     const { onCartOpen } = useUI()
 

@@ -1,20 +1,17 @@
 
 import React, { useEffect, useState } from 'react'
 import { Container } from '@components/ui'
-import { useCustomerState } from "@components/context"
 import { Order } from '@shopify/shema'
 import { financialStatusToJp }  from "@lib/finacial-status-to-jp"
 import Image from 'next/image'
 import provinceToJP from '@lib/province-to-jp'
 import { fulfillmentToJp } from '@lib/fulfillment-status-to-jp'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { root } from 'cheerio'
-import getOrdersPagenation from '@shopify/customer/get-orders-pagination'
 import { getCustomerAccessToken, getOrder } from '@shopify/customer'
 import getCustomerAllOrdersId from '@shopify/customer/get-customer-all-orders-id'
 
 const placeholderImage = "/images/product-image-placeholder.svg"
+
 
 const OrderId = () => {
 

@@ -8,12 +8,13 @@ import {
 import getAllProductsPaths from '@shopify/products/get-all-product-paths'
 import { getProduct } from '@shopify/products'
 import { ProductView } from '@components/product'
+import { getProductReviews } from '@firebase/firestore/review'
 
 
-const ProductSlug = ({ product }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const ProductSlug = ({ product, reviews }: InferGetStaticPropsType<typeof getStaticProps>) => {
     return (
         <>
-            <ProductView product={product}/>
+            <ProductView product={product} reviews={reviews}/>
         </>
     )
 }
@@ -29,9 +30,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps:GetStaticProps = async (context) => {
 
     const product = await getProduct(String(context.params?.slug))
+    const reviews = await getProductReviews(product.id, 4)
     return {
         props: {
-            product: product
+            product: product,
+            reviews: reviews
         }
     }
 }

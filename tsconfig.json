@@ -20,7 +20,8 @@
       "@components/*": ["components/*"],
       "@aseets/*": ["assets/*"],
       "@shopify/*": ["framework/shopify/*"],
-      "@lib/*": ["lib/*"]
+      "@lib/*": ["lib/*"],
+      "@firebase/*": ["framework/firebase/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
