@@ -177,7 +177,7 @@ const ProductView: FC<Props> = ({ product, reviews }) => {
                                 )}
                             </section>
                         </div>
-                        <div className="p-3 pb-8">
+                        <div className="p-3">
                             <p className='text-gray-500'>{product.description}</p>
                         </div>
                         <div className='py-6'>
@@ -193,11 +193,11 @@ const ProductView: FC<Props> = ({ product, reviews }) => {
                                             <p className='text-blue-500 font-mono'>{ (new Date(review.postDate._seconds * 1000).toLocaleDateString())}</p>
                                             <p className='text-xs'>投稿者: <span className='font-bold text-sm'>{ truncate(review.customerName, 15)}</span></p>
                                         </div>
-                                        <div className='mt-2'>
+                                        <div className='mt-2 p-2'>
                                             <p className='text-base font-bold tracking-wide py-2'>{truncate(review.title, 30)}</p>
                                             <p className='text-gray-500 text-sm'>{truncate(review.comment, 120)}</p>
                                         </div>
-                                    </div>) 
+                                    </div>)
                                         : <div className='cols-span-2'>
                                             <p className='text-sm foont-bold text-gray-500 text-center my-12'>まだレビューはありません。</p> 
                                         </div>

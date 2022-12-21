@@ -9,6 +9,11 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
 import React, { useState } from 'react'
 import idConverter from '@lib/id-converter'
 import { useRouter } from 'next/router'
+import Image from "next/image"
+import { motion } from 'framer-motion'
+import { LoadCircle } from '@components/icon'
+
+const placeholderImage = "/images/product-image-placeholder.svg"
 
 const PostReview = ({ product }: InferGetStaticPropsType<typeof getStaticProps>) => {
 
@@ -33,6 +38,10 @@ const PostReview = ({ product }: InferGetStaticPropsType<typeof getStaticProps>)
     })
 
     const postReview = async () => {
+        if(postReviewInfo.review.title === "" || postReviewInfo.review.comment === "" || postReviewInfo.review.customerName === ""){
+            alert('すべての項目を入力してください。')
+            return
+        }
         setIsLoading(true)
         try{
             await postProductReview(postReviewInfo);
@@ -50,9 +59,23 @@ const PostReview = ({ product }: InferGetStaticPropsType<typeof getStaticProps>)
         <Container>
             <div className='px-8 space-y-2'>
                 <h1 className='mb-6 font-bold text-lg'>商品レビューの投稿</h1>
+                <div className='relative w-full h-full'>
+                    <Image
+                        alt={product.name ?? "Product Image"}
+                        src={product.images[0].url ?? placeholderImage}
+                        height={320}
+                        width={320}
+                        quality="85"
+                        layout='responsive'
+                        className='rounded-md transform duration-1000 ease-in-out hover:scale-105'
+                    />
+                </div>
+                <div className='py-3'>
+                    <h3 className='font-bold text-base'>{product.name}</h3>
+                </div>
                 <div className='text-xs'>
                     <label className='block' htmlFor="star" id="star">評価</label>
-                    <input className='block border rounded-md bg-gray-50 w-12 h-6 focus:outline-none px-2' type="number" id="star" name="star" min="1" max="5" onChange={(e) => setPostReviewInfo({
+                    <input className='block border rounded-md bg-gray-50 w-12 h-6 focus:outline-none px-2' type="number" id="star" name="star" min="1" max="5" value={postReviewInfo.review.star} onChange={(e) => setPostReviewInfo({
                         ...postReviewInfo,
                         review: {
                             ...postReviewInfo.review,
@@ -67,8 +90,15 @@ const PostReview = ({ product }: InferGetStaticPropsType<typeof getStaticProps>)
                     <textarea className='text-base block text-gray-500 w-full border p-2 rounded-md bg-gray-50 focus:outline-none' id="story" placeholder={"例文"} name="story" rows={10} value={postReviewInfo.review.comment} onChange={(e) => setPostReviewInfo({...postReviewInfo, review: { ...postReviewInfo.review, comment: e.target.value }})} />
                 </div>
             </div>
-            <div className='flex justify-center'>
-                <button className='my-6 text-center bg-blue-600 rounded-md shadow-md text-white px-3 py-1' onClick={postReview} disabled={isLoading} >レビューを投稿</button>
+            <div className='w-fit mx-auto py-8'>
+                <button className={`px-6 py-2 textp-center bg-gradient-to-tl to-blue-500 from-sky-400 rounded-md`} onClick={postReview} disabled={isLoading}>
+                    <div className='flex items-center justify-between'>
+                        <p className='text-white font-bold'>レビューを投稿</p>
+                        <motion.div className="ml-2 -translate-y-1.5" initial={{ opacity:0, height:12, width:0 }} animate={{ opacity: isLoading ? 1: 0, height:12, width: isLoading ? 12: 0 }}>
+                        <LoadCircle className='text-white h-6 w-6 animate-spin'/>
+                        </motion.div>
+                    </div>
+                </button>
             </div>
         </Container>
     )
