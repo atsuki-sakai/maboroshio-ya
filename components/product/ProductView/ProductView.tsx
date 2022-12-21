@@ -15,6 +15,7 @@ import LoadCircle from '@components/icon/LoadCircle';
 import { Minus, Plus } from '@components/icon';
 import { Product } from '@shopify/types/product';
 import { Review } from '@shopify/types/review';
+import { truncate } from '@lib/truncate';
 
 interface Props {
     product: Product,
@@ -149,7 +150,7 @@ const ProductView: FC<Props> = ({ product, reviews }) => {
                                         <div className='bg-indigo-100 w-fit rounded-md px-3 py-1'>
                                             <p className='text-xs text-indigo-500'>{ option.displayName }</p>
                                         </div>
-                                        <div className='grid grid-cols-5 gap-1 py-2 w-full'>
+                                        <div className='grid grid-cols-5 gap-3 py-2 w-full'>
                                             {
                                                 option.values.map((value, index) => {
                                                     const activeChoice = choices[option.displayName.toLowerCase()]
@@ -176,33 +177,35 @@ const ProductView: FC<Props> = ({ product, reviews }) => {
                                 )}
                             </section>
                         </div>
+                        <div className="p-3 pb-8">
+                            <p className='text-gray-500'>{product.description}</p>
+                        </div>
                         <div className='py-6'>
-                            <div className='flex items-center justify-between'>
-                                <p className='mb-2 font-bold text-sm'>商品レビュー</p>
+                            <div className='flex items-start justify-between mb-3'>
+                                <p className='mb-2 font-bold text-base'>商品レビュー</p>
                                 <div className='pr-5'>☆☆☆☆☆</div>
                             </div>
+                            <div className='grid grid-cols-1 gap-5 py-2'>
                             {
                                 reviews.length !== 0 ? reviews.map((review: Review, index) => 
                                     <div key={index} className="text-sm border rounded-md shadow-md p-3">
-                                        <div className='flex items-center justify-between'>
-                                            <p className='text-gray-500 font-mono'>{ (new Date(review.postDate._seconds * 1000).toLocaleDateString())}</p>
-                                            <p className='text-xs mt-2'>投稿者: <span className='font-bold'>{ review.customerName }</span></p>
+                                        <div className='flex items-end justify-between'>
+                                            <p className='text-blue-500 font-mono'>{ (new Date(review.postDate._seconds * 1000).toLocaleDateString())}</p>
+                                            <p className='text-xs'>投稿者: <span className='font-bold text-sm'>{ truncate(review.customerName, 15)}</span></p>
                                         </div>
-                                        <div>
-                                            <p className='text-base font-bold'>{review.title}</p>
-                                            <p className='text-gray-500 text-base'>{review.comment}</p>
+                                        <div className='mt-2'>
+                                            <p className='text-base font-bold tracking-wide py-2'>{truncate(review.title, 30)}</p>
+                                            <p className='text-gray-500 text-sm'>{truncate(review.comment, 120)}</p>
                                         </div>
                                     </div>) 
-                                        : <div className=''>
+                                        : <div className='cols-span-2'>
                                             <p className='text-sm foont-bold text-gray-500 text-center my-12'>まだレビューはありません。</p> 
                                         </div>
                             }
+                            </div>
                             <div className='pt-3'>
                                 <Link href={`/products/post-review/${product.slug}`} passHref><a className='text-blue-500 underline text-sm'>レビューを書く</a></Link>
                             </div>
-                        </div>
-                        <div className="p-3">
-                            <p className='text-gray-500'>{product.description}</p>
                         </div>
                     </div>
                     <div className='fixed bottom-0 left-0 right-0 h-fits z-40 bg-white border-t'>
