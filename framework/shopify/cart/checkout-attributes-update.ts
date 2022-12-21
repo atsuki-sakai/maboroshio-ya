@@ -27,8 +27,6 @@ const checkoutAttributesUpdate = async(chekcoutId: string, attribute: {key:strin
     if(error){
         throw Error(error.message)
     }
-
-    console.log("data: ", data)
 }
 
 export default checkoutAttributesUpdate

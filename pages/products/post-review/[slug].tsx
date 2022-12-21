@@ -17,7 +17,6 @@ const placeholderImage = "/images/product-image-placeholder.svg"
 
 const PostReview = ({ product }: InferGetStaticPropsType<typeof getStaticProps>) => {
 
-
     const { loggedCustomer } = useCustomerState()
     const router = useRouter()
     const [ isLoading, setIsLoading ] = useState(false)
@@ -52,8 +51,6 @@ const PostReview = ({ product }: InferGetStaticPropsType<typeof getStaticProps>)
             setIsLoading(false)
         }
     };
-
-    console.log(postReviewInfo)
 
     return (
         <Container>
@@ -93,7 +90,7 @@ const PostReview = ({ product }: InferGetStaticPropsType<typeof getStaticProps>)
             <div className='w-fit mx-auto py-8'>
                 <button className={`px-6 py-2 textp-center bg-gradient-to-tl to-blue-500 from-sky-400 rounded-md`} onClick={postReview} disabled={isLoading}>
                     <div className='flex items-center justify-between'>
-                        <p className='text-white font-bold'>レビューを投稿</p>
+                        <p className='text-white font-bold'>{isLoading ? "投稿中..." : "レビューを投稿"}</p>
                         <motion.div className="ml-2 -translate-y-1.5" initial={{ opacity:0, height:12, width:0 }} animate={{ opacity: isLoading ? 1: 0, height:12, width: isLoading ? 12: 0 }}>
                         <LoadCircle className='text-white h-6 w-6 animate-spin'/>
                         </motion.div>

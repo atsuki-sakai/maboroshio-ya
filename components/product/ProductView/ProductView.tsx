@@ -199,7 +199,7 @@ const ProductView: FC<Props> = ({ product, reviews }) => {
                                         </div>
                                     </div>)
                                         : <div className='cols-span-2'>
-                                            <p className='text-sm foont-bold text-gray-500 text-center my-12'>まだレビューはありません。</p> 
+                                            <p className='text-sm foont-bold text-gray-500 text-center my-12'>まだレビューはありません。</p>
                                         </div>
                             }
                             </div>

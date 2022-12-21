@@ -42,5 +42,6 @@ export const ShopifyApiFeatcher = async ({ type }: ApiType, query: string, varia
             variables: variables
         }),
     })
+
     return response;
 }

@@ -14,7 +14,6 @@ import idConverter from '@lib/id-converter'
 
 
 const ProductSlug = ({ product, reviews }: InferGetStaticPropsType<typeof getStaticProps>) => {
-    console.log('reviews: ',reviews)
     return (
         <>
             <ProductView product={product} reviews={reviews}/>
@@ -32,9 +31,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps:GetStaticProps = async (context) => {
 
-    const numberOfReviews = 4
     const product = await getProduct(String(context.params?.slug))
-    const reviews = await getProductReviews(idConverter({type: "PRODUCT"}, product.id), numberOfReviews)
+
+    const numberOfReviews = 4
+    const firestoreProductId = idConverter({type: "PRODUCT"}, product.id)
+
+    const reviews = await getProductReviews(firestoreProductId, numberOfReviews)
 
     return {
         props: {

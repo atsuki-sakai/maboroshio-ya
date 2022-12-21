@@ -7,7 +7,6 @@ import { generateApiUrl } from "@shopify/utils/generate-api-url"
 const getProduct = async(slug: string) => {
 
     const getProductApiUrl = generateApiUrl({type:"GET_PRODUCT"})
-    console.log(getProductApiUrl)
     const response = await fetch(getProductApiUrl, {
         method: "POST",
         mode: "no-cors",
