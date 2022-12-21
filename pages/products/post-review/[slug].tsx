@@ -15,6 +15,7 @@ const PostReview = ({ product }: InferGetStaticPropsType<typeof getStaticProps>)
 
     const { loggedCustomer } = useCustomerState()
     const router = useRouter()
+    const [ isLoading, setIsLoading ] = useState(false)
 
     const [ postReviewInfo, setPostReviewInfo ] = useState<PostReviewInput>({
         reviewerCustomerId: idConverter({type: "CUSTOMER"},loggedCustomer?.id ?? ""),
@@ -32,11 +33,14 @@ const PostReview = ({ product }: InferGetStaticPropsType<typeof getStaticProps>)
     })
 
     const postReview = async () => {
+        setIsLoading(true)
         try{
             await postProductReview(postReviewInfo);
             router.push('/')
         }catch(e: any){
             alert(e.message)
+        }finally{
+            setIsLoading(false)
         }
     };
 
@@ -64,7 +68,7 @@ const PostReview = ({ product }: InferGetStaticPropsType<typeof getStaticProps>)
                 </div>
             </div>
             <div className='flex justify-center'>
-                <button className='my-6 text-center bg-blue-600 rounded-md shadow-md text-white px-3 py-1' onClick={postReview}>レビューを投稿</button>
+                <button className='my-6 text-center bg-blue-600 rounded-md shadow-md text-white px-3 py-1' onClick={postReview} disabled={isLoading} >レビューを投稿</button>
             </div>
         </Container>
     )
