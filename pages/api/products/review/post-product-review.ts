@@ -2,8 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { cert } from 'firebase-admin/app';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
 import serviceAccount  from '../../../../firebase-serviceAccount.json'; // 秘密鍵を取得
-import admin from 'firebase-admin';
-import { REVIEW_COLLLECTION  } from "@firebase/const"
+import admin, { firestore } from 'firebase-admin';
+import { PRODUCT_INFO_COLLECTION, REVIEW_COLLLECTION  } from "@firebase/const"
 import type { PostReviewInput } from '@shopify/types/review';
 
 
@@ -19,43 +19,51 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         }
 
         const reviewInfo = await JSON.parse(req.body) as PostReviewInput
-
         const db = getFirestore();
-        const docRef = db.collection(REVIEW_COLLLECTION).doc(reviewInfo.productId);
+        const productInfoCollection = db.collection(PRODUCT_INFO_COLLECTION);
         const reviewCollection = db.collection(REVIEW_COLLLECTION)
+        const productInfoRef = await db.collection(PRODUCT_INFO_COLLECTION).doc(reviewInfo.productId).get()
 
-        const productReviewDoc = await docRef.get()
+
+
         ///商品のレビュードキュメントが存在するか
-        if(productReviewDoc.exists){
-            // 顧客がすでに商品のレビューを書いていた場合
-            const reviewerCustomerIdsDoc = await reviewCollection.select("reviewerCustomerIds").get()
-            const reviewerCustomerIds = reviewerCustomerIdsDoc.docs[0].data().reviewerCustomerIds as [string]
-            if(reviewerCustomerIds.includes(reviewInfo.review.customerId)){
-                // throw Error()で例外を投げれない
-                return;
+        if(productInfoRef.exists){
+
+            // 空文字列の場合は、非会員のレビュー
+            if(reviewInfo.reviewerCustomerId !== "") {
+                //顧客がすでに商品のレビューを書いていた場合
+                const reviewerCustomerIdsRef = await productInfoCollection.select("reviewerCustomerIds").get()
+                const reviewerCustomerIds = reviewerCustomerIdsRef.docs[0].data().reviewerCustomerIds as string[]
+                if(reviewInfo.reviewerCustomerId !== "" && reviewerCustomerIds.includes(reviewInfo.reviewerCustomerId)){
+                    // throw Error()で例外を投げれない
+                    return;
+                }
             }
+
             //すでに商品のレビューがある場合
-            const totalStartSnapshot = await reviewCollection.where("productId", "==", reviewInfo.productId).select('totalStar').get()
-            const numberOfTotalReviewSnapshot = await reviewCollection.where('productId', "==", reviewInfo.productId).select('numberOfTotalReview').get()
-            await docRef.update({
+            const totalStarField = await productInfoCollection.where("productId", "==", reviewInfo.productId).select('totalStar').get()
+            const numberOfTotalReviewField = await productInfoCollection.where('productId', "==", reviewInfo.productId).select('numberOfTotalReview').get()
+
+            productInfoCollection.doc(reviewInfo.productId).update({
                 productId: reviewInfo.productId,
-                totalStar: FieldValue.increment(reviewInfo.review.star),
                 reviewerCustomerIds: FieldValue.arrayUnion(reviewInfo.reviewerCustomerId),
-                score: (totalStartSnapshot.docs[0].data().totalStar + reviewInfo.review.star) / (numberOfTotalReviewSnapshot.docs[0].data().numberOfTotalReview + 1),
+                totalStar: FieldValue.increment(reviewInfo.review.star),
+                score: ((totalStarField.docs[0].data().totalStar + reviewInfo.review.star) / (numberOfTotalReviewField.docs[0].data().numberOfTotalReview + 1)).toFixed(2),
                 numberOfTotalReview: FieldValue.increment(1),
-                reviews: FieldValue.arrayUnion(reviewInfo.review)
             });
+            reviewCollection.doc().set({...reviewInfo.review, postDate: firestore.FieldValue.serverTimestamp()})
+
         }else{
             //商品の初めてのレビュー
-            await docRef.set({
+            productInfoCollection.doc(reviewInfo.productId).set({
                 productId: reviewInfo.productId,
-                totalStar: reviewInfo.review.star,
                 reviewerCustomerIds: [reviewInfo.reviewerCustomerId],
-                score: reviewInfo.review.star,
+                totalStar: reviewInfo.review.star,
                 numberOfTotalReview: 1,
-                reviews: [reviewInfo.review],
-                isPublic: false
-            });
+                score: reviewInfo.review.star
+            })
+
+            reviewCollection.doc().set({...reviewInfo.review, postDate: firestore.FieldValue.serverTimestamp()})
         }
 
         res.statusCode = 200

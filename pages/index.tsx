@@ -1,19 +1,13 @@
 
 
-import React, { useEffect, useState} from 'react'
+import React, { useState} from 'react'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
-import { getProduct, getProductsPagenation } from '@shopify/products'
-import { Hero, Container } from "@components/ui"
-import { ProductCard  } from "@components/product"
-import { MetaHead } from '@components/common'
+import { getProductsPagenation } from '@shopify/products'
 import { PageInfo, Product } from '@shopify/shema'
+import { MetaHead } from '@components/common'
+import { Container, Hero } from '@components/ui'
+import { ProductCard } from '@components/product'
 import { normalizeProduct } from '@shopify/utils'
-import getProductsPaths from '@shopify/products/get-all-product-paths'
-
-import axios from 'axios';
-import { getProductReviews, postProductReview } from '@firebase/firestore/review'
-import { PostReviewInput, Review, ReviewInfo } from '@shopify/types/review'
-import { firebaseApiUrl } from '@firebase/firesbase-api-url'
 
 const numFeatureProducts = 20
 
@@ -43,37 +37,6 @@ const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticPro
       alert(error.message)
     }
   }
-
-  const productId = "test_product3"
-  const customerId = "customer_id2"
-
-  const postReview = async () => {
-
-    const review: Review = {
-      customerId: customerId,
-      customerName: "customerName",
-      postDate: "123456",
-      productId: productId,
-      productName: "test_product_name12",
-      star:5,
-      title: "test_title12",
-      comment: "test_comment10000000",
-    }
-
-    const reviewInfo: PostReviewInput = {
-      reviewerCustomerId: customerId,
-      productId: productId,
-      review: review
-    }
-    await postProductReview(reviewInfo);
-  };
-
-  const getReview = async () => {
-
-    const numberOfReviews = 4
-    const reviews = await getProductReviews(productId, numberOfReviews);
-    console.log("reviews: ", reviews)
-  };
 
   return (
     <>
@@ -122,20 +85,6 @@ const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticPro
         </div>
       </Container>
     </>
-    // <div>
-    //     <div className="flex min-h-screen flex-col items-center justify-center py-2">
-    //     <button
-    //       className="mt-4 w-60 rounded-full bg-green-500 py-2 px-4 font-bold text-white hover:bg-green-700"
-    //       onClick={() => postReview()}>
-    //       Insert User
-    //     </button>
-    //     <button
-    //       className="mt-4 w-60 rounded-full bg-yellow-500 py-2 px-4 font-bold text-white hover:bg-yellow-700"
-    //       onClick={() => getReview()}>
-    //       Update User
-    //     </button>
-    //   </div>
-    // </div>
   )
 }
 

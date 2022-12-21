@@ -4,7 +4,6 @@ import { getFirestore } from 'firebase-admin/firestore';
 import serviceAccount  from '../../../../firebase-serviceAccount.json'; // 秘密鍵を取得
 import admin from 'firebase-admin';
 import { REVIEW_COLLLECTION  } from "@firebase/const"
-import { Review } from '@shopify/types/review';
 
 
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
@@ -21,16 +20,19 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         const body = JSON.parse(req.body) as { productId: string, limit: number }
 
         const db = getFirestore();
-        const docRef = db.collection(REVIEW_COLLLECTION).doc(body.productId);
-        const productDoc = await docRef.get()
-        let reviews: Review[] = []
-        if(productDoc.exists){
-            const reviewsSnapShot =  await db.collection(REVIEW_COLLLECTION).where('productId', "==", body.productId).limit(body.limit).get();
-            reviews = reviewsSnapShot.docs[0].data().reviews
-        }
+
+        const productReviewsMatchQuery = await db.collection(REVIEW_COLLLECTION).limit(body.limit).where('productId', "==", body.productId).get()
+
+        let reviews : Array<any>= []
+        if(productReviewsMatchQuery.docs[0]?.exists)[
+            productReviewsMatchQuery.docs.map((doc) => {
+                reviews.push(doc.data())
+            })
+        ]
+
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
-        res.end(JSON.stringify({reviews}))
+        res.end(JSON.stringify({ data: { reviews:  reviews }}))
 
     }catch(e: any){
 

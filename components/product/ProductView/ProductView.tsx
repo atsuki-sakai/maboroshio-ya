@@ -2,6 +2,7 @@
 
 import { FC, useEffect, useState } from 'react'
 import Image from 'next/image';
+import Link from 'next/link';
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import '@splidejs/splide/css';
 import { Container } from "@components/ui";
@@ -22,7 +23,6 @@ interface Props {
 
 const ProductView: FC<Props> = ({ product, reviews }) => {
 
-    console.log("reviews: ", reviews)
     const { updateCart } = useCart()
     const { onCartOpen } = useUI()
 
@@ -175,6 +175,31 @@ const ProductView: FC<Props> = ({ product, reviews }) => {
                                     </div>
                                 )}
                             </section>
+                        </div>
+                        <div className='py-6'>
+                            <div className='flex items-center justify-between'>
+                                <p className='mb-2 font-bold text-sm'>商品レビュー</p>
+                                <div className='pr-5'>☆☆☆☆☆</div>
+                            </div>
+                            {
+                                reviews.length !== 0 ? reviews.map((review: Review, index) => 
+                                    <div key={index} className="text-sm border rounded-md shadow-md p-3">
+                                        <div className='flex items-center justify-between'>
+                                            <p className='text-gray-500 font-mono'>{ (new Date(review.postDate._seconds * 1000).toLocaleDateString())}</p>
+                                            <p className='text-xs mt-2'>投稿者: <span className='font-bold'>{ review.customerName }</span></p>
+                                        </div>
+                                        <div>
+                                            <p className='text-base font-bold'>{review.title}</p>
+                                            <p className='text-gray-500 text-base'>{review.comment}</p>
+                                        </div>
+                                    </div>) 
+                                        : <div className=''>
+                                            <p className='text-sm foont-bold text-gray-500 text-center my-12'>まだレビューはありません。</p> 
+                                        </div>
+                            }
+                            <div className='pt-3'>
+                                <Link href={`/products/post-review/${product.slug}`} passHref><a className='text-blue-500 underline text-sm'>レビューを書く</a></Link>
+                            </div>
                         </div>
                         <div className="p-3">
                             <p className='text-gray-500'>{product.description}</p>

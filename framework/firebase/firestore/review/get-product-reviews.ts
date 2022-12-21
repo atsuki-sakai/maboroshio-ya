@@ -1,6 +1,6 @@
 
 import { firebaseApiUrl } from "@firebase/firesbase-api-url"
-import { Review } from "@shopify/types/review"
+import type { Review } from "@shopify/types/review"
 
 const getProductReviews = async(productId: string, limit: number): Promise<Review[]> => {
 
@@ -14,12 +14,8 @@ const getProductReviews = async(productId: string, limit: number): Promise<Revie
         })
     })
 
-    const { data, error }  = await response.json()
-
-    if(error){
-        throw Error(error.message)
-    }
-    return data
+    const { data } = await response.json()
+    return data.reviews as Review[]
 }
 
 export default getProductReviews
