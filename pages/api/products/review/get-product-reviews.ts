@@ -21,7 +21,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 
         const db = getFirestore();
 
-        const productReviewsMatchQuery = await db.collection(REVIEW_COLLLECTION).where('productId', "==", body.productId).limit(body.limit).get()
+        const productReviewsMatchQuery = await db.collection(REVIEW_COLLLECTION).where('productId', "==", body.productId).orderBy('postDate', "asc").limit(body.limit).get()
 
         let reviews : Array<any>= []
         if(productReviewsMatchQuery.docs[0]?.exists)[
