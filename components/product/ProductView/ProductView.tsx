@@ -241,22 +241,30 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                                         </div>
                             }
                             </div>
-                            <div className='mt-4 px-3 py-1 border rounded-md shadow-sm flex items-center justify-between'>
-                                <Link href={`/products/post-review/${product.slug}`} passHref><a className='text-sm font-sans'>すべてのレビューを見る</a></Link>
-                                <div>
-                                    <RightArrow className='h-5 w-5'/>
+                            <Link href={`/products/post-review/${product.slug}`} passHref>
+                                <a>
+                                <div className='mt-4 px-3 py-1 border rounded-md shadow-sm flex items-center justify-between'>
+                                    <p className='text-sm font-sans'>すべてのレビューを見る</p>
+                                    <div>
+                                        <RightArrow className='h-5 w-5'/>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='mt-4 px-3 py-1 border rounded-md shadow-sm flex items-center justify-between'>
-                                <Link href={`/products/post-review/${product.slug}`} passHref><a className='text-sm font-sans'>レビューを書く</a></Link>
-                                <div>
-                                    <RightArrow className='h-5 w-5'/>
+                                </a>
+                            </Link>
+                            <Link href={`/products/post-review/${product.slug}`} passHref>
+                                <a>
+                                <div className='mt-4 px-3 py-1 border rounded-md shadow-sm flex items-center justify-between'>
+                                    <p className='text-sm font-sans'>レビューを書く</p>
+                                    <div>
+                                        <RightArrow className='h-5 w-5'/>
+                                    </div>
                                 </div>
-                            </div>
+                                </a>
+                            </Link>
                         </div>
                     </div>
                     <div className='fixed bottom-0 left-0 right-0 h-fits z-40 bg-white border-t'>
-                        <div className={``} >
+                        <div className={`mb-2`} >
                             <div className='text-center h-full pb-3 pt-0.5 flex items-end justify-between px-6'>
                                 <div className='translate-y-1'>
                                     <p className='text-xs text-start'>販売価格</p>
