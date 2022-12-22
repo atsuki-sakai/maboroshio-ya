@@ -12,17 +12,19 @@ import { checkoutLineItemsAdd }  from '@shopify/cart';
 import { checkoutToCart, getCheckoutId } from '@shopify/cart';
 import { motion } from 'framer-motion';
 import LoadCircle from '@components/icon/LoadCircle';
-import { Minus, Plus } from '@components/icon';
+import { RightArrow, Minus, Plus } from '@components/icon';
 import { Product } from '@shopify/types/product';
-import { Review } from '@shopify/types/review';
+import { ProductReviewInfo, Review } from '@shopify/types/review';
 import { truncate } from '@lib/truncate';
+import { numberToStar } from '@lib/number-to-star';
 
 interface Props {
     product: Product,
-    reviews: Array<Review>
+    reviews: Array<Review>,
+    productReviewInfo: ProductReviewInfo
 }
 
-const ProductView: FC<Props> = ({ product, reviews }) => {
+const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
 
     const { updateCart } = useCart()
     const { onCartOpen } = useUI()
@@ -90,6 +92,7 @@ const ProductView: FC<Props> = ({ product, reviews }) => {
         setQuantity(quantity + 1)
     }
 
+
     useEffect(() => {
         setChoices(initialOptions(product))
     }, [product])
@@ -120,6 +123,16 @@ const ProductView: FC<Props> = ({ product, reviews }) => {
                                     {product.vendor}
                                 </p>
                             </div>
+                            <div className='flex items-center justify-between'>
+                            <div className='w-full'></div>
+                            <div className='w-full flex justify-end items-center'>
+                                <div className='text-yellow-500 text-lg'>{numberToStar(productReviewInfo.score)}</div>
+                                <div className='flex items-end justify-center'>
+                                    <p className='text-sm text-blue-500 font-mono ml-3'>{productReviewInfo.totalStar}</p>
+                                    <p className='text-black text-xs scale-75'> 件</p>
+                                </div>
+                            </div>
+                        </div>
                         </div>
                         <div className='py-4'>
                             <h1 className='font-bold text-2xl my-3'>{product.name}</h1>
@@ -180,22 +193,47 @@ const ProductView: FC<Props> = ({ product, reviews }) => {
                         <div className="p-3">
                             <p className='text-gray-500'>{product.description}</p>
                         </div>
+                        <div className='py-6 flex justify-center'>
+                            <div className='bg-gray-300 h-0.5 w-full rounded-full'></div>
+                        </div>
                         <div className='py-6'>
                             <div className='flex items-start justify-between mb-3'>
-                                <p className='mb-2 font-bold text-base'>商品レビュー</p>
-                                <div className='pr-5'>☆☆☆☆☆</div>
+                                <div className='mb-2 w-full font-bold text-base'>商品レビュー</div>
+                                {
+                                    reviews.length !== 0 ? <div className='w-full flex justify-end items-center'>
+                                                                <div className='text-yellow-500 text-lg'>{numberToStar(productReviewInfo.score)}</div>
+                                                                <div className='flex items-end justify-center'>
+                                                                    <p className='text-sm text-blue-500 font-mono ml-3'>{productReviewInfo.numberOfTotalReview}</p>
+                                                                    <p className='text-black text-xs scale-75'> 件</p>
+                                                                </div>
+                                                            </div> : <></>
+                                }
                             </div>
                             <div className='grid grid-cols-1 gap-5 py-2'>
                             {
                                 reviews.length !== 0 ? reviews.map((review: Review, index) => 
-                                    <div key={index} className="text-sm border rounded-md shadow-md p-3">
+                                    <div key={index} className="text-sm">
                                         <div className='flex items-end justify-between'>
-                                            <p className='text-blue-500 font-mono'>{ (new Date(review.postDate._seconds * 1000).toLocaleDateString())}</p>
-                                            <p className='text-xs'>投稿者: <span className='font-bold text-sm'>{ truncate(review.customerName, 15)}</span></p>
+                                            <p className='text-indigo-700 font-mono text-xs'>{ (new Date(review.postDate._seconds * 1000).toLocaleDateString())}</p>
+                                            <p className='text-xs'>投稿者: <span className='font-bold text-xs'>{ truncate(review.customerName, 10)}</span></p>
                                         </div>
-                                        <div className='mt-2 p-2'>
+                                        <div className='flex items-end justify-start mt-1'>
+                                            <div className='text-yellow-500'>{numberToStar(review.star)}</div>
+                                            {
+                                                review.customerId !== "" ? <div className='px-3 py-0.5 border ml-10 border-orange-500 rounded-md'><p className='text-orange-500 text-xs font-bold'>認証ユーザー</p></div>: null
+                                            }
+                                        </div>
+                                        <div className='mt-1'>
                                             <p className='text-base font-bold tracking-wide py-2'>{truncate(review.title, 30)}</p>
-                                            <p className='text-gray-500 text-sm'>{truncate(review.comment, 120)}</p>
+                                            <p className='text-xs'>{truncate(review.comment, 120)}</p>
+                                        </div>
+                                        <div className='mt-3'>
+                                            <button className='text-sm px-3 py-0.5 border shadow-sm rounded-md'>
+                                                役に立った
+                                            </button>
+                                        </div>
+                                        <div className='pt-6 flex justify-center'>
+                                            <div className='bg-gray-300 h-[1px] w-2/3 rounded-full'></div>
                                         </div>
                                     </div>)
                                         : <div className='cols-span-2'>
@@ -203,8 +241,17 @@ const ProductView: FC<Props> = ({ product, reviews }) => {
                                         </div>
                             }
                             </div>
-                            <div className='pt-3'>
-                                <Link href={`/products/post-review/${product.slug}`} passHref><a className='text-blue-500 underline text-sm'>レビューを書く</a></Link>
+                            <div className='mt-4 px-3 py-1 border rounded-md shadow-sm flex items-center justify-between'>
+                                <Link href={`/products/post-review/${product.slug}`} passHref><a className='text-sm font-sans'>すべてのレビューを見る</a></Link>
+                                <div>
+                                    <RightArrow className='h-5 w-5'/>
+                                </div>
+                            </div>
+                            <div className='mt-4 px-3 py-1 border rounded-md shadow-sm flex items-center justify-between'>
+                                <Link href={`/products/post-review/${product.slug}`} passHref><a className='text-sm font-sans'>レビューを書く</a></Link>
+                                <div>
+                                    <RightArrow className='h-5 w-5'/>
+                                </div>
                             </div>
                         </div>
                     </div>

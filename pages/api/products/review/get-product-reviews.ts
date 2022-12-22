@@ -25,11 +25,11 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         const productReviewsMatchQuery = await db.collection(PRODUCT_INFO_COLLECTION).doc(body.productId).collection(REVIEW_COLLLECTION).where('productId', "==", body.productId).limit(body.limit).get()
 
         let reviews : Array<any>= []
-        if(productReviewsMatchQuery.docs[0]?.exists)[
+        if(productReviewsMatchQuery.docs[0]?.exists){
             productReviewsMatchQuery.docs.map((doc) => {
                 reviews.push(doc.data())
             })
-        ]
+        }
 
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
