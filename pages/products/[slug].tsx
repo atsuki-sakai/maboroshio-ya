@@ -12,8 +12,6 @@ import { getProductReviewInfo, getProductReviews } from '@firebase/firestore/rev
 import idConverter from '@lib/id-converter'
 
 const ProductSlug = ({ product, reviews, productReviewInfo }: InferGetStaticPropsType<typeof getStaticProps>) => {
-
-    console.log(productReviewInfo)
     return (
         <>
             <ProductView product={product} reviews={reviews} productReviewInfo={productReviewInfo}/>
