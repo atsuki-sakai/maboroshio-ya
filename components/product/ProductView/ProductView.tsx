@@ -21,7 +21,7 @@ import { numberToStar } from '@lib/number-to-star';
 interface Props {
     product: Product,
     reviews: Array<Review>,
-    productReviewInfo: ProductReviewInfo
+    productReviewInfo: ProductReviewInfo | null
 }
 
 const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
@@ -123,20 +123,18 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                                     {product.vendor}
                                 </p>
                             </div>
-                            {
-                                productReviewInfo ? <div>
-                                                        <div className='flex items-center justify-between'>
-                                                            <div className='w-full'></div>
-                                                            <div className='w-full flex justify-end items-center'>
-                                                                <div className='text-yellow-500 text-lg'>{numberToStar(productReviewInfo.score)}</div>
-                                                                <div className='flex items-end justify-center'>
-                                                                    <p className='text-sm text-blue-500 font-mono ml-3'>{productReviewInfo.totalStar}</p>
-                                                                    <p className='text-black text-xs scale-75'> 件</p>
-                                                                </div>
-                                                            </div>
-                                                            </div>
-                                                    </div>: <></>
-                            }
+                            <div>
+                            <div className='flex items-center justify-between'>
+                                <div className='w-full'></div>
+                                <div className='w-full flex justify-end items-center'>
+                                    <div className='text-yellow-500 text-lg'>{numberToStar(productReviewInfo?.score ?? 0)}</div>
+                                    <div className='flex items-end justify-center'>
+                                        <p className='text-sm text-blue-500 font-mono ml-3'>{productReviewInfo?.totalStar ?? 0}</p>
+                                        <p className='text-black text-xs scale-75'> 件</p>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
                         </div>
                         <div className='py-4'>
                             <h1 className='font-bold text-2xl my-3'>{product.name}</h1>
@@ -203,19 +201,17 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                         <div className='py-6'>
                             <div className='flex items-start justify-between mb-3'>
                                 <div className='mb-2 w-full font-bold text-base'>商品レビュー</div>
-                                {
-                                    reviews.length !== 0 ? <div className='w-full flex justify-end items-center'>
-                                                                <div className='text-yellow-500 text-lg'>{numberToStar(productReviewInfo.score)}</div>
-                                                                <div className='flex items-end justify-center'>
-                                                                    <p className='text-sm text-blue-500 font-mono ml-3'>{productReviewInfo.numberOfTotalReview}</p>
-                                                                    <p className='text-black text-xs scale-75'> 件</p>
-                                                                </div>
-                                                            </div> : <></>
-                                }
+                                <div className='w-full flex justify-end items-center'>
+                                    <div className='text-yellow-500 text-lg'>{numberToStar(productReviewInfo?.score ?? 0)}</div>
+                                    <div className='flex items-end justify-center'>
+                                        <p className='text-sm text-blue-500 font-mono ml-3'>{productReviewInfo?.numberOfTotalReview ?? 0}</p>
+                                        <p className='text-black text-xs scale-75'> 件</p>
+                                    </div>
+                                </div>
                             </div>
                             <div className='grid grid-cols-1 gap-5 py-2'>
                             {
-                                reviews.length !== 0 ? reviews.map((review: Review, index) => 
+                                reviews.length !== 0 ? reviews.map((review: Review, index) =>
                                     <div key={index} className="text-sm">
                                         <div className='flex items-end justify-between'>
                                             <p className='text-indigo-700 font-mono text-xs'>{ (new Date(review.postDate._seconds * 1000).toLocaleDateString())}</p>

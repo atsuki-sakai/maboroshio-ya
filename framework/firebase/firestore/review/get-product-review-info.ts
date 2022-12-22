@@ -1,26 +1,20 @@
 
-import { cert } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
-import serviceAccount  from '../../../../firebase-serviceAccount.json'; // 秘密鍵を取得
-import * as admin from 'firebase-admin';
-import { PRODUCT_INFO_COLLECTION } from "@firebase/const"
 
-const getProductReviewInfo = async(productId: string) => {
-    try{
-        if (admin.apps.length === 0) {
-            admin.initializeApp({
-                credential: cert(serviceAccount as any),
-            });
-        }
-        const db = getFirestore();
-        const productInfoMatchQuery = await db.collection(PRODUCT_INFO_COLLECTION).where('productId', "==", productId).get()
+import { firebaseApiUrl } from '@firebase/firesbase-api-url';
+import { ProductReviewInfo } from '@shopify/types/review';
 
-        if(!productInfoMatchQuery.docs[0]?.exists) return {}
-        return {...productInfoMatchQuery.docs[0].data()}
+const getProductReviewInfo = async(productId: string): Promise<ProductReviewInfo | null> => {
+    const getProuctReviewInfoApiUrl = firebaseApiUrl({type:"GET_PRODUCT_REVIEW_INFO"})
+    const response = await fetch(getProuctReviewInfoApiUrl, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify({
+            productId: productId
+        })
+    })
 
-    }catch(error: any){
-        throw Error(error.message)
-    }
+    const { data } = await response.json()
+    return data.productReviewInfo
 }
 
 export default getProductReviewInfo

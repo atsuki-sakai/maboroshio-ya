@@ -1,6 +1,9 @@
 export const numberToStar = (score: number) => {
     const formatScore = Math.floor(score)
     switch(formatScore){
+        case 0: {
+            return "☆☆☆☆☆";
+        }
         case 1: {
             return "★☆☆☆☆";
         }
