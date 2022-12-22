@@ -16,6 +16,7 @@ const getOrder = async(orderId: string):Promise<Order> => {
     if(error) {
         throw Error(error.message)
     }
+
     const order = data.node as Order
     return order
 }

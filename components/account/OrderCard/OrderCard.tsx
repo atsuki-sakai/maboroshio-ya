@@ -85,10 +85,10 @@ const OrderCard = ({order}: Props) => {
                         <div className='p-1'>
                             <p className='text-xs text-gray-500 mb-1'>注文番号 <span className='font-bold'>{order.orderNumber}</span></p>
                             <div className='flex items-center justify-between'>
-                                <div className='border border-green-500 rounded-full w-fit px-2 py-0.5'>
+                                <div className='border border-green-500 rounded-full w-fit px-1 py-0.5'>
                                     <p className='text-xs scale-90 text-green-500'>{fulfillmentToJp(order.fulfillmentStatus)}</p>
                                 </div>
-                                <div className='border border-blue-500 rounded-full w-fit px-2 py-0.5'>
+                                <div className='border border-blue-500 rounded-full w-fit px-1 py-0.5'>
                                     <p className='text-xs scale-90 text-blue-500'>{financialStatus(order.financialStatus!)}</p>
                                 </div>
                             </div>

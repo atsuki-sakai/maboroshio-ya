@@ -20,24 +20,19 @@ const OrderId = () => {
     useEffect(() => {
 
         (async() => {
-            const orderNumber = document.location.pathname.split('orders/')[1]
-            const orders = await getCustomerAllOrdersId(getCustomerAccessToken()!)
-            orders.map(async(order) => {
-                if(String(order.orderNumber) === orderNumber){
-                    const matchOrder = await getOrder(order.id)
-                    setOrder(matchOrder)
-                }
-            })
-
+            const encodeOrderId = document.location.pathname.split('orders/')[1]
+            const orderId = decodeURIComponent(encodeOrderId)
+            const order = await getOrder(orderId);
+            setOrder(order)
         })()
     },[])
 
     if(!order){
         return  <Container>
                     <div className='flex items-center justify-center'>
-                        <div className='h-screen w-screen'>
-                            <div className='flex justify-center'>
-                                <p className='text-gray-500 text-xl mt-24'>読み込み中...</p>
+                        <div className='h-[520px] w-screen'>
+                            <div className='flex justify-center items-center h-full'>
+                                <p className='text-gray-500 text-xl'>読み込み中...</p>
                             </div>
                         </div>
                     </div>
@@ -47,30 +42,28 @@ const OrderId = () => {
     return (
         <Container>
             <div className='px-8'>
-                <div className='flex items-start justify-between mb-3'>
+                <div className='flex items-end justify-between mb-3'>
                     <p className='text-xl font-bold'>注文番号  #<span className=''>{order.orderNumber}</span></p>
-                    <div className='bg-gray-100 px-2 py-1 rounded-md'>
-                        <p className='text-xs text-gray-500'>注文日 <span className=''>{order.processedAt.split('T')[0]}</span></p>
-                    </div>
+                    <p className='text-xs text-gray-500'>注文日 <span className=''>{order.processedAt.split('T')[0]}</span></p>
                 </div>
-                <div className='text-sm font-bold'>
-                    <p className='text-xs font-normal text-gray-500'>合計注文数 <span className='text-2xl text-black'>{order.lineItems.edges.map((edge: any) => edge.node.quantity).reduce((sum, value) => sum += value)}</span> 点</p>
+                <div className='text-sm shadow-sm pt-3'>
+                    <p className='text-sm font-normal text-gray-500'>合計注文数 <span className='text-2xl text-black'>{order.lineItems.edges.map((edge: any) => edge.node.quantity).reduce((sum, value) => sum += value)}</span> 点</p>
                     <div className='grid grid-cols-4 gap-2 mt-5 bg-blue-100 px-3 py-1 text-blue-500 rounded-md'>
                         <div>
                             <p>小計</p>
-                            <p className='text-blue-500 font-normal'>¥{Math.floor(order.subtotalPrice.amount)}</p>
+                            <p className='text-blue-500 font-bold mt-1'>¥{Math.floor(order.subtotalPrice.amount)}</p>
                         </div>
                         <div>
                             <p>送料</p>
-                            <p className='text-blue-500 font-normal'>¥{Math.floor(order.totalShippingPrice.amount)}</p>
+                            <p className='text-blue-500 font-bold mt-1'>¥{Math.floor(order.totalShippingPrice.amount)}</p>
                         </div>
                         <div>
                             <p>税</p>
-                            <p className='text-blue-500 font-normal'>¥{Math.floor(order.totalTax.amount)}</p>
+                            <p className='text-blue-500 font-bold mt-1'>¥{Math.floor(order.totalTax.amount)}</p>
                         </div>
                         <div>
                             <p>合計金額</p>
-                            <p className='text-blue-500 font-normal'>¥{Math.floor(order.totalPrice.amount)}</p>
+                            <p className='text-blue-500 font-bold mt-1'>¥{Math.floor(order.totalPrice.amount)}</p>
                         </div>
                     </div>
                 </div>
@@ -89,7 +82,7 @@ const OrderId = () => {
                                 order.successfulFulfillments![0] ?  <div>
                                                                     <div className='flex items-center'>
                                                                         <p className='pr-2'>{order.successfulFulfillments![0].trackingCompany ?? "指定無し"}</p>
-                                                                        <p>{order.successfulFulfillments![0].trackingInfo[0] ? <a className='text-blue-500 underline' href={order.successfulFulfillments![0].trackingInfo[0] ? order.successfulFulfillments![0].trackingInfo[0].url : "/" }>{order.successfulFulfillments![0].trackingInfo[0].number}</a> : "追跡番号はありません。"}</p>
+                                                                        <p>{order.successfulFulfillments![0].trackingInfo[0] ? <a className='text-blue-500 underline' href={order.successfulFulfillments![0].trackingInfo[0] ? order.successfulFulfillments![0].trackingInfo[0].url : "/" }>{order.successfulFulfillments![0].trackingInfo[0].number}</a> : "追跡番号無し"}</p>
                                                                     </div>
                                                                 </div> : "未発送"
                             }
@@ -99,7 +92,7 @@ const OrderId = () => {
                 <div className='py-3 '>
                     {
                         order.lineItems.edges.map(({node: lineItem}, index) => {
-                            return  <div key={index} className="border p-2 rounded-md">
+                            return  <div key={index} className="border p-2 shadow-sm rounded-md mb-3">
                                         <Link href={`/products/${lineItem.variant?.product.handle}`} passHref>
                                             <a>
                                                 <div className='relative'>
@@ -131,6 +124,7 @@ const OrderId = () => {
                 <div className='pt-6 pb-12'>
                     <p className='font-bold text-sm  mb-2'>配達住所</p>
                     <div className='text-xs text-gray-500'>
+                        <p>{order.shippingAddress?.lastName}{order.shippingAddress?.firstName}</p>
                         <p>{order.shippingAddress?.country === "Japan" ? "日本" : "海外"}</p>
                         <p>{order.shippingAddress?.zip}</p>
                         <p>{provinceToJP(order.shippingAddress?.province!)}{order.shippingAddress?.city}{order.shippingAddress?.address1}{order.shippingAddress?.address2}</p>

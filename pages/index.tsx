@@ -8,6 +8,8 @@ import { MetaHead } from '@components/common'
 import { Container, Hero } from '@components/ui'
 import { ProductCard } from '@components/product'
 import { normalizeProduct } from '@shopify/utils'
+import { motion } from 'framer-motion'
+import { LoadCircle } from '@components/icon'
 
 const numFeatureProducts = 20
 
@@ -26,15 +28,19 @@ const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticPro
 
   const [ featureProducts, setFeatureProducts ] = useState<Array<Product>>(featureProductsInfo.products.edges.map((product: any) => product.node))
   const [ featureProductsPagination, setFeatureProductsPagination ] = useState<PageInfo>(featureProductsInfo.products.pageInfo)
+  const [ isFetching, setIsFetching ] = useState(false)
 
   const showMoreProducts = async() => {
     if(!featureProductsPagination.hasNextPage) return
     try{
+      setIsFetching(true)
       const newProductsInfo = await getProductsPagenation(numFeatureProducts, { type: "NEXT", cursor: featureProductsPagination.endCursor! })
       setFeatureProducts(featureProducts.concat(newProductsInfo.products.edges.map((product: any) => product.node)))
       setFeatureProductsPagination(newProductsInfo.products.pageInfo)
     }catch(error: any){
       alert(error.message)
+    }finally{
+      setIsFetching(false)
     }
   }
 
@@ -60,11 +66,16 @@ const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticPro
             </div>
             <div className='flex items-center justify-between my-6'>
               {
-                featureProductsPagination.hasNextPage ? <button className='w-full text-center rounded-md bg-gradient-to-tr to-green-500 from-lime-400 py-2' onClick={showMoreProducts} >
-                                                        <p className='text-sm text-white'>
-                                                          さらに商品を表示
-                                                        </p>
-                                                      </button> : <></>
+                featureProductsPagination.hasNextPage ? <div className='mt-8'>
+                                                          <button className="px-3 w-full py-1 textp-center bg-green-500 rounded-md" onClick={showMoreProducts} disabled={isFetching}>
+                                                              <div className='flex items-center justify-center'>
+                                                                  <p className='text-white text-sm text-center w-fit font-bold'>さらに商品を表示する</p>
+                                                                  <motion.div className="ml-1 mr-1 -translate-y-1" initial={{ opacity:0, height:6, width:0 }} animate={{ opacity: isFetching ? 1: 0, height:12, width: isFetching ? 12: 0 }}>
+                                                                      <LoadCircle className='text-white h-5 w-5 animate-spin'/>
+                                                                  </motion.div>
+                                                              </div>
+                                                          </button>
+                                                      </div> : <></>
               }
             </div>
           </div>

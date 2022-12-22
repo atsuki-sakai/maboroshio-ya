@@ -20,6 +20,7 @@ const MyPage = () => {
     const { loggedCustomer, updateCustomer } = useCustomerState()
 
     const [ isLoading, setIsLoading ] = useState(false)
+    const [ isFetching, setIsFetching ] = useState(false)
     const [ errorText, setErrorText ] = useState("")
     const [ orders, setOrders ] = useState(loggedCustomer?.orders?.edges.map(({node: order}) => order))
     const [ ordersPagination, setOrdersPagination] = useState(loggedCustomer?.orders?.pageInfo)
@@ -43,9 +44,16 @@ const MyPage = () => {
     const fetchMoreOrders = async() => {
         if(!loggedCustomer?.orders.pageInfo.hasNextPage) return
 
-        const newOrdersInfo = await getOrdersPagenation(6, getCustomerAccessToken()!, {type: "NEXT", cursor: ordersPagination?.endCursor!})
-        setOrders(orders?.concat(newOrdersInfo.edges.map((order: any) => order.node)))
-        setOrdersPagination(newOrdersInfo.pageInfo)
+        try{
+            setIsFetching(true)
+            const newOrdersInfo = await getOrdersPagenation(6, getCustomerAccessToken()!, {type: "NEXT", cursor: ordersPagination?.endCursor!})
+            setOrders(orders?.concat(newOrdersInfo.edges.map((order: any) => order.node)))
+            setOrdersPagination(newOrdersInfo.pageInfo)
+        }catch(e: any){
+            alert(e.message)
+        }finally{
+            setIsFetching(false)
+        }
     }
 
     useEffect(() => {
@@ -65,7 +73,7 @@ const MyPage = () => {
                             <div className='flex items-center text-center w-full justify-between'>
                                 <p className='text-blue-500 text-sm font-bold'>ログアウト</p>
                                 <motion.div className="ml-1 mr-1 -translate-y-1" initial={{ opacity:0, height:6, width:0 }} animate={{ opacity: isLoading ? 1: 0, height:12, width: isLoading ? 12: 0 }}>
-                                <LoadCircle className='text-white h-5 w-5 animate-spin'/>
+                                <LoadCircle className='text-blue-500 h-5 w-5 animate-spin'/>
                                 </motion.div>
                             </div>
                         </button>
@@ -85,11 +93,16 @@ const MyPage = () => {
                             </div> : <div className="col-span-2 text-gray-500 text-sm h-20">まだ注文履歴はありません</div>
                     }
                     {
-                        ordersPagination?.hasNextPage ? <button className='w-full text-center rounded-md bg-gradient-to-tr to-green-500 from-lime-400 py-2 mt-6' onClick={fetchMoreOrders} >
-                                                            <p className='text-sm text-white'>
-                                                                さらに注文を表示
-                                                            </p>
-                                                        </button> : <></>
+                        ordersPagination?.hasNextPage ? <div className='mt-8'>
+                                                            <button className="px-3 w-full py-1 textp-center bg-green-500 rounded-md" onClick={fetchMoreOrders} disabled={isFetching}>
+                                                                <div className='flex items-center justify-center'>
+                                                                    <p className='text-white text-sm text-center w-fit font-bold'>さらに注文を表示</p>
+                                                                    <motion.div className="ml-1 mr-1 -translate-y-1" initial={{ opacity:0, height:6, width:0 }} animate={{ opacity: isFetching ? 1: 0, height:12, width: isFetching ? 12: 0 }}>
+                                                                        <LoadCircle className='text-white h-5 w-5 animate-spin'/>
+                                                                    </motion.div>
+                                                                </div>
+                                                            </button>
+                                                        </div> : <></>
                     }
                 </div>
                 <div className="flex items-start justiry-between py-12">
