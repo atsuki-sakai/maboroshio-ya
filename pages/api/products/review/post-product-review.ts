@@ -6,7 +6,6 @@ import admin, { firestore } from 'firebase-admin';
 import { PRODUCT_INFO_COLLECTION, REVIEW_COLLLECTION  } from "@firebase/const"
 import type { PostReviewInput } from '@shopify/types/review';
 
-
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
 
     if(req.method !== "POST") throw Error('this api is only POST method...')

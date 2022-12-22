@@ -11,8 +11,6 @@ import { ProductView } from '@components/product'
 import { getProductReviewInfo, getProductReviews } from '@firebase/firestore/review'
 import idConverter from '@lib/id-converter'
 
-
-
 const ProductSlug = ({ product, reviews, productReviewInfo }: InferGetStaticPropsType<typeof getStaticProps>) => {
 
     return (
@@ -48,6 +46,5 @@ export const getStaticProps:GetStaticProps = async (context) => {
         }
     }
 }
-
 
 export default ProductSlug
