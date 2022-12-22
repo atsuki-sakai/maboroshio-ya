@@ -43,6 +43,7 @@ export const getStaticProps:GetStaticProps = async (context) => {
             product,
             reviews,
             productReviewInfo
+
         }
     }
 }

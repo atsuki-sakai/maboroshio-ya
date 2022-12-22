@@ -123,16 +123,20 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                                     {product.vendor}
                                 </p>
                             </div>
-                            <div className='flex items-center justify-between'>
-                            <div className='w-full'></div>
-                            <div className='w-full flex justify-end items-center'>
-                                <div className='text-yellow-500 text-lg'>{numberToStar(productReviewInfo.score)}</div>
-                                <div className='flex items-end justify-center'>
-                                    <p className='text-sm text-blue-500 font-mono ml-3'>{productReviewInfo.totalStar}</p>
-                                    <p className='text-black text-xs scale-75'> 件</p>
-                                </div>
-                            </div>
-                        </div>
+                            {
+                                productReviewInfo ? <div>
+                                                        <div className='flex items-center justify-between'>
+                                                            <div className='w-full'></div>
+                                                            <div className='w-full flex justify-end items-center'>
+                                                                <div className='text-yellow-500 text-lg'>{numberToStar(productReviewInfo.score)}</div>
+                                                                <div className='flex items-end justify-center'>
+                                                                    <p className='text-sm text-blue-500 font-mono ml-3'>{productReviewInfo.totalStar}</p>
+                                                                    <p className='text-black text-xs scale-75'> 件</p>
+                                                                </div>
+                                                            </div>
+                                                            </div>
+                                                    </div>: <></>
+                            }
                         </div>
                         <div className='py-4'>
                             <h1 className='font-bold text-2xl my-3'>{product.name}</h1>

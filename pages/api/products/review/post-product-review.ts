@@ -24,8 +24,6 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
                                                                         : productInfoCollection.doc(reviewInfo.productId).collection(REVIEW_COLLLECTION).doc()
         const productInfoRef = await db.collection(PRODUCT_INFO_COLLECTION).doc(reviewInfo.productId).get()
 
-
-
         //商品のレビュードキュメントが存在するか
         if(productInfoRef.exists){
 

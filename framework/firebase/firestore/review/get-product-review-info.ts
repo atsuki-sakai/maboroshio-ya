@@ -2,7 +2,7 @@
 import { cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import serviceAccount  from '../../../../firebase-serviceAccount.json'; // 秘密鍵を取得
-import admin from 'firebase-admin';
+import * as admin from 'firebase-admin';
 import { PRODUCT_INFO_COLLECTION } from "@firebase/const"
 
 const getProductReviewInfo = async(productId: string) => {
