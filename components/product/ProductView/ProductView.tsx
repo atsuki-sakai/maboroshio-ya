@@ -129,7 +129,7 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                                 <div className='w-full flex justify-end items-center'>
                                     <div className='text-yellow-500 text-lg'>{numberToStar(productReviewInfo?.score ?? 0)}</div>
                                     <div className='flex items-end justify-center'>
-                                        <p className='text-sm text-blue-500 font-mono ml-3'>{productReviewInfo?.totalStar ?? 0}</p>
+                                        <p className='text-sm text-blue-500 font-mono ml-3'>{productReviewInfo?.numberOfTotalReview ?? 0}</p>
                                         <p className='text-black text-xs scale-75'> 件</p>
                                     </div>
                                 </div>
