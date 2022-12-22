@@ -30,17 +30,6 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         //商品のレビュードキュメントが存在するか
         if(productInfoRef.exists){
 
-            // 空文字列の場合は、非会員のレビュー
-            if(reviewInfo.reviewerCustomerId !== "") {
-                //顧客がすでに商品のレビューを書いていた場合
-                const reviewerCustomerIdsRef = await productInfoCollection.select("reviewerCustomerIds").get()
-                const reviewerCustomerIds = reviewerCustomerIdsRef.docs[0].data().reviewerCustomerIds as string[]
-                if(reviewInfo.reviewerCustomerId !== "" && reviewerCustomerIds.includes(reviewInfo.reviewerCustomerId)){
-                    // throw Error()で例外を投げれない
-                    return;
-                }
-            }
-
             //すでに商品のレビューがある場合
             const totalStarField = await productInfoCollection.where("productId", "==", reviewInfo.productId).select('totalStar').get()
             const numberOfTotalReviewField = await productInfoCollection.where('productId', "==", reviewInfo.productId).select('numberOfTotalReview').get()
@@ -49,7 +38,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
                 productId: reviewInfo.productId,
                 productName: reviewInfo.productName,
                 totalStar: FieldValue.increment(reviewInfo.review.star),
-                score: ((totalStarField.docs[0].data().totalStar + reviewInfo.review.star) / (numberOfTotalReviewField.docs[0].data().numberOfTotalReview + 1)).toFixed(2),
+                score: ((totalStarField.docs[0].data().totalStar + reviewInfo.review.star) / (numberOfTotalReviewField.docs[0].data().numberOfTotalReview + 1)).toFixed(1),
                 numberOfTotalReview: FieldValue.increment(1),
             });
             reviewCollection.set({...reviewInfo.review, postDate: firestore.FieldValue.serverTimestamp()})
