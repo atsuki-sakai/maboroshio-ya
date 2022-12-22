@@ -1,6 +1,4 @@
 
-
-
 export type Review = {
     customerId: string
     customerName: string
