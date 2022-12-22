@@ -3,7 +3,7 @@ import { cert } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import serviceAccount  from '../../../../firebase-serviceAccount.json'; // 秘密鍵を取得
 import admin from 'firebase-admin';
-import { REVIEW_COLLLECTION  } from "@firebase/const"
+import { PRODUCT_INFO_COLLECTION, REVIEW_COLLLECTION  } from "@firebase/const"
 
 
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
@@ -22,7 +22,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         const db = getFirestore();
 
         // #TODO - 最新のレビューから昇順で取得したい
-        const productReviewsMatchQuery = await db.collection(REVIEW_COLLLECTION).where('productId', "==", body.productId).limit(body.limit).get()
+        const productReviewsMatchQuery = await db.collection(PRODUCT_INFO_COLLECTION).doc(body.productId).collection(REVIEW_COLLLECTION).where('productId', "==", body.productId).limit(body.limit).get()
 
         let reviews : Array<any>= []
         if(productReviewsMatchQuery.docs[0]?.exists)[

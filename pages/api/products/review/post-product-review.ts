@@ -21,12 +21,13 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         const reviewInfo = await JSON.parse(req.body) as PostReviewInput
         const db = getFirestore();
         const productInfoCollection = db.collection(PRODUCT_INFO_COLLECTION);
-        const reviewCollection = db.collection(REVIEW_COLLLECTION)
+        const reviewCollection = reviewInfo.reviewerCustomerId !== "" ? productInfoCollection.doc(reviewInfo.productId).collection(REVIEW_COLLLECTION).doc(reviewInfo.reviewerCustomerId)
+                                                                        : productInfoCollection.doc(reviewInfo.productId).collection(REVIEW_COLLLECTION).doc()
         const productInfoRef = await db.collection(PRODUCT_INFO_COLLECTION).doc(reviewInfo.productId).get()
 
 
 
-        ///商品のレビュードキュメントが存在するか
+        //商品のレビュードキュメントが存在するか
         if(productInfoRef.exists){
 
             // 空文字列の場合は、非会員のレビュー
@@ -46,24 +47,24 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 
             productInfoCollection.doc(reviewInfo.productId).update({
                 productId: reviewInfo.productId,
-                reviewerCustomerIds: FieldValue.arrayUnion(reviewInfo.reviewerCustomerId),
+                productName: reviewInfo.productName,
                 totalStar: FieldValue.increment(reviewInfo.review.star),
                 score: ((totalStarField.docs[0].data().totalStar + reviewInfo.review.star) / (numberOfTotalReviewField.docs[0].data().numberOfTotalReview + 1)).toFixed(2),
                 numberOfTotalReview: FieldValue.increment(1),
             });
-            reviewCollection.doc().set({...reviewInfo.review, postDate: firestore.FieldValue.serverTimestamp()})
+            reviewCollection.set({...reviewInfo.review, postDate: firestore.FieldValue.serverTimestamp()})
 
         }else{
             //商品の初めてのレビュー
             productInfoCollection.doc(reviewInfo.productId).set({
                 productId: reviewInfo.productId,
-                reviewerCustomerIds: [reviewInfo.reviewerCustomerId],
+                productName: reviewInfo.productName,
                 totalStar: reviewInfo.review.star,
                 numberOfTotalReview: 1,
                 score: reviewInfo.review.star
             })
 
-            reviewCollection.doc().set({...reviewInfo.review, postDate: firestore.FieldValue.serverTimestamp()})
+            reviewCollection.set({...reviewInfo.review, postDate: firestore.FieldValue.serverTimestamp()})
         }
 
         res.statusCode = 200

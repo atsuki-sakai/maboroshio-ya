@@ -24,6 +24,7 @@ const PostReview = ({ product }: InferGetStaticPropsType<typeof getStaticProps>)
     const [ postReviewInfo, setPostReviewInfo ] = useState<PostReviewInput>({
         reviewerCustomerId: idConverter({type: "CUSTOMER"},loggedCustomer?.id ?? ""),
         productId: idConverter({type: "PRODUCT"},product.id),
+        productName: product.name,
         review: {
             customerId: idConverter({type: "CUSTOMER"},loggedCustomer?.id ?? ""),
             customerName: loggedCustomer?.displayName ?? "",

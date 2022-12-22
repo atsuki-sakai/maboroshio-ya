@@ -24,6 +24,7 @@ export type ProductReviewInfo = {
 
 export type PostReviewInput = {
     productId: string
+    productName: string
     reviewerCustomerId: string
     review: Review
 }
