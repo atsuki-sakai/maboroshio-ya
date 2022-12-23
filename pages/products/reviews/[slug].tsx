@@ -1,12 +1,13 @@
 
 import { Container } from '@components/ui'
-import { getProductReviews } from '@firebase/firestore/review'
-import { Review } from '@shopify/types/review'
+import { getProductReviewInfo} from '@firebase/firestore/review'
+import { ProductReviewInfo, Review } from '@shopify/types/review'
 import React, { useEffect, useState } from 'react'
 import { ProductReviewCard } from '@components/product'
 import useSWR from 'swr'
 import { firebaseApiUrl } from '@firebase/firesbase-api-url'
 import { useRouter } from 'next/router'
+import { numberToStar } from '@lib/number-to-star'
 
 const ProductReviews = () => {
 
@@ -29,8 +30,15 @@ const ProductReviews = () => {
 
     const { data, error } = useSWR([getProuctReviewsApiUrl, orderId, 5], router.isReady ? fetcher : null)
 
+    const [ info, setInfo] = useState<ProductReviewInfo | null>()
     useEffect(() => {
-    }, [router.isReady])
+        (async() => {
+            if(data){
+                const reviewInfo = await getProductReviewInfo(data.reviews[0].productId)
+                setInfo(reviewInfo)
+            }
+        })()
+    }, [router.isReady, data, info])
 
     if(error){
         return <Container>useSWR is fetch error: {error.message}</Container>
@@ -55,13 +63,34 @@ const ProductReviews = () => {
 
     return (
         <Container>
-            <h1 className='text-xl font-bold'>商品レビュー</h1>
-            <div className='px-8 space-y-5'>
-                {
-                    data.reviews.map((review: Review, index: number) => {
-                        return <ProductReviewCard key={index} review={review}/>;
-                    })
-                }
+            <div className='px-8'>
+                <h1 className='font-bold text-xl font-sans'>カスタマーレビュー</h1>
+                <div className='flex items-center justify-between'>
+                    <div>
+                        <div className='w-full flex justify-start items-end mt-3 mb-1'>
+                            <div className='text-yellow-500 text-lg'>{numberToStar(info?.score ?? 0)}</div>
+                            <div className='ml-3'>
+                                <span className='text-sm'>
+                                    星5つ中の{info?.score}
+                                </span>
+                            </div>
+                        </div>
+                        <p className='text-xs mb-5 text-gray-500'>
+                            合計{info?.numberOfTotalReview ?? 0}件の評価
+                        </p>
+                    </div>
+                    <div className='flex justify-center items-center'>
+                        <p className='text-xs text-blue-500 underline'>レビューを書く</p>
+                    </div>
+                </div>
+                {/* <h1 className='text-xl font-bold'>{data.reviews[0].productName}</h1> */}
+                <div className='space-y-5'>
+                    {
+                        data.reviews.map((review: Review, index: number) => {
+                            return <ProductReviewCard key={index} review={review}/>;
+                        })
+                    }
+                </div>
             </div>
         </Container>
     )
