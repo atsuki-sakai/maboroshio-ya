@@ -10,9 +10,9 @@ interface Props {
 
 const ProductReviewCard = ({review}: Props) => {
     return (
-        <div className="text-sm">
+        <div className="text-sm font-sans">
             <div className='flex items-end justify-between'>
-                <p className='text-indigo-700 font-mono text-xs'>{ (new Date(review.postDate._seconds * 1000).toLocaleDateString())}</p>
+                <p className='text-indigo-700 text-xs'>{ (new Date(review.postDate._seconds * 1000).toLocaleDateString())}</p>
                 <p className='text-xs'>投稿者: <span className='font-bold text-xs'>{ truncate(review.customerName, 10)}</span></p>
             </div>
             <div className='flex items-end justify-between mt-1'>
@@ -26,7 +26,7 @@ const ProductReviewCard = ({review}: Props) => {
                 <p className='text-xs'>{truncate(review.comment, 120)}</p>
             </div>
             <div className='mt-3'>
-                <button className='text-sm px-3 py-0.5 border shadow-sm rounded-md'>
+                <button className='text-xs px-3 py-0.5 border shadow-sm rounded-md'>
                     役に立った
                 </button>
             </div>

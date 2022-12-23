@@ -3,7 +3,7 @@
 import React, { useState} from 'react'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import { getProductsPagenation } from '@shopify/products'
-import { PageInfo, Product } from '@shopify/shema'
+import { PageInfo } from '@shopify/shema'
 import { MetaHead } from '@components/common'
 import { Container, Hero } from '@components/ui'
 import { ProductCard } from '@components/product'
@@ -11,34 +11,52 @@ import { normalizeProduct } from '@shopify/utils'
 import { motion } from 'framer-motion'
 import { LoadCircle } from '@components/icon'
 import { getProductReviewInfo } from '@firebase/firestore/review'
-import { ProductReviewInfo, Review } from '@shopify/types/review'
+import type { Product } from "@shopify/types/product"
+import idConverter from '@lib/id-converter'
+import { ProductReviewInfo } from '@shopify/types/review'
 
 const numFeatureProducts = 20
 
 export const getStaticProps: GetStaticProps = async() =>  {
 
   const featureProductsInfo = await getProductsPagenation(numFeatureProducts)
+  const _featureProducts: Product[] = await featureProductsInfo.products.edges.map((product: any) => product.node);
+  const productReviewInfos = await Promise.all(
+    _featureProducts.map( async(product) => {
+      return await getProductReviewInfo(idConverter({type: "PRODUCT"}, product.id))
+    })
+  )
+
   return {
     props: {
-      featureProductsInfo
+      featureProductsInfo,
+      productReviewInfos
     },
     revalidate: 4 * 60 * 60
   }
 }
 
-const Home = ({featureProductsInfo, featureProductReviewInfo}: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Home = ({featureProductsInfo, productReviewInfos}: InferGetStaticPropsType<typeof getStaticProps>) => {
 
-  console.log(featureProductReviewInfo)
   const [ featureProducts, setFeatureProducts ] = useState<Array<Product>>(featureProductsInfo.products.edges.map((product: any) => product.node))
   const [ featureProductsPagination, setFeatureProductsPagination ] = useState<PageInfo>(featureProductsInfo.products.pageInfo)
+  const [ featureProductReviewInfos, setFeatureProductReviewInfos ] = useState<ProductReviewInfo[]>(productReviewInfos)
   const [ isFetching, setIsFetching ] = useState(false)
+
+  console.log(featureProductReviewInfos)
 
   const showMoreProducts = async() => {
     if(!featureProductsPagination.hasNextPage) return
     try{
       setIsFetching(true)
       const newProductsInfo = await getProductsPagenation(numFeatureProducts, { type: "NEXT", cursor: featureProductsPagination.endCursor! })
+      const newProductReviewInfos = await Promise.all(
+        newProductsInfo.products.edges.map(async(product: any) => {
+          return await getProductReviewInfo(idConverter({type: "PRODUCT"}, product.node.id))
+        })
+      )
       setFeatureProducts(featureProducts.concat(newProductsInfo.products.edges.map((product: any) => product.node)))
+      setFeatureProductReviewInfos(featureProductReviewInfos.concat(newProductReviewInfos))
       setFeatureProductsPagination(newProductsInfo.products.pageInfo)
     }catch(error: any){
       alert(error.message)
@@ -61,15 +79,15 @@ const Home = ({featureProductsInfo, featureProductReviewInfo}: InferGetStaticPro
           <div className='px-8 py-12'>
             <div className='grid grid-cols-2 md:grid-cols-3 gap-8 items-center justify-center'>
               {
-                featureProducts.map((product) => {
+                featureProducts.map((product, index) => {
                   const normarizedProduct = normalizeProduct(product)
-                  return <ProductCard key={product.id} product={normarizedProduct} />
+                  return <ProductCard key={product.id} productReviewInfo={featureProductReviewInfos[index]} product={normarizedProduct} />
                 })
               }
             </div>
             <div className='flex items-center justify-between my-6'>
               {
-                featureProductsPagination.hasNextPage ? <div className='mt-8'>
+                featureProductsPagination.hasNextPage ? <div className='mt-8 w-full'>
                                                           <button className="px-3 w-full py-1 textp-center bg-green-500 rounded-md" onClick={showMoreProducts} disabled={isFetching}>
                                                               <div className='flex items-center justify-center'>
                                                                   <p className='text-white text-sm text-center w-fit font-bold'>さらに商品を表示する</p>

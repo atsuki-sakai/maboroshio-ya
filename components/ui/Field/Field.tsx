@@ -4,7 +4,7 @@ import React from 'react'
 interface Props {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
     value: any
-    label: string
+    label?: string
     placeHolder: string
     autoComplete?: string
     type?: string
@@ -17,7 +17,7 @@ const Field = ({ label, value, placeHolder, autoComplete = "", type = "text", id
     return (
         <>
             <div className='flex items-end mb-1'>
-                <label htmlFor={id} className='text-xs text-gray-700'>{label}</label>
+                <label htmlFor={id} className='text-xs text-gray-700'>{label ?? ""}</label>
                 {
                     required ?  <div className='ml-4 px-1.5   border border-red-500 rounded-full'>
                                     <p className='text-red-500 text-xs scale-90'>必須</p>

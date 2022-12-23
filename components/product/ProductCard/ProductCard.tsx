@@ -3,20 +3,21 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Product } from '@shopify/types/product'
 import { truncate } from '@lib/truncate'
+import { ProductReviewInfo } from '@shopify/types/review'
+import { numberToStar } from '@lib/number-to-star'
+import { Cart } from '@components/icon'
 interface Props {
     product: Product
+    productReviewInfo: ProductReviewInfo | null
 }
 
 const placeholderImage = "/images/product-image-placeholder.svg"
 
-const ProductCard = ({product} : Props) => {
+const ProductCard = ({product, productReviewInfo} : Props) => {
     return (
         <div key={product.id} className="rounded-md overflow-hidden">
             <Link href={`/products/${product.slug}`} passHref>
                 <a>
-                    <h4 className='text-sm font-serif text-gray-800 text-center pb-1'>
-                        { truncate(product.name, 25) }
-                    </h4>
                     {
                         product.images && <div className='relative'>
                                             <Image
@@ -39,7 +40,25 @@ const ProductCard = ({product} : Props) => {
                                             }
                                         </div>
                     }
-                    <p className='text-center text-red-500 text-xs font-thin'><span className='text-base font-medium '>¥ { Number(product.priceRange.minVariantPrice.amount) }</span> 税込</p>
+                    <div className='w-full flex justify-end items-center'>
+                        <div className='text-yellow-500'>{numberToStar(productReviewInfo?.score ?? 0)}</div>
+                        <div className='flex items-end justify-center font-sans'>
+                            <p className='text-sm text-blue-500 ml-3'>{productReviewInfo?.numberOfTotalReview ?? 0}</p>
+                            <p className='text-black text-xs scale-75'> 件</p>
+                        </div>
+                    </div>
+                    <h4 className='text-xs font-sans text-gray-800 text-center'>
+                        { truncate(product.name, 25) }
+                    </h4>
+                    <p className='text-end text-red-500 text-xs font-thin'><span className='text-lg font-medium '>¥ { Number(product.priceRange.minVariantPrice.amount) }</span> 税込</p>
+                    <div className='flex mt-2'>
+                        <button className='bg-gradient-to-tr to-blue-500 from-sky-500 w-full flex items-center justify-center '>
+                            <p className='text-xs text-white font-bold'>
+                                今すぐ購入
+                            </p>
+                            <Cart className='pl-2 h-7 w-7 text-white'/>
+                        </button>
+                    </div>
                 </a>
             </Link>
         </div>

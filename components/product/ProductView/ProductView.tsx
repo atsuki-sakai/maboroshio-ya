@@ -139,17 +139,19 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                         </div>
                         <div className='py-4'>
                             <h1 className='font-bold text-2xl my-3'>{product.name}</h1>
-                            <div className='flex items-end justify-between'>
-                                <div className='mb-2'>
-                                    <p className='text-sm w-full text-start text-gray-800'>購入数量</p>
-                                    <div className='flex items-center'>
+                            <div className='flex items-end justify-between font-sans'>
+                                <div className=''>
+                                    <div className='bg-indigo-100 w-fit rounded-md px-3 py-1'>
+                                        <p className='text-xs w-full text-start text-indigo-500'>購入数量</p>
+                                    </div>
+                                    <div className='flex items-center mt-2'>
                                         <div className='w-full flex items-center space-x-3'>
-                                            <button onClick={incrementQuantity}>
-                                                <Plus className='text-green-400 h-8 w-8'/>
+                                            <button className='bg-red-500 rounded-full shadow-md' onClick={decrementQuantity}>
+                                                <Minus className='text-white h-10 w-10'/>
                                             </button>
                                             <input className='w-16 h-8 font-sans text-[17px] bg-white text-gray-700 border text-center rounded-md focus:outline-none' id='quantity' type="number" value={quantity} onChange={handleChange} />
-                                            <button onClick={decrementQuantity}>
-                                                <Minus className='text-red-400 h-8 w-8'/>
+                                            <button className='bg-green-500 rounded-full shadow-md' onClick={incrementQuantity}>
+                                                <Plus className='text-white h-10 w-10'/>
                                             </button>
                                         </div>
                                     </div>
@@ -159,14 +161,14 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className='flex items-end font-sans'>
+                        <div className='flex items-end font-sans mt-4'>
                             <section>
                                 {product.options.map((option, index) =>
                                     <div key={index}>
                                         <div className='bg-indigo-100 w-fit rounded-md px-3 py-1'>
                                             <p className='text-xs text-indigo-500'>{ option.displayName }</p>
                                         </div>
-                                        <div className='grid grid-cols-5 gap-3 py-2 w-full'>
+                                        <div className='grid grid-cols-5 gap-3 py-2 w-full mt-2'>
                                             {
                                                 option.values.map((value, index) => {
                                                     const activeChoice = choices[option.displayName.toLowerCase()]
@@ -196,16 +198,13 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                         <div className="p-3">
                             <p className='text-gray-500'>{product.description}</p>
                         </div>
-                        <div className='py-6 flex justify-center'>
-                            <div className='bg-gray-300 h-0.5 w-full rounded-full'></div>
-                        </div>
-                        <div className='py-6'>
+                        <div className='py-6 mt-10'>
                             <div className='flex items-start justify-between mb-3'>
-                                <div className='mb-2 w-full font-bold text-base'>商品レビュー</div>
+                                <div className='mb-2 w-full font-bold text-lg font-sans'>商品レビュー</div>
                                 <div className='w-full flex justify-end items-center'>
                                     <div className='text-yellow-500 text-lg'>{numberToStar(productReviewInfo?.score ?? 0)}</div>
-                                    <div className='flex items-end justify-center'>
-                                        <p className='text-sm text-blue-500 font-mono ml-3'>{productReviewInfo?.numberOfTotalReview ?? 0}</p>
+                                    <div className='flex items-end justify-center font-sans'>
+                                        <p className='text-sm text-blue-500 ml-3'>{productReviewInfo?.numberOfTotalReview ?? 0}</p>
                                         <p className='text-black text-xs scale-75'> 件</p>
                                     </div>
                                 </div>
