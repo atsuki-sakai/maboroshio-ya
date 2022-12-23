@@ -22,7 +22,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
         const db = getFirestore();
 
         // #TODO - 最新のレビューから昇順で取得したい
-        const productReviewsMatchQuery = await db.collection(PRODUCT_INFO_COLLECTION).doc(body.productId).collection(REVIEW_COLLLECTION).where('productId', "==", body.productId).limit(body.limit).get()
+        const productReviewsMatchQuery = await db.collection(PRODUCT_INFO_COLLECTION).doc(body.productId).collection(REVIEW_COLLLECTION).where('productId', "==", body.productId).limit(body.limit ?? 10).get()
 
         let reviews : Array<any>= []
         if(productReviewsMatchQuery.docs[0]?.exists){

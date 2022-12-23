@@ -17,6 +17,7 @@ import { Product } from '@shopify/types/product';
 import { ProductReviewInfo, Review } from '@shopify/types/review';
 import { truncate } from '@lib/truncate';
 import { numberToStar } from '@lib/number-to-star';
+import ProductReviewCard from '../ProductReviewCard';
 
 interface Props {
     product: Product,
@@ -211,37 +212,13 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                             </div>
                             <div className='grid grid-cols-1 gap-5 py-2'>
                             {
-                                reviews.length !== 0 ? reviews.map((review: Review, index) =>
-                                    <div key={index} className="text-sm">
-                                        <div className='flex items-end justify-between'>
-                                            <p className='text-indigo-700 font-mono text-xs'>{ (new Date(review.postDate._seconds * 1000).toLocaleDateString())}</p>
-                                            <p className='text-xs'>投稿者: <span className='font-bold text-xs'>{ truncate(review.customerName, 10)}</span></p>
-                                        </div>
-                                        <div className='flex items-end justify-start mt-1'>
-                                            <div className='text-yellow-500'>{numberToStar(review.star)}</div>
-                                            {
-                                                review.customerId !== "" ? <div className='px-3 py-0.5 border ml-10 border-orange-500 rounded-md'><p className='text-orange-500 text-xs font-bold'>認証ユーザー</p></div>: null
-                                            }
-                                        </div>
-                                        <div className='mt-1'>
-                                            <p className='text-base font-bold tracking-wide py-2'>{truncate(review.title, 30)}</p>
-                                            <p className='text-xs'>{truncate(review.comment, 120)}</p>
-                                        </div>
-                                        <div className='mt-3'>
-                                            <button className='text-sm px-3 py-0.5 border shadow-sm rounded-md'>
-                                                役に立った
-                                            </button>
-                                        </div>
-                                        <div className='pt-6 flex justify-center'>
-                                            <div className='bg-gray-300 h-[1px] w-2/3 rounded-full'></div>
-                                        </div>
-                                    </div>)
+                                reviews.length !== 0 ? reviews.map((review: Review, index) => <ProductReviewCard key={index} review={review} />)
                                         : <div className='cols-span-2'>
                                             <p className='text-sm foont-bold text-gray-500 text-center my-12'>まだレビューはありません。</p>
                                         </div>
                             }
                             </div>
-                            <Link href={`/products/post-review/${product.slug}`} passHref>
+                            <Link href={`/products/reviews${product.id.split('/Product')[1]}`} passHref>
                                 <a>
                                 <div className='mt-4 px-3 py-1 border rounded-md shadow-sm flex items-center justify-between'>
                                     <p className='text-sm font-sans'>すべてのレビューを見る</p>

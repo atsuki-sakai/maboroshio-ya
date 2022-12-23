@@ -10,6 +10,8 @@ import { ProductCard } from '@components/product'
 import { normalizeProduct } from '@shopify/utils'
 import { motion } from 'framer-motion'
 import { LoadCircle } from '@components/icon'
+import { getProductReviewInfo } from '@firebase/firestore/review'
+import { ProductReviewInfo, Review } from '@shopify/types/review'
 
 const numFeatureProducts = 20
 
@@ -24,8 +26,9 @@ export const getStaticProps: GetStaticProps = async() =>  {
   }
 }
 
-const Home = ({featureProductsInfo}: InferGetStaticPropsType<typeof getStaticProps>) => {
+const Home = ({featureProductsInfo, featureProductReviewInfo}: InferGetStaticPropsType<typeof getStaticProps>) => {
 
+  console.log(featureProductReviewInfo)
   const [ featureProducts, setFeatureProducts ] = useState<Array<Product>>(featureProductsInfo.products.edges.map((product: any) => product.node))
   const [ featureProductsPagination, setFeatureProductsPagination ] = useState<PageInfo>(featureProductsInfo.products.pageInfo)
   const [ isFetching, setIsFetching ] = useState(false)
