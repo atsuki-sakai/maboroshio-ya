@@ -7,8 +7,10 @@ import Image from 'next/image'
 import provinceToJP from '@lib/province-to-jp'
 import { fulfillmentToJp } from '@lib/fulfillment-status-to-jp'
 import Link from 'next/link'
-import { getCustomerAccessToken, getOrder } from '@shopify/customer'
-import getCustomerAllOrdersId from '@shopify/customer/get-customer-all-orders-id'
+import { getOrder } from '@shopify/customer'
+import useSWR from 'swr'
+import { generateApiUrl } from '@shopify/utils/generate-api-url'
+import { getCheckoutId } from '@shopify/cart'
 
 const placeholderImage = "/images/product-image-placeholder.svg"
 
@@ -18,7 +20,6 @@ const OrderId = () => {
     const [order, setOrder] = useState<Order | undefined>()
 
     useEffect(() => {
-
         (async() => {
             const encodeOrderId = document.location.pathname.split('orders/')[1]
             const orderId = decodeURIComponent(encodeOrderId)

@@ -14,7 +14,7 @@ const getProductReviews = async(productId: string, limit?: number): Promise<Revi
         })
     })
 
-    const { data } = await response.json()
+    const data = await response.json()
     return data.reviews as Review[]
 }
 

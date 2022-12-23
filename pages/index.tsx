@@ -14,6 +14,7 @@ import { getProductReviewInfo } from '@firebase/firestore/review'
 import type { Product } from "@shopify/types/product"
 import idConverter from '@lib/id-converter'
 import { ProductReviewInfo } from '@shopify/types/review'
+import useSWR from 'swr'
 
 const numFeatureProducts = 20
 
@@ -88,7 +89,7 @@ const Home = ({featureProductsInfo, productReviewInfos}: InferGetStaticPropsType
             <div className='flex items-center justify-between my-6'>
               {
                 featureProductsPagination.hasNextPage ? <div className='mt-8 w-full'>
-                                                          <button className="px-3 w-full py-1 textp-center bg-green-500 rounded-md" onClick={showMoreProducts} disabled={isFetching}>
+                                                          <button className="px-3 w-full shadow-md py-1 textp-center bg-green-500 rounded-md" onClick={showMoreProducts} disabled={isFetching}>
                                                               <div className='flex items-center justify-center'>
                                                                   <p className='text-white text-sm text-center w-fit font-bold'>さらに商品を表示する</p>
                                                                   <motion.div className="ml-1 mr-1 -translate-y-1" initial={{ opacity:0, height:6, width:0 }} animate={{ opacity: isFetching ? 1: 0, height:12, width: isFetching ? 12: 0 }}>

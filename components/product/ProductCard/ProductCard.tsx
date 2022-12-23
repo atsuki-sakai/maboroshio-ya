@@ -51,8 +51,8 @@ const ProductCard = ({product, productReviewInfo} : Props) => {
                         { truncate(product.name, 25) }
                     </h4>
                     <p className='text-end text-red-500 text-xs font-thin'><span className='text-lg font-medium '>¥ { Number(product.priceRange.minVariantPrice.amount) }</span> 税込</p>
-                    <div className='flex mt-2'>
-                        <button className='bg-gradient-to-tr to-blue-500 from-sky-500 w-full flex items-center justify-center '>
+                    <div className='flex mt-2 shadow-md'>
+                        <button className='bg-blue-500 w-full flex items-center justify-center rounded-md shadow-md'>
                             <p className='text-xs text-white font-bold'>
                                 今すぐ購入
                             </p>

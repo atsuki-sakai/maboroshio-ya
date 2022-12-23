@@ -33,7 +33,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
-        res.end(JSON.stringify({ data: { reviews:  reviews }}))
+        res.end(JSON.stringify({ reviews:  reviews }))
 
     }catch(e: any){
 
