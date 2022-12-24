@@ -7,7 +7,7 @@ import Link from "next/link"
 import { Container } from '@components/ui'
 import { ProductReviewInfo, Review } from '@firebase/types/review'
 import { ProductReviewCard } from '@components/product'
-import { firebaseApiUrl } from '@firebase/utils/firesbase-api-url'
+import { firebaseApiUrl } from '@firebase/utils'
 import { useRouter } from 'next/router'
 import { numberToStar } from '@lib/number-to-star'
 
