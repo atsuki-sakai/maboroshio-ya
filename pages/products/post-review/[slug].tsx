@@ -12,7 +12,6 @@ import { LoadCircle } from '@components/icon'
 import { truncate } from '@lib/truncate'
 import { generateApiUrl } from '@shopify/utils/generate-api-url'
 import useSWR from 'swr'
-import ProductSlug from '../[slug]'
 
 const placeholderImage = "/images/product-image-placeholder.svg"
 
@@ -86,7 +85,7 @@ const PostReview = () => {
 
     return (
         <Container>
-            <div className='px-8 space-y-2'>
+            <div className='px-8 space-y-2 font-sans'>
                 <h1 className='mb-6 font-bold text-lg'>商品レビュー投稿</h1>
                 <div className='flex items-center justify-start'>
                     <Image
@@ -99,12 +98,12 @@ const PostReview = () => {
                         className='rounded-sm transform duration-1000 ease-in-out hover:scale-105'
                     />
                     <div className='pl-3'>
-                        <h3 className='text-lg'>{truncate(productSWR.data.productByHandle.title, 12)}</h3>
+                        <h3 className='text-base'>{truncate(productSWR.data.productByHandle.title, 14)}</h3>
                     </div>
                 </div>
                 <div className='text-xs pt-5 pb-4'>
                     <label className='block' htmlFor="star" id="star">総合評価</label>
-                    <div className='flex items-center space-x-1 text-4xl text-yellow-500'>
+                    <div className='flex items-center space-x-1 text-3xl text-yellow-500'>
                         <button onClick={() => setPostReviewInfo({...postReviewInfo, review: {...postReviewInfo.review, star: 1}})}>{ postReviewInfo.review.star >= 1 ? "★": "☆" }</button>
                         <button onClick={() => setPostReviewInfo({...postReviewInfo, review: {...postReviewInfo.review, star: 2}})}>{ postReviewInfo.review.star >= 2 ? "★": "☆" }</button>
                         <button onClick={() => setPostReviewInfo({...postReviewInfo, review: {...postReviewInfo.review, star: 3}})}>{ postReviewInfo.review.star >= 3 ? "★": "☆" }</button>
@@ -123,7 +122,7 @@ const PostReview = () => {
                 </div>
             </div>
             <div className='w-fit mx-auto py-8'>
-                <button className={`px-6 py-2 textp-center bg-gradient-to-tl to-blue-500 from-sky-400 rounded-md shadow-md`} onClick={postReview} disabled={isLoading}>
+                <button className={`px-6 py-2 textp-center bg-gradient-to-tl to-orange-500 from-orange-400 rounded-md shadow-md`} onClick={postReview} disabled={isLoading}>
                     <div className='flex items-center justify-between'>
                         <p className='text-white font-bold'>{isLoading ? "投稿中..." : "レビューを投稿"}</p>
                         <motion.div className="ml-2 -translate-y-1.5" initial={{ opacity:0, height:12, width:0 }} animate={{ opacity: isLoading ? 1: 0, height:12, width: isLoading ? 12: 0 }}>

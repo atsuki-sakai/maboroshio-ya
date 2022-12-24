@@ -118,22 +118,21 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                         }
                     </Splide>
                     <div className='font-serif pt-3'>
-                        <div className='flex items-center justify-between w-full mt-2'>
+                        <div className='flex items-start justify-between w-full mt-2'>
                             <div className="bg-gray-100 rounded-md w-fit px-3 py-1">
                                 <p className='text-sm text-gray-500'>
                                     {product.vendor}
                                 </p>
                             </div>
                             <div>
-                            <div className='flex items-center justify-between'>
-                                <div className='w-full'></div>
-                                <div className='w-full flex justify-end items-center'>
-                                    <div className='text-yellow-500 text-lg'>{numberToStar(productReviewInfo?.score ?? 0)}</div>
-                                    <div className='flex items-end justify-center'>
-                                        <p className='text-sm text-blue-500 font-mono ml-3'>{productReviewInfo?.numberOfTotalReview ?? 0}</p>
-                                        <p className='text-black text-xs scale-75'> 件</p>
+                                <div className='flex items-center justify-between'>
+                                    <div className='w-full'></div>
+                                    <div className='w-full flex justify-end items-center'>
+                                        <div className='text-yellow-500 text-2xl'>
+                                            <p>{numberToStar(productReviewInfo?.score ?? 0)}</p>
+                                            <div className='text-black w-[120px] text-xs scale-95 font-sans'><span className='text-sm'>{productReviewInfo?.numberOfTotalReview ?? 0}</span>件のレビュー</div>
+                                        </div>
                                     </div>
-                                </div>
                                 </div>
                             </div>
                         </div>
@@ -145,13 +144,13 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                                         <p className='text-xs w-full text-start text-indigo-500'>購入数量</p>
                                     </div>
                                     <div className='flex items-center mt-2'>
-                                        <div className='w-full flex items-center space-x-3'>
-                                            <button className='bg-red-500 rounded-full shadow-md' onClick={decrementQuantity}>
-                                                <Minus className='text-white h-10 w-10'/>
+                                        <div className='w-full flex items-center space-x-6'>
+                                            <button className='' onClick={decrementQuantity}>
+                                                <Minus className='text-red-500 h-9 w-9'/>
                                             </button>
                                             <input className='w-16 h-8 font-sans text-[17px] bg-white text-gray-700 border text-center rounded-md focus:outline-none' id='quantity' type="number" value={quantity} onChange={handleChange} />
-                                            <button className='bg-green-500 rounded-full shadow-md' onClick={incrementQuantity}>
-                                                <Plus className='text-white h-10 w-10'/>
+                                            <button className=''onClick={incrementQuantity}>
+                                                <Plus className='text-green-500 h-9 w-9'/>
                                             </button>
                                         </div>
                                     </div>
@@ -161,7 +160,7 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className='flex items-end font-sans mt-4'>
+                        <div className='flex items-end font-sans'>
                             <section>
                                 {product.options.map((option, index) =>
                                     <div key={index}>
@@ -196,41 +195,42 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                             </section>
                         </div>
                         <div className="p-3">
-                            <p className='text-gray-500'>{product.description}</p>
+                            <p className='text-gray-500 font-sans'>{product.description}</p>
                         </div>
-                        <div className='py-6 mt-10'>
-                            <div className='flex items-start justify-between mb-3'>
-                                <div className='mb-2 w-full font-bold text-lg font-sans'>商品レビュー</div>
-                                <div className='w-full flex justify-end items-center'>
-                                    <div className='text-yellow-500 text-lg'>{numberToStar(productReviewInfo?.score ?? 0)}</div>
-                                    <div className='flex items-end justify-center font-sans'>
-                                        <p className='text-sm text-blue-500 ml-3'>{productReviewInfo?.numberOfTotalReview ?? 0}</p>
-                                        <p className='text-black text-xs scale-75'> 件</p>
+                        <div className='py-6'>
+                            <div className='mb-3 border-y py-2'>
+                                <div className='mb-2 w-full font-bold text-lg font-sans'>カスタマーレビュー</div>
+                                <div className='w-full flex justify-start items-center'>
+                                    <div className='text-yellow-500 text-2xl'>{numberToStar(productReviewInfo?.score ?? 0)}</div>
+                                    <div className='flex items-end justify-center font-sans ml-4'>
+                                        <p className='text-sm'>星５つ中の<span className='text-base'>{productReviewInfo?.score ?? 0}</span></p>
                                     </div>
                                 </div>
+                                <p className='font-sans text-xs text-gray-500'>合計<span className='text-sm'>{productReviewInfo?.numberOfTotalReview ?? 0}</span>件のレビュー</p>
                             </div>
                             <div className='grid grid-cols-1 gap-5 py-2'>
                             {
                                 reviews.length !== 0 ? reviews.map((review: Review, index) => <ProductReviewCard key={index} review={review} />)
                                         : <div className='cols-span-2'>
-                                            <p className='text-sm foont-bold text-gray-500 text-center my-12'>まだレビューはありません。</p>
+                                            <p className='text-sm font-sans text-gray-500 text-center my-12'>レビューはありません</p>
                                         </div>
                             }
                             </div>
-                            <Link
-                                as={`/products/reviews${product.id.split('/Product')[1]}`}
-                                href={{ pathname:`/products/reviews/[slug]` , query: { handle: product.slug} }}
-                                passHref
-                            >
-                                <a>
-                                <div className='mt-4 px-3 py-1 border rounded-md shadow-sm flex items-center justify-between'>
-                                    <p className='text-sm font-sans'>すべてのレビューを見る</p>
-                                    <div>
-                                        <RightArrow className='h-5 w-5'/>
-                                    </div>
-                                </div>
-                                </a>
-                            </Link>
+                            {
+                                reviews.length === 0 ? null: <Link
+                                                                as={`/products/reviews${product.id.split('/Product')[1]}`}
+                                                                href={{ pathname:`/products/reviews/[slug]` , query: { handle: product.slug} }}
+                                                                passHref
+                                                            ><a>
+                                                                <div className='mt-4 px-3 py-1 border rounded-md shadow-sm flex items-center justify-between'>
+                                                                    <p className='text-sm font-sans'>すべてのレビューを見る</p>
+                                                                    <div>
+                                                                        <RightArrow className='h-5 w-5'/>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </Link>
+                            }
                             <Link href={`/products/post-review/${product.slug}`} passHref>
                                 <a>
                                 <div className='mt-4 px-3 py-1 border rounded-md shadow-sm flex items-center justify-between'>
