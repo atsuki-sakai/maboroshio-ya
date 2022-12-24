@@ -14,7 +14,7 @@ import { motion } from 'framer-motion';
 import LoadCircle from '@components/icon/LoadCircle';
 import { RightArrow, Minus, Plus } from '@components/icon';
 import { Product } from '@shopify/types/product';
-import { ProductReviewInfo, Review } from '@shopify/types/review';
+import { ProductReviewInfo, Review } from '@firebase/types/review';
 import { truncate } from '@lib/truncate';
 import { numberToStar } from '@lib/number-to-star';
 import ProductReviewCard from '../ProductReviewCard';

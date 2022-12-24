@@ -1,7 +1,7 @@
 
 import { numberToStar } from '@lib/number-to-star'
 import { truncate } from '@lib/truncate'
-import { Review } from '@shopify/types/review'
+import { Review } from '@firebase/types/review'
 import React, { useState } from 'react'
 
 interface Props {

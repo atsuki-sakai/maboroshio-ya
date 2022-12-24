@@ -5,8 +5,7 @@ export type ApiPath = {
     type: "POST_PRODUCT_REVIEW" | "GET_PRODUCT_REVIEWS" | "GET_PRODUCT_REVIEW_INFO";
 }
 
-
-export const firebaseApiUrl = (apiPath: ApiPath) => {
+const firebaseApiUrl = (apiPath: ApiPath) => {
     switch(apiPath.type){
         case "POST_PRODUCT_REVIEW": {
             return `${HOSTING_URL}/api/products/review/post-product-review`
@@ -22,3 +21,5 @@ export const firebaseApiUrl = (apiPath: ApiPath) => {
         }
     }
 }
+
+export default firebaseApiUrl

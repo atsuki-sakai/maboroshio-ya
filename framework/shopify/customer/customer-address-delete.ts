@@ -1,5 +1,5 @@
 
-import { generateApiUrl } from "@shopify/utils/generate-api-url"
+import { generateApiUrl } from "@shopify/utils"
 
 const customerAddressDelete = async (customerAccessToken: string, addressId: string) => {
 

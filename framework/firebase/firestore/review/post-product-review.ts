@@ -1,6 +1,6 @@
 
-import { firebaseApiUrl } from "@firebase/firesbase-api-url"
-import type { PostReviewInput } from "@shopify/types/review"
+import { firebaseApiUrl } from "@firebase/utils"
+import type { PostReviewInput } from "@firebase/types/review"
 
 const postProductReview = async(reviewInput: PostReviewInput) => {
 

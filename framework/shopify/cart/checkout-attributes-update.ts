@@ -1,4 +1,4 @@
-import { generateApiUrl } from "@shopify/utils/generate-api-url"
+import { generateApiUrl } from "@shopify/utils"
 
 
 const checkoutAttributesUpdate = async(chekcoutId: string, attribute: {key:string, value: string }) => {

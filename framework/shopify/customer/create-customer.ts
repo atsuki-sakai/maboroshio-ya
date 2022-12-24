@@ -1,7 +1,7 @@
 
 import { SHOPIFY_CUSTOMER_ACCESS_TOKEN, SHOPIFY_CUSTOMER_ACCESS_TOKEN_EXPIRE } from "@shopify/const"
 import { CustomerCreatePayload } from "@shopify/shema"
-import { generateApiUrl } from "@shopify/utils/generate-api-url"
+import { generateApiUrl } from "@shopify/utils"
 import { createCustomerAccessToken, getCustomerAccessToken  } from "@shopify/customer"
 import Cookies from "js-cookie"
 

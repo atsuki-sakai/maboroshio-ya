@@ -1,6 +1,6 @@
 
 import { Checkout, CheckoutShippingAddressUpdateV2Payload, MutationCheckoutShippingLineUpdateArgs } from "@shopify/shema"
-import { generateApiUrl } from "@shopify/utils/generate-api-url"
+import { generateApiUrl } from "@shopify/utils"
 import { add } from "cheerio/lib/api/traversing"
 
 

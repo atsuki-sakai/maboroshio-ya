@@ -1,5 +1,5 @@
 
-export { default as fetchApi } from "./fetch-api"
+export { default as generateApiUrl } from "./generate-api-url"
 
 export * from "./normarize"
 export * from "./queries"

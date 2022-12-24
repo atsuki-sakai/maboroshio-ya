@@ -1,5 +1,5 @@
 import { Customer, CustomerDefaultAddressUpdatePayload } from "@shopify/shema";
-import { generateApiUrl } from "@shopify/utils/generate-api-url"
+import { generateApiUrl } from "@shopify/utils"
 
 const customerDefaultAddressUpdate = async(addressId: string, customerAccessToken: string): Promise<Customer> => {
 

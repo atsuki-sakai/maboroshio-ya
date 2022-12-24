@@ -1,6 +1,6 @@
 
 import { Checkout, CheckoutLineItemsAddPayload } from "@shopify/shema"
-import { generateApiUrl } from "@shopify/utils/generate-api-url"
+import { generateApiUrl } from "@shopify/utils"
 
 
 

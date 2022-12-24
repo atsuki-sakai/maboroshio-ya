@@ -1,6 +1,6 @@
 import { SHOPIFY_CHECKOUT_ID_COOKIE, SHOPIFY_CHECKOUT_URL_COOKIE, SHOPIFY_COOKIE_EXPIRE } from "@shopify/const"
 import { Checkout, CheckoutCreatePayload } from "@shopify/shema"
-import { generateApiUrl } from "@shopify/utils/generate-api-url"
+import { generateApiUrl } from "@shopify/utils"
 import Cookies from "js-cookie"
 
 

@@ -2,7 +2,7 @@
 import { Product as ShopifyProduct } from "@shopify/shema" 
 import type { Product } from "@shopify/types/product"
 import { normalizeProduct } from "@shopify/utils"
-import { generateApiUrl } from "@shopify/utils/generate-api-url"
+import { generateApiUrl } from "@shopify/utils"
 
 const getProduct = async(slug: string) => {
 

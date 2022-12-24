@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Product } from '@shopify/types/product'
 import { truncate } from '@lib/truncate'
-import { ProductReviewInfo } from '@shopify/types/review'
+import { ProductReviewInfo } from '@firebase/types/review'
 import { numberToStar } from '@lib/number-to-star'
 import { Cart } from '@components/icon'
 interface Props {

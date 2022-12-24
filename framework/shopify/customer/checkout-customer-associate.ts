@@ -1,5 +1,5 @@
 import { Customer, CheckoutCustomerAssociateV2Payload } from "@shopify/shema";
-import { generateApiUrl } from "@shopify/utils/generate-api-url"
+import { generateApiUrl } from "@shopify/utils"
 
 
 

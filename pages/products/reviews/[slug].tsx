@@ -1,11 +1,13 @@
 
-import { Container } from '@components/ui'
-import { Review } from '@shopify/types/review'
+
 import React, { useEffect } from 'react'
-import { ProductReviewCard } from '@components/product'
 import useSWR from 'swr'
 import Link from "next/link"
-import { firebaseApiUrl } from '@firebase/firesbase-api-url'
+
+import { Container } from '@components/ui'
+import { ProductReviewInfo, Review } from '@firebase/types/review'
+import { ProductReviewCard } from '@components/product'
+import { firebaseApiUrl } from '@firebase/utils/firesbase-api-url'
 import { useRouter } from 'next/router'
 import { numberToStar } from '@lib/number-to-star'
 
@@ -15,49 +17,54 @@ const ProductReviews = () => {
     const productSlug = router.query?.handle
     const productId = router.asPath.split('reviews/')[1]
 
-    const getProuctReviewsApiUrl = firebaseApiUrl({type:"GET_PRODUCT_REVIEWS"})
-    const getProductReviewInfoApiUrl = firebaseApiUrl({type: "GET_PRODUCT_REVIEW_INFO"})
+    const prouctReviewsApiUrl = firebaseApiUrl({type:"GET_PRODUCT_REVIEWS"})
+    const productReviewInfoApiUrl = firebaseApiUrl({type: "GET_PRODUCT_REVIEW_INFO"})
     const numberOfReviews = 5
 
-    const reviewFetcher = (url: string, productId: string, limit?:number) => fetch(url, {
-        method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify({
-            productId: productId,
-            limit: limit
+    const reviewsFetcher = async (url: string, productId: string, limit?:number): Promise<Review[]> =>{
+        const response = await fetch(url, {
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify({
+                productId: productId,
+                limit: limit
+            })
+        }).then((res) => {
+            return res.json()
+        }).catch((e) => {
+            throw Error(e.message)
         })
-    }).then((res) => {
-        return res.json()
-    }).catch((e) => {
-        throw Error(e.message)
-    })
-
-    const productReviewInfoFetcher = (url: string, productId: string) => fetch(url, {
-        method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify({
-            productId: productId
+        return response.reviews
+    }
+    const productReviewInfoFetcher = async(url: string, productId: string): Promise<ProductReviewInfo | null> => { 
+        const response = await fetch(url, {
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify({
+                productId: productId
+            })
+        }).then((res) => {
+            return res.json()
+        }).catch((e) => {
+            throw Error(e.message)
         })
-    }).then((res) => {
-        return res.json()
-    }).catch((e) => {
-        throw Error(e.message)
-    })
+        return response.productReviewInfo
+    }
 
-    const { data: reviewsSWR, error: reviewError } = useSWR([getProuctReviewsApiUrl, productId, numberOfReviews], router.isReady ? reviewFetcher : null)
-    const { data: productReviewInfoSWR, error: productReviewInfoError } = useSWR([getProductReviewInfoApiUrl, productId], router.isReady ? productReviewInfoFetcher : null)
+    const { data: reviews, error: reviewsError } = useSWR([prouctReviewsApiUrl, productId, numberOfReviews], router.isReady ? reviewsFetcher : null)
+    const { data: productReviewInfo, error: productReviewInfoError } = useSWR([productReviewInfoApiUrl, productId], router.isReady ? productReviewInfoFetcher : null)
 
     useEffect(() => {
     }, [router.isReady])
 
-    if(reviewError || productReviewInfoError){
+    if(reviewsError || productReviewInfoError){
         if(productReviewInfoError){
             return <Container>useSWR is fetch error: {productReviewInfoError.message}</Container>
         }
-        return <Container>useSWR is fetch error: {reviewError.message}</Container>
+        return <Container>useSWR is fetch error: {reviewsError.message}</Container>
     }
 
-    if(!reviewsSWR || !productReviewInfoSWR){
+    if(!reviews || !productReviewInfo){
         return  <div className='h-screen w-screen'>
                     <div className='flex justify-center items-center w-full h-full'>
                         <p className='text-center text-gray-500'>読み込み中...</p>
@@ -65,22 +72,22 @@ const ProductReviews = () => {
                 </div>
     }
 
-    if(reviewsSWR.reviews.length === 0){
+    if(reviews.length === 0){
         return <Container>
                     <div className='px-8'>
                         <h1 className='font-bold text-xl font-sans'>カスタマーレビュー</h1>
                         <div className='flex items-center justify-between'>
                             <div>
                                 <div className='w-full flex justify-start items-end mt-3 mb-1'>
-                                    <div className='text-yellow-500 text-lg'>{numberToStar(productReviewInfoSWR.productReviewInfo?.score ?? 0)}</div>
+                                    <div className='text-yellow-500 text-lg'>{numberToStar(productReviewInfo?.score ?? 0)}</div>
                                     <div className='ml-3'>
                                         <span className='text-sm'>
-                                            星5つ中の{productReviewInfoSWR.productReviewInfo?.score}
+                                            星5つ中の{productReviewInfo?.score}
                                         </span>
                                     </div>
                                 </div>
                                 <p className='text-xs mb-5 text-gray-500'>
-                                    合計{productReviewInfoSWR.productReviewInfo?.numberOfTotalReview ?? 0}件の評価
+                                    合計{productReviewInfo?.numberOfTotalReview ?? 0}件の評価
                                 </p>
                             </div>
                             <Link
@@ -108,15 +115,15 @@ const ProductReviews = () => {
                 <div className='flex items-center justify-between'>
                     <div>
                         <div className='w-full flex justify-start items-end mt-3 mb-1'>
-                            <div className='text-yellow-500 text-lg'>{numberToStar(productReviewInfoSWR.productReviewInfo?.score ?? 0)}</div>
+                            <div className='text-yellow-500 text-lg'>{numberToStar(productReviewInfo?.score ?? 0)}</div>
                             <div className='ml-3'>
                                 <span className='text-sm'>
-                                    星5つ中の{productReviewInfoSWR.productReviewInfo?.score}
+                                    星5つ中の{productReviewInfo?.score}
                                 </span>
                             </div>
                         </div>
                         <p className='text-xs mb-5 text-gray-500'>
-                            合計{productReviewInfoSWR.productReviewInfo?.numberOfTotalReview ?? 0}件の評価
+                            合計{productReviewInfo?.numberOfTotalReview ?? 0}件の評価
                         </p>
                     </div>
                     <Link
@@ -132,7 +139,7 @@ const ProductReviews = () => {
                 </div>
                 <div className='space-y-5'>
                     {
-                        reviewsSWR.reviews.map((review: Review, index: number) => {
+                        reviews.map((review: Review, index: number) => {
                             return <ProductReviewCard key={index} review={review}/>;
                         })
                     }

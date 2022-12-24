@@ -1,6 +1,6 @@
 
 import { Check } from '@components/icon'
-import provinceToJP from '@lib/province-to-jp'
+import { provinceToJP } from '@lib/province-to-jp'
 import { MailingAddress } from '@shopify/shema'
 import React from 'react'
 

@@ -1,7 +1,7 @@
 
 import { HOSTING_URL } from "@shopify/const"
 
-export type ApiPath = {
+type ApiPath = {
     type: "CREATE_CUSTOMER" | "CREATE_CHECKOUT" | "GET_CHECKOUT" | "UPDATE_CHECKOUT"
     | "CHECKOUT_LINE_ITEMS_ADD" | "CHECKOUT_LINE_ITEMS_UPDATE" | "CHECKOUT_LINE_ITEMS_REMOVE"
     | "CUSTOMER_ACCESS_TOKEN_CREATE" | "GET_CUSTOMER" | "CHECKOUT_CUSTOMER_ASSOCIATE"
@@ -12,7 +12,7 @@ export type ApiPath = {
 }
 
 
-export const generateApiUrl = (apiPath: ApiPath) => {
+const generateApiUrl = (apiPath: ApiPath) => {
     switch(apiPath.type){
         case "CREATE_CUSTOMER": {
             return `${HOSTING_URL}/api/customer/create-customer`
@@ -94,3 +94,5 @@ export const generateApiUrl = (apiPath: ApiPath) => {
         }
     }
 }
+
+export default generateApiUrl

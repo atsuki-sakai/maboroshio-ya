@@ -1,5 +1,5 @@
 import { CustomerAccessTokenCreatePayload, CustomerAccessToken } from "@shopify/shema";
-import { generateApiUrl } from "@shopify/utils/generate-api-url";
+import { generateApiUrl } from "@shopify/utils";
 
 const createCustomerAccessToken = async(email: string, password: string): Promise<CustomerAccessToken> => {
 

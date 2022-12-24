@@ -1,6 +1,6 @@
 
-import { firebaseApiUrl } from "@firebase/firesbase-api-url"
-import type { Review } from "@shopify/types/review"
+import { firebaseApiUrl } from "@firebase/utils"
+import type { Review } from "@firebase/types/review"
 
 const getProductReviews = async(productId: string, limit?: number): Promise<Review[]> => {
 

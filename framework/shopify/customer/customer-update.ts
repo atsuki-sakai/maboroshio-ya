@@ -1,5 +1,5 @@
 import { Customer, CustomerAccessToken, CustomerUpdatePayload, Maybe } from "@shopify/shema"
-import { generateApiUrl } from "@shopify/utils/generate-api-url"
+import { generateApiUrl } from "@shopify/utils"
 
 type ReturnType = {
     customer: Maybe<Customer> | undefined

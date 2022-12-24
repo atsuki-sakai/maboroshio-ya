@@ -1,7 +1,7 @@
 
 import { Container, Field } from '@components/ui'
-import {  postProductReview } from '@firebase/firestore/review'
-import { PostReviewInput } from '@shopify/types/review'
+import { postProductReview } from '@firebase/firestore/review'
+import { PostReviewInput } from '@firebase/types/review'
 import { useCustomerState  } from "@components/context"
 import React, { useEffect, useState } from 'react'
 import idConverter from '@lib/id-converter'
@@ -10,42 +10,48 @@ import Image from "next/image"
 import { motion } from 'framer-motion'
 import { LoadCircle } from '@components/icon'
 import { truncate } from '@lib/truncate'
-import { generateApiUrl } from '@shopify/utils/generate-api-url'
+import { generateApiUrl } from '@shopify/utils'
 import useSWR from 'swr'
+import { Product as ShopifyProduct } from '@shopify/shema'
 
 const placeholderImage = "/images/product-image-placeholder.svg"
 
 const PostReview = () => {
 
-    const { loggedCustomer } = useCustomerState()
     const router = useRouter()
+    const { loggedCustomer } = useCustomerState()
     const productSlug: string = router.query.slug as any
 
+    const productBySlugApiUrl = generateApiUrl({type: "GET_PRODUCT"})
 
-    const getProductBySlugApiUrl = generateApiUrl({type: "GET_PRODUCT"})
-
-    const productFetcher = (url: string, slug: string) => fetch(url, {
-        method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify({
-            slug: slug
+    const productFetcher = async(url: string, slug: string): Promise<ShopifyProduct> => {
+        const response = await fetch(url, {
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify({
+                slug: slug
+            })
+        }).then((res) =>{
+            return res.json()
+        }).catch((e) => {
+            throw Error(e.message)
         })
-    }).then((res) => res.json()).catch((e) => { throw Error(e.message) })
+        return response.data.productByHandle
+    }
 
-    const { data: productSWR, error } = useSWR([getProductBySlugApiUrl, productSlug], router.isReady ? productFetcher: null)
+    const { data: product, error } = useSWR([productBySlugApiUrl, productSlug], router.isReady ? productFetcher: null)
 
     const [ isLoading, setIsLoading ] = useState(false)
-
     const [ postReviewInfo, setPostReviewInfo ] = useState<PostReviewInput>({
         reviewerCustomerId: idConverter({type: "CUSTOMER"},loggedCustomer?.id ?? ""),
-        productId: idConverter({type: "PRODUCT"},productSWR?.data.productByHandle.id ?? ""),
-        productName: productSWR?.data.productByHandle.name ?? "",
+        productId: idConverter({type: "PRODUCT"},product?.id ?? ""),
+        productName: product?.title ?? "",
         review: {
             customerId: idConverter({type: "CUSTOMER"},loggedCustomer?.id ?? ""),
             customerName: loggedCustomer?.displayName ?? "",
             isPublic: false,
-            productId: idConverter({type: "PRODUCT"}, productSWR?.data.productByHandle.id),
-            productName: productSWR?.data.productByHandle.name ?? "",
+            productId: idConverter({type: "PRODUCT"}, product?.id ?? ""),
+            productName: product?.title ?? "",
             star: 3,
             title: "",
             comment: "",
@@ -75,7 +81,7 @@ const PostReview = () => {
         return <Container>useSWR is fetch error: {error.message}</Container>
     }
 
-    if(!productSWR){
+    if(!product){
         return  <div className='h-screen w-screen'>
                     <div className='flex justify-center items-center w-full h-full'>
                         <p className='text-center text-gray-500'>読み込み中...</p>
@@ -89,8 +95,8 @@ const PostReview = () => {
                 <h1 className='mb-6 font-bold text-lg'>商品レビュー投稿</h1>
                 <div className='flex items-center justify-start'>
                     <Image
-                        alt={productSWR.data.productByHandle.name ?? "Product Image"}
-                        src={productSWR.data.productByHandle.images.edges[0].node.url ?? placeholderImage}
+                        alt={product.title ?? "Product Image"}
+                        src={product.images.edges[0].node.url ?? placeholderImage}
                         height={50}
                         width={50}
                         quality="85"
@@ -98,7 +104,7 @@ const PostReview = () => {
                         className='rounded-sm transform duration-1000 ease-in-out hover:scale-105'
                     />
                     <div className='pl-3'>
-                        <h3 className='text-base'>{truncate(productSWR.data.productByHandle.title, 14)}</h3>
+                        <h3 className='text-base'>{truncate(product.title, 14)}</h3>
                     </div>
                 </div>
                 <div className='text-xs pt-5 pb-4'>

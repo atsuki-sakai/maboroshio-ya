@@ -13,7 +13,7 @@ import { LoadCircle } from '@components/icon'
 import { getProductReviewInfo } from '@firebase/firestore/review'
 import type { Product } from "@shopify/types/product"
 import idConverter from '@lib/id-converter'
-import { ProductReviewInfo } from '@shopify/types/review'
+import { ProductReviewInfo } from '@firebase/types/review'
 import useSWR from 'swr'
 
 const numFeatureProducts = 20

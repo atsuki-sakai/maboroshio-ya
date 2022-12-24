@@ -191,7 +191,7 @@ const ProvinceData = [
     }
 ]
 
-const provinceToJP = (province: string): string => {
+export const provinceToJP = (province: string): string => {
 
   const matchProvince = ProvinceData.map((_province) => {
     if(_province.en === province) {
@@ -201,5 +201,3 @@ const provinceToJP = (province: string): string => {
 
   return matchProvince ?? province
 }
-
-export default provinceToJP

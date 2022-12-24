@@ -10,8 +10,8 @@ import { checkoutShippingAddressUpdate, getCheckoutId } from '@shopify/cart'
 import { LoadCircle } from '@components/icon'
 import Cookies from 'js-cookie'
 import { motion } from 'framer-motion'
-import provinceToJP from '@lib/province-to-jp'
-import { OrderCard } from '@components/account'
+import { provinceToJP } from '@lib/province-to-jp'
+import { OrderCard } from '@components/my-page'
 import getOrdersPagenation from '@shopify/customer/get-orders-pagination'
 
 const MyPage = () => {

@@ -2,10 +2,10 @@
 import React, { useEffect, useState } from 'react'
 import { AlertDialog, Container, Field } from '@components/ui'
 import { useCustomerState } from "@components/context"
-import { ShippingAddressCard } from '@components/account'
+import { ShippingAddressCard } from '@components/my-page'
 import { checkoutShippingAddressUpdate } from "@shopify/cart"
 import { customerDefaultAddressUpdate, getCustomerAccessToken, customerAddressDelete, customerAddressUpdate, customerAddressCreate, getCustomer } from "@shopify/customer"
-import provinceToJP from '@lib/province-to-jp'
+import { provinceToJP } from '@lib/province-to-jp'
 import { MailingAddress } from '@shopify/shema'
 import { getCheckoutId, getCheckout } from '@shopify/cart'
 

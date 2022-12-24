@@ -1,7 +1,7 @@
 
 
-import { firebaseApiUrl } from '@firebase/firesbase-api-url';
-import { ProductReviewInfo } from '@shopify/types/review';
+import { firebaseApiUrl } from '@firebase/utils';
+import { ProductReviewInfo } from '@firebase/types/review';
 
 const getProductReviewInfo = async(productId: string): Promise<ProductReviewInfo | null> => {
     const getProuctReviewInfoApiUrl = firebaseApiUrl({type:"GET_PRODUCT_REVIEW_INFO"})
