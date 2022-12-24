@@ -4,7 +4,7 @@ type SplitType = {
 }
 
 const idConverter = ({ type }: SplitType, id: string) => {
-    if(id === "") return id;
+    if(id === "" || id === undefined) return "";
     return id.split(type === "PRODUCT" ? "Product/" : "Customer/")[1]
 }
 

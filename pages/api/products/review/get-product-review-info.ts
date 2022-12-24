@@ -27,7 +27,7 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
-        res.end(JSON.stringify({ data: { productReviewInfo:  productReviewInfo }}))
+        res.end(JSON.stringify({ productReviewInfo: productReviewInfo }))
 
 
     }catch(error: any){

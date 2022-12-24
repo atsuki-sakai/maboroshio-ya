@@ -1,38 +1,51 @@
 
 import { Container, Field } from '@components/ui'
 import {  postProductReview } from '@firebase/firestore/review'
-import { getProduct } from '@shopify/products'
-import getProductsPaths from '@shopify/products/get-all-product-paths'
 import { PostReviewInput } from '@shopify/types/review'
 import { useCustomerState  } from "@components/context"
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import idConverter from '@lib/id-converter'
 import { useRouter } from 'next/router'
 import Image from "next/image"
 import { motion } from 'framer-motion'
 import { LoadCircle } from '@components/icon'
 import { truncate } from '@lib/truncate'
+import { generateApiUrl } from '@shopify/utils/generate-api-url'
+import useSWR from 'swr'
 
 const placeholderImage = "/images/product-image-placeholder.svg"
 
-const PostReview = ({ product }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const PostReview = () => {
 
     const { loggedCustomer } = useCustomerState()
     const router = useRouter()
-    const [ isLoading, setIsLoading ] = useState(false)
 
+    const productId: string = router.query.slug as any
+
+    const getProductBySlugApiUrl = generateApiUrl({type: "GET_PRODUCT"})
+
+    const productFetcher = (url: string, slug: string) => fetch(url, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify({
+            slug: slug
+        })
+    }).then((res) => res.json()).catch((e) => { throw Error(e.message) })
+
+    const { data: productSWR, error } = useSWR([getProductBySlugApiUrl, productId], router.isReady ? productFetcher: null)
+
+    const [ isLoading, setIsLoading ] = useState(false)
 
     const [ postReviewInfo, setPostReviewInfo ] = useState<PostReviewInput>({
         reviewerCustomerId: idConverter({type: "CUSTOMER"},loggedCustomer?.id ?? ""),
-        productId: idConverter({type: "PRODUCT"},product.id),
-        productName: product.name,
+        productId: idConverter({type: "PRODUCT"},productSWR?.data.productByHandle.id ?? ""),
+        productName: productSWR?.data.productByHandle.name ?? "",
         review: {
             customerId: idConverter({type: "CUSTOMER"},loggedCustomer?.id ?? ""),
             customerName: loggedCustomer?.displayName ?? "",
             isPublic: false,
-            productId: idConverter({type: "PRODUCT"}, product.id),
-            productName: product.name,
+            productId: idConverter({type: "PRODUCT"}, productSWR?.data.productByHandle.id),
+            productName: productSWR?.data.productByHandle.name ?? "",
             star: 3,
             title: "",
             comment: "",
@@ -55,14 +68,29 @@ const PostReview = ({ product }: InferGetStaticPropsType<typeof getStaticProps>)
         }
     };
 
+    useEffect(() => {
+    }, [router.isReady])
+
+    if(error){
+        return <Container>useSWR is fetch error: {error.message}</Container>
+    }
+
+    if(!productSWR){
+        return  <div className='h-screen w-screen'>
+                    <div className='flex justify-center items-center w-full h-full'>
+                        <p className='text-center text-gray-500'>読み込み中...</p>
+                    </div>
+                </div>
+    }
+
     return (
         <Container>
             <div className='px-8 space-y-2'>
                 <h1 className='mb-6 font-bold text-lg'>商品レビュー投稿</h1>
                 <div className='flex items-center justify-start'>
                     <Image
-                        alt={product.name ?? "Product Image"}
-                        src={product.images[0].url ?? placeholderImage}
+                        alt={productSWR.data.productByHandle.name ?? "Product Image"}
+                        src={productSWR.data.productByHandle.images.edges[0].node.url ?? placeholderImage}
                         height={50}
                         width={50}
                         quality="85"
@@ -70,7 +98,7 @@ const PostReview = ({ product }: InferGetStaticPropsType<typeof getStaticProps>)
                         className='rounded-sm transform duration-1000 ease-in-out hover:scale-105'
                     />
                     <div className='pl-3'>
-                        <h3 className='text-lg'>{truncate(product.name, 12)}</h3>
+                        <h3 className='text-lg'>{truncate(productSWR.data.productByHandle.title, 12)}</h3>
                     </div>
                 </div>
                 <div className='text-xs pt-5 pb-4'>
@@ -105,26 +133,6 @@ const PostReview = ({ product }: InferGetStaticPropsType<typeof getStaticProps>)
             </div>
         </Container>
     )
-}
-
-export const getStaticPaths: GetStaticPaths = async() => {
-    const paths = await getProductsPaths()
-    return {
-        paths: paths.map((path) => `/products/post-review/${path}`),
-        fallback: false
-    }
-}
-
-export const getStaticProps: GetStaticProps = async(context) => {
-
-    const slug = context.params?.slug as string
-    const product = await getProduct(slug)
-
-    return {
-        props: {
-            product
-        }
-    }
 }
 
 export default PostReview
