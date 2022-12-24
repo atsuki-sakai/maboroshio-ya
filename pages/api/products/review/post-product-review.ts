@@ -32,8 +32,6 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
             const numberOfTotalReviewField = await productInfoCollection.where('productId', "==", reviewInfo.productId).select('numberOfTotalReview').get()
 
             productInfoCollection.doc(reviewInfo.productId).update({
-                // productId: reviewInfo.productId,
-                // productName: reviewInfo.productName,
                 totalStar: FieldValue.increment(reviewInfo.review.star),
                 score: ((totalStarField.docs[0].data().totalStar + reviewInfo.review.star) / (numberOfTotalReviewField.docs[0].data().numberOfTotalReview + 1)).toFixed(1),
                 numberOfTotalReview: FieldValue.increment(1),

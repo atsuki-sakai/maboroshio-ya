@@ -217,7 +217,11 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                                         </div>
                             }
                             </div>
-                            <Link href={`/products/reviews${product.id.split('/Product')[1]}`} passHref>
+                            <Link
+                                as={`/products/reviews${product.id.split('/Product')[1]}`}
+                                href={{ pathname:`/products/reviews/[slug]` , query: { handle: product.slug} }}
+                                passHref
+                            >
                                 <a>
                                 <div className='mt-4 px-3 py-1 border rounded-md shadow-sm flex items-center justify-between'>
                                     <p className='text-sm font-sans'>すべてのレビューを見る</p>

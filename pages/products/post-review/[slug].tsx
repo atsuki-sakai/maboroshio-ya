@@ -12,6 +12,7 @@ import { LoadCircle } from '@components/icon'
 import { truncate } from '@lib/truncate'
 import { generateApiUrl } from '@shopify/utils/generate-api-url'
 import useSWR from 'swr'
+import ProductSlug from '../[slug]'
 
 const placeholderImage = "/images/product-image-placeholder.svg"
 
@@ -19,8 +20,8 @@ const PostReview = () => {
 
     const { loggedCustomer } = useCustomerState()
     const router = useRouter()
+    const productSlug: string = router.query.slug as any
 
-    const productId: string = router.query.slug as any
 
     const getProductBySlugApiUrl = generateApiUrl({type: "GET_PRODUCT"})
 
@@ -32,7 +33,7 @@ const PostReview = () => {
         })
     }).then((res) => res.json()).catch((e) => { throw Error(e.message) })
 
-    const { data: productSWR, error } = useSWR([getProductBySlugApiUrl, productId], router.isReady ? productFetcher: null)
+    const { data: productSWR, error } = useSWR([getProductBySlugApiUrl, productSlug], router.isReady ? productFetcher: null)
 
     const [ isLoading, setIsLoading ] = useState(false)
 

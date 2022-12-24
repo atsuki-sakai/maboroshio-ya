@@ -4,6 +4,7 @@ import { Review } from '@shopify/types/review'
 import React, { useEffect } from 'react'
 import { ProductReviewCard } from '@components/product'
 import useSWR from 'swr'
+import Link from "next/link"
 import { firebaseApiUrl } from '@firebase/firesbase-api-url'
 import { useRouter } from 'next/router'
 import { numberToStar } from '@lib/number-to-star'
@@ -11,6 +12,7 @@ import { numberToStar } from '@lib/number-to-star'
 const ProductReviews = () => {
 
     const router = useRouter()
+    const productSlug = router.query?.handle
     const productId = router.asPath.split('reviews/')[1]
 
     const getProuctReviewsApiUrl = firebaseApiUrl({type:"GET_PRODUCT_REVIEWS"})
@@ -81,9 +83,16 @@ const ProductReviews = () => {
                                     合計{productReviewInfoSWR.productReviewInfo?.numberOfTotalReview ?? 0}件の評価
                                 </p>
                             </div>
-                            <div className='flex justify-center items-center'>
-                                <p className='text-xs text-blue-500 underline'>レビューを書く</p>
-                            </div>
+                            <Link
+                                href={`/products/post-review/${productSlug}`}
+                                passHref
+                            >
+                                <a>
+                                    <div className='flex justify-center items-center'>
+                                        <p className='text-xs text-blue-500 underline'>レビューを書く</p>
+                                    </div>
+                                </a>
+                            </Link>
                         </div>
                         <div className='flex justify-center items-center w-full h-[420px]'>
                             <p className='text-center text-gray-500'>レビューはまだありません...</p>
@@ -110,9 +119,16 @@ const ProductReviews = () => {
                             合計{productReviewInfoSWR.productReviewInfo?.numberOfTotalReview ?? 0}件の評価
                         </p>
                     </div>
-                    <div className='flex justify-center items-center'>
-                        <p className='text-xs text-blue-500 underline'>レビューを書く</p>
-                    </div>
+                    <Link
+                        href={`/products/post-review/${productSlug}`}
+                        passHref
+                    >
+                        <a>
+                            <div className='flex justify-center items-center'>
+                                <p className='text-xs text-blue-500 underline'>レビューを書く</p>
+                            </div>
+                        </a>
+                    </Link>
                 </div>
                 <div className='space-y-5'>
                     {

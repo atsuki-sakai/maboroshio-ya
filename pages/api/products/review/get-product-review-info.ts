@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { cert } from 'firebase-admin/app';
-import { FieldValue, getFirestore } from 'firebase-admin/firestore';
+import { getFirestore } from 'firebase-admin/firestore';
 import serviceAccount  from '../../../../firebase-serviceAccount.json'; // 秘密鍵を取得
-import admin, { firestore } from 'firebase-admin';
-import { PRODUCT_INFO_COLLECTION, REVIEW_COLLLECTION  } from "@firebase/const"
+import admin from 'firebase-admin';
+import { PRODUCT_INFO_COLLECTION  } from "@firebase/const"
 
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
 
