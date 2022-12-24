@@ -1,16 +1,13 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Container } from '@components/ui'
-import { Order } from '@shopify/shema'
 import { financialStatusToJp }  from "@lib/finacial-status-to-jp"
 import Image from 'next/image'
 import provinceToJP from '@lib/province-to-jp'
 import { fulfillmentToJp } from '@lib/fulfillment-status-to-jp'
 import Link from 'next/link'
-import { getOrder } from '@shopify/customer'
 import useSWR from 'swr'
 import { generateApiUrl } from '@shopify/utils/generate-api-url'
-import { getCheckoutId } from '@shopify/cart'
 import { useRouter } from 'next/router'
 
 const placeholderImage = "/images/product-image-placeholder.svg"
@@ -22,6 +19,7 @@ const OrderId = () => {
 
     const encodeOrderId:string = router.query.id as any
     const getOrderApiUrl = generateApiUrl({type: "GET_ORDER"})
+
     const orderFetcher = (url: string, orderId: string): Promise<any> => fetch(url, {
         method: "POST",
         mode: "no-cors",
@@ -72,7 +70,7 @@ const OrderId = () => {
                     <p className='text-xs text-gray-500'>注文日 <span className=''>{orderSWR.data.node.processedAt.split('T')[0]}</span></p>
                 </div>
                 <div className='text-sm shadow-sm pt-3'>
-                    <p className='text-sm font-normal text-gray-500'>合計注文数 <span className='text-2xl text-black'>{orderSWR.data.node.lineItems.edges.map((edge: any) => edge.node.quantity).reduce((sum, value) => sum += value)}</span> 点</p>
+                    <p className='text-sm font-normal text-gray-500'>合計注文数 <span className='text-2xl text-black'>{orderSWR.data.node.lineItems.edges.map((edge: any) => edge.node.quantity).reduce((sum: any, value: any) => sum += value)}</span> 点</p>
                     <div className='grid grid-cols-4 gap-2 mt-5 bg-blue-100 px-3 py-1 text-blue-500 rounded-md'>
                         <div>
                             <p>小計</p>
@@ -116,7 +114,7 @@ const OrderId = () => {
                 </div>
                 <div className='py-3 '>
                     {
-                        orderSWR.data.node.lineItems.edges.map(({node: lineItem}, index) => {
+                        orderSWR.data.node.lineItems.edges.map(({node: lineItem}: any, index: number) => {
                             return  <div key={index} className="border p-2 shadow-sm rounded-md mb-3">
                                         <Link href={`/products/${lineItem.variant?.product.handle}`} passHref>
                                             <a>
