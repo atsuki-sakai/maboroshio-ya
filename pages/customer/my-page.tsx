@@ -18,13 +18,14 @@ const MyPage = () => {
 
     const router = useRouter()
     const { loggedCustomer, updateCustomer } = useCustomerState()
-
     const [ isLoading, setIsLoading ] = useState(false)
     const [ isFetching, setIsFetching ] = useState(false)
     const [ errorText, setErrorText ] = useState("")
     const [ orders, setOrders ] = useState(loggedCustomer?.orders?.edges.map(({node: order}) => order))
     const [ ordersPagination, setOrdersPagination] = useState(loggedCustomer?.orders?.pageInfo)
     const [ defaultAddress, setDefaultAddress ] = useState(loggedCustomer?.defaultAddress)
+
+    const numberOfOrders = 4
 
     const logout = async () => {
         try{
@@ -46,7 +47,7 @@ const MyPage = () => {
 
         try{
             setIsFetching(true)
-            const newOrdersInfo = await getOrdersPagenation(6, getCustomerAccessToken()!, {type: "NEXT", cursor: ordersPagination?.endCursor!})
+            const newOrdersInfo = await getOrdersPagenation(numberOfOrders, getCustomerAccessToken()!, {type: "NEXT", cursor: ordersPagination?.endCursor!})
             setOrders(orders?.concat(newOrdersInfo.edges.map((order: any) => order.node)))
             setOrdersPagination(newOrdersInfo.pageInfo)
         }catch(e: any){
@@ -69,11 +70,11 @@ const MyPage = () => {
                 <div className='flex items-end justify-between pt-6 pb-4'>
                     <h3 className='font-bold'>お客様の注文履歴</h3>
                     <div>
-                        <button className="px-3 py-1 textp-center bg-blue-100 rounded-md" onClick={logout} disabled={isLoading}>
+                        <button className="px-3 py-1 textp-center bg-blue-500 shadow-md rounded-md" onClick={logout} disabled={isLoading}>
                             <div className='flex items-center text-center w-full justify-between'>
-                                <p className='text-blue-500 text-sm font-bold'>ログアウト</p>
+                                <p className='text-white text-sm'>ログアウト</p>
                                 <motion.div className="ml-1 mr-1 -translate-y-1" initial={{ opacity:0, height:6, width:0 }} animate={{ opacity: isLoading ? 1: 0, height:12, width: isLoading ? 12: 0 }}>
-                                <LoadCircle className='text-blue-500 h-5 w-5 animate-spin'/>
+                                <LoadCircle className='text-white h-5 w-5 animate-spin'/>
                                 </motion.div>
                             </div>
                         </button>
@@ -94,9 +95,9 @@ const MyPage = () => {
                     }
                     {
                         ordersPagination?.hasNextPage ? <div className='mt-8'>
-                                                            <button className="px-3 w-full py-1 textp-center bg-green-500 rounded-md" onClick={fetchMoreOrders} disabled={isFetching}>
+                                                            <button className="px-3 w-full py-1 textp-center bg-green-500 rounded-md shadow-md" onClick={fetchMoreOrders} disabled={isFetching}>
                                                                 <div className='flex items-center justify-center'>
-                                                                    <p className='text-white text-sm text-center w-fit font-bold'>さらに注文を表示</p>
+                                                                    <p className='text-white text-sm text-center w-fit'>さらに注文を表示</p>
                                                                     <motion.div className="ml-1 mr-1 -translate-y-1" initial={{ opacity:0, height:6, width:0 }} animate={{ opacity: isFetching ? 1: 0, height:12, width: isFetching ? 12: 0 }}>
                                                                         <LoadCircle className='text-white h-5 w-5 animate-spin'/>
                                                                     </motion.div>
@@ -105,11 +106,11 @@ const MyPage = () => {
                                                         </div> : <></>
                     }
                 </div>
-                <div className="flex items-start justiry-between py-12">
+                <div className="flex items-between justiry-between py-12">
                     <div className='w-full'>
-                        <p className='font-bold mb-3'>配送情報</p>
+                        <p className='font-bold mb-2'>配送情報</p>
                         {
-                            defaultAddress ? <div className='text-gray-500 text-sm'>
+                            defaultAddress ? <div className='text-sm'>
                                                 <div className='h-fit'>
                                                     <p>{defaultAddress?.lastName}{defaultAddress?.firstName}</p>
                                                     <p>{defaultAddress?.company}</p>
@@ -122,8 +123,8 @@ const MyPage = () => {
                                                 <div>
                                                     <Link href={"/customer/address-update"}>
                                                         <a>
-                                                            <div className='bg-green-100 w-fit px-3 py-1 rounded-md mt-3'>
-                                                                <p className='text-xs text-green-500'>配送情報を編集する</p>
+                                                            <div className='bg-blue-500 w-fit px-3 py-1 rounded-md mt-3'>
+                                                                <p className='text-xs text-white'>配送情報を編集する</p>
                                                             </div>
                                                         </a>
                                                     </Link>
@@ -134,8 +135,8 @@ const MyPage = () => {
                                                 <div>
                                                     <Link href={"/customer/address-update"}>
                                                         <a>
-                                                            <div className='bg-green-100 w-fit px-3 py-1 rounded-md mt-3'>
-                                                                <p className='text-xs text-green-500'>配送情報を作成</p>
+                                                            <div className='bg-blue-500 w-fit px-3 py-1 rounded-md mt-3'>
+                                                                <p className='text-xs text-white'>配送情報を作成</p>
                                                             </div>
                                                         </a>
                                                     </Link>
@@ -143,9 +144,9 @@ const MyPage = () => {
                                             </div>
                         }
                     </div>
-                    <div className='w-full'>
+                    <div className='w-full pl-2'>
                         <p className="font-bold mb-3">アカウント情報</p>
-                        <div className='text-xs font-gray-500 space-y-3'>
+                        <div className='text-sm font-gray-500 space-y-2'>
                             <p>{loggedCustomer?.lastName}{loggedCustomer?.firstName}</p>
                             <p>{loggedCustomer?.email}</p>
                             <p>メルマガ{loggedCustomer?.acceptsMarketing ? "購読中" : "未購読"}</p>
@@ -153,8 +154,8 @@ const MyPage = () => {
                         <div>
                             <Link href={"/customer/customer-update"}>
                                 <a>
-                                    <div className='bg-green-100 w-fit px-3 py-1 rounded-md mt-3'>
-                                        <p className='text-xs text-green-500'>アカウントを編集する</p>
+                                    <div className='bg-blue-500 w-fit px-3 py-1 rounded-md mt-3'>
+                                        <p className='text-xs text-white'>アカウントを編集する</p>
                                     </div>
                                 </a>
                             </Link>

@@ -5,7 +5,7 @@ import Image from 'next/image'
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
 
-import { Container } from '@components/ui'
+import { Container, LoadingView } from '@components/ui'
 import { financialStatusToJp }  from "@lib/finacial-status-to-jp"
 import { provinceToJP } from '@lib/province-to-jp'
 import { fulfillmentToJp } from '@lib/fulfillment-status-to-jp'
@@ -55,15 +55,7 @@ const OrderId = () => {
     }
 
     if(!order){
-        return  <Container>
-                    <div className='flex items-center justify-center'>
-                        <div className='h-[520px] w-screen'>
-                            <div className='flex justify-center items-center h-full'>
-                                <p className='text-gray-500 text-xl'>読み込み中...</p>
-                            </div>
-                        </div>
-                    </div>
-                </Container>
+        return  <LoadingView/>
     }
 
     return (

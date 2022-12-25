@@ -10,7 +10,7 @@ type PaginationType = {
 const getOrdersPagination = (numOrders: number, accessToken: string, pagination?: PaginationType)  => `
     query {
         customer(customerAccessToken: "${accessToken}") {
-            orders(${pagination ?  pagination.type === "NEXT" ? `first: ${numOrders}, after: "${pagination.cursor}"`: `last: ${numOrders}, before: "${pagination.cursor}"` : `first: ${numOrders}`} ) {
+            orders(${pagination ?  pagination.type === "NEXT" ? `first: ${numOrders}, after: "${pagination.cursor}", sortKey: PROCESSED_AT, reverse: true`: `last: ${numOrders}, before: "${pagination.cursor}"` : `first: ${numOrders}, sortKey: PROCESSED_AT, reverse: true`} ) {
                 pageInfo {
                     hasNextPage
                     hasPreviousPage

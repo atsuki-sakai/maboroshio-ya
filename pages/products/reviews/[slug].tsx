@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import useSWR from 'swr'
 import Link from "next/link"
 
-import { Container } from '@components/ui'
+import { Container, LoadingView } from '@components/ui'
 import { ProductReviewInfo, Review } from '@firebase/types/review'
 import { ProductReviewCard } from '@components/product'
 import { firebaseApiUrl } from '@firebase/utils'
@@ -65,11 +65,7 @@ const ProductReviews = () => {
     }
 
     if(!reviews || !productReviewInfo){
-        return  <div className='h-screen w-screen'>
-                    <div className='flex justify-center items-center w-full h-full'>
-                        <p className='text-center text-gray-500'>読み込み中...</p>
-                    </div>
-                </div>
+        return  <LoadingView/>
     }
 
     if(reviews.length === 0){

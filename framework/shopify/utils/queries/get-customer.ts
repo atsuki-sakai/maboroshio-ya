@@ -21,7 +21,7 @@ const getCustomer = `
                     }
                 }
             }
-            orders(first: 4) {
+            orders(first: 4, sortKey: PROCESSED_AT, reverse: true) {
                 pageInfo {
                     hasNextPage
                     hasPreviousPage

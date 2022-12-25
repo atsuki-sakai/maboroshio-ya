@@ -69,7 +69,7 @@ const OrderCard = ({order}: Props) => {
     const firstItem = order.lineItems.edges[0].node.variant
 
     return (
-        <div className='border rounded-md'>
+        <div className='border rounded-md shadow-sm'>
             <Link
                 href={`/customer/orders/${encodeURIComponent(order.id)}`}
                 passHref
@@ -79,11 +79,12 @@ const OrderCard = ({order}: Props) => {
                         <Image
                             src={firstItem?.image?.url ?? placeholderImage}
                             width={firstItem?.image?.width ?? "320"}
-                            height={firstItem?.image?.height ?? "180"}
+                            height={firstItem?.image?.height ?? "320"}
                             alt={firstItem?.image?.altText ?? "Product Image"}
                         />
-                        <div className='p-1'>
-                            <p className='text-xs text-gray-500 mb-1'>注文番号 <span className='font-bold'>{order.orderNumber}</span></p>
+                        <div className='px-1'>
+                            <p className='text-xs text-gray-500'># {order.orderNumber}</p>
+                            <p className='text-xs mb-2'>注文日 <span className=''>{order.processedAt.split("T")[0]}</span></p>
                             <div className='flex items-center justify-between'>
                                 <div className='border border-green-500 rounded-full w-fit px-1 py-0.5'>
                                     <p className='text-xs scale-90 text-green-500'>{fulfillmentToJp(order.fulfillmentStatus)}</p>
@@ -92,7 +93,7 @@ const OrderCard = ({order}: Props) => {
                                     <p className='text-xs scale-90 text-blue-500'>{financialStatus(order.financialStatus!)}</p>
                                 </div>
                             </div>
-                            <p className="text-base mt-1 w-full">
+                            <p className="text-base mt-1 w-full text-end">
                                 ¥ { Math.floor(order.totalPrice.amount) }
                             </p>
                         </div>

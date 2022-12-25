@@ -11,9 +11,9 @@ interface Props {
 
 const ShippingAddressCard = ({address, isDefault = false}: Props) => {
     return (
-        <div className="text-xs text-gray-500 p-3">
+        <div className="text-xs text-gray-500 rounded-sm p-3">
             {
-                isDefault ? <div className='w-full px-2 py-0.5 flex items-center justify-center mb-1 text-green-500 bg-green-100'> <Check className='h-5 w-5'/>選択中</div>: <></>
+                isDefault ? <div className='w-full px-2 py-0.5 flex items-center justify-center mb-2 text-green-500 rounded-md bg-green-100'> <Check className='h-5 w-5'/>選択中</div>: <></>
             }
             <p className="text-black text-sm">{address.lastName}{address.firstName}</p>
             <p>{address.company}</p>

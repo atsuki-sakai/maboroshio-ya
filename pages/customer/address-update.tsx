@@ -133,20 +133,20 @@ const AddressUpdate = () => {
           errorMessage ? <AlertDialog title='ERROR' message={errorMessage} onClose={() => setErrorMessage("")}/>: <></>
         }
         <div className='flex items-center justify-between'>
-          <h2 className="font-bold">配送情報を編集する</h2>
-          <div className='px-3 py-1 rounded-md bg-blue-100' onClick={showAddressCreateView}>
-            <p className="text-blue-500 text-sm">新規住所を作成</p>
+          <h2 className="font-bold text-lg">配送情報を編集</h2>
+          <div className='px-3 py-1 rounded-md bg-blue-500 shadow-md' onClick={showAddressCreateView}>
+            <p className="text-white text-sm">新規住所を作成</p>
           </div>
         </div>
         <div className='grid grid-cols-2 gap-3 pt-8 pb-12'>
           {
-              addresses?.length !== 0 ? addresses?.map((_address) => <div key={_address.id} className="border shadow-sm pb-3 flex flex-col justify-between">
+              addresses?.length !== 0 ? addresses?.map((_address) => <div key={_address.id} className="border shadow-sm rounded-md pb-3 flex flex-col justify-between">
                                                                       <ShippingAddressCard key={_address.id} isDefault={_address.id === defaultAddress?.id} address={_address}/>
                                                                       <div className='flex items-center justify-between px-3 text-xs'>
-                                                                        <div className='bg-gray-700 px-3 py-1' onClick={() => showEditView(_address)}>
+                                                                        <div className='bg-gray-700 rounded-md px-3 py-1' onClick={() => showEditView(_address)}>
                                                                           <p className='text-white'>編集する</p>
                                                                         </div>
-                                                                        <div className='bg-gray-700 px-3 py-1' onClick={() => deleteAddress(_address)}>
+                                                                        <div className='bg-red-500 rounded-md px-3 py-1' onClick={() => deleteAddress(_address)}>
                                                                           <p className='text-white'>削除</p>
                                                                         </div>
                                                                       </div>

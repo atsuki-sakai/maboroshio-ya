@@ -1,5 +1,5 @@
 
-import { Container, Field } from '@components/ui'
+import { Container, Field, LoadingView } from '@components/ui'
 import { postProductReview } from '@firebase/firestore/review'
 import { PostReviewInput } from '@firebase/types/review'
 import { useCustomerState  } from "@components/context"
@@ -82,11 +82,7 @@ const PostReview = () => {
     }
 
     if(!product){
-        return  <div className='h-screen w-screen'>
-                    <div className='flex justify-center items-center w-full h-full'>
-                        <p className='text-center text-gray-500'>読み込み中...</p>
-                    </div>
-                </div>
+        return <LoadingView/>
     }
 
     return (
