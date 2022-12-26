@@ -1,21 +1,44 @@
 
 import React, { useEffect } from 'react'
 import Link from 'next/link';
-import { useUI } from '@components/context'
+import { useCustomerState, useUI } from '@components/context'
 import { motion } from 'framer-motion';
 import style from "./Drawer.module.css"
-import { Close } from "@components/icon"
 import LeftArrow from '@components/icon/LeftArrow';
 import Search from '@components/icon/Search';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
+import { getAllCollections } from '@shopify/products';
+import useSWR from 'swr';
+import { generateApiUrl } from '@shopify/utils';
+import { Collection } from "@shopify/shema"
 
 
 const Drawer = () => {
-
     const { isDrawerOpen, onDrawerClose } = useUI();
-
+    const { loggedCustomer } = useCustomerState()
     const handle = (e: any) => {
         e.preventDefault();
     }
+
+    const getAllCollectionsApiUrl = generateApiUrl({type: "GET_ALL_COLLECTIONS"})
+
+    const collectionsFeacher = async(url: string): Promise<Collection[]> => {
+        const response = await fetch(url, {
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify({
+                limit: 6
+            })
+        }).then((res) => {
+            return res.json()
+        }).catch((e) => {
+            throw Error(e.message)
+        })
+        return response.data.collections.edges.map((edge: any) => edge.node)
+    }
+
+    const { data: collections, error } = useSWR(getAllCollectionsApiUrl, collectionsFeacher)
+
     useEffect(() => {
         if(isDrawerOpen){
             document.addEventListener('touchmove', handle, { passive: false })
@@ -57,9 +80,15 @@ const Drawer = () => {
                                     </button>
                                 </div>
                                 <div className='h-full w-full space-y-5 bg-gray-100 py-2 px-3'>
-                                    <div>
-                                        マイページ
-                                    </div>
+                                    {
+                                        loggedCustomer && <div onClick={onDrawerClose}>
+                                                            <Link href={"/customer/my-page"} passHref>
+                                                                <a>
+                                                                    マイページ
+                                                                </a>
+                                                            </Link>
+                                                        </div>
+                                    }
                                     <div onClick={onDrawerClose}>
                                         <Link href={"/customer/login"} passHref>
                                             <a>
@@ -83,24 +112,15 @@ const Drawer = () => {
                                 <div>
                                     <p>商品カテゴリ</p>
                                     <div className='grid grid-cols-3 gap-2 mt-3 text-xs'>
-                                        <div>
-                                            <p>生鮮食品</p>
-                                        </div>
-                                        <div>
-                                            <p>加工食品</p>
-                                        </div>
-                                        <div>
-                                            <p>特産品</p>
-                                        </div>
-                                        <div>
-                                            <p>生鮮食品</p>
-                                        </div>
-                                        <div>
-                                            <p>加工食品</p>
-                                        </div>
-                                        <div>
-                                            <p>特産品</p>
-                                        </div>
+                                        {
+                                            collections && collections.map((collection, index) => {
+                                                return <div key={index} onClick={onDrawerClose}>
+                                                            <Link href={`/products/collection/${collection.handle}`} passHref>
+                                                                <a>{collection.title}</a>
+                                                            </Link>
+                                                        </div>
+                                            })
+                                        }
                                     </div>
                                 </div>
                                 <div>

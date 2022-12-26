@@ -8,7 +8,7 @@ type ApiPath = {
     | "CHECKOUT_CUSTOMER_DISASSOCIATE" | "CUSTOMER_ADDRESS_CREATE" | "CUSTOMER_DEFAULT_ADDRESS_UPDATE"
     | "CUSTOMER_ADDRESS_UPDATE" | "CUSTOMER_ADDRESS_DELETE" | "CHECKOUT_SHIPPING_ADDRESS_UPDATE" | "CHECKOUT_ATTRIBUTES_UPDATE"
     | "CUSTOMER_RECOVER" | "CUSTOMER_RESET_BY_URL" | "CUSTOMER_UPDATE" | "GET_ORDER" | "GET_PRODUCTS_PAGINATION" | "GET_ORDERS_PAGINATION"
-    | "GET_PRODUCTS_PATHS" | "GET_PRODUCT" | "GET_CUSTOMER_ALL_ORDERS_ID";
+    | "GET_PRODUCTS_PATHS" | "GET_PRODUCT" | "GET_CUSTOMER_ALL_ORDERS_ID" | "GET_ALL_COLLECTIONS" | "GET_COLLECTION_BY_HANDLE";
 }
 
 
@@ -88,6 +88,12 @@ const generateApiUrl = (apiPath: ApiPath) => {
         }
         case "GET_CUSTOMER_ALL_ORDERS_ID" : {
             return `${HOSTING_URL}/api/customer/get-customer-all-orders-id`
+        }
+        case "GET_ALL_COLLECTIONS" : {
+            return `${HOSTING_URL}/api/products/get-all-collections`
+        }
+        case "GET_COLLECTION_BY_HANDLE" : {
+            return `${HOSTING_URL}/api/products/get-collection-by-handle`
         }
         default : {
             throw Error('It is an APITYPE that does not exist...')

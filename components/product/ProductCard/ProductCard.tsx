@@ -10,14 +10,18 @@ import { checkoutLineItemsAdd, checkoutShippingAddressUpdate, createCheckout } f
 import { useCustomerState } from '@components/context'
 import { MailingAddress } from '@shopify/shema'
 import { checkoutCustomerAssociate, getCustomerAccessToken } from '@shopify/customer'
+
 interface Props {
     product: Product
     productReviewInfo: ProductReviewInfo | null
+    showBuyNow?: boolean
 }
 
 const placeholderImage = "/images/product-image-placeholder.svg"
 
-const ProductCard = ({product, productReviewInfo} : Props) => {
+const ProductCard = ({product, productReviewInfo, showBuyNow = false} : Props) => {
+
+    console.log("info: ", productReviewInfo)
 
     const { loggedCustomer } = useCustomerState()
     const [ isLoading, setIsLoading ] = useState(false)
@@ -78,16 +82,18 @@ const ProductCard = ({product, productReviewInfo} : Props) => {
                     <p className='text-end text-red-500 text-xs font-thin'><span className='text-lg font-medium'>¥ { Number(product.priceRange.minVariantPrice.amount) }</span> 税込</p>
                 </a>
             </Link>
-            <div className='mt-2'>
-                <button className={`transform duration-300 ease-linear ${isLoading ? "bg-gray-600": "bg-yellow-500"} w-fit mx-auto px-3 py-1 flex items-center justify-center rounded-full shadow-md overflow-hidden`} onClick={buyNow} disabled={isLoading}>
-                    <p className='text-xs text-white font-bold'>
-                        { isLoading ? "決済処理中": "今すぐ購入" }
-                    </p>
-                    {
-                        isLoading ? <div className='transition pl-2'><LoadCircle className='h-5 w-5 text-white animate-spin'></LoadCircle></div> : <Cart className='pl-2 h-6 w-6 text-white'/>
-                    }
-                </button>
-            </div>
+            {
+                showBuyNow ? <div className='mt-2'>
+                                <button className={`transform duration-300 ease-linear ${isLoading ? "bg-gray-600": "bg-yellow-500"} w-fit mx-auto px-3 py-1 flex items-center justify-center rounded-full shadow-full overflow-hidden`} onClick={buyNow} disabled={isLoading}>
+                                    <p className='text-xs text-white font-bold'>
+                                        { isLoading ? "決済処理中": "今すぐ購入" }
+                                    </p>
+                                    {
+                                        isLoading ? <div className='transition pl-2'><LoadCircle className='h-5 w-5 text-white animate-spin'></LoadCircle></div> : <Cart className='pl-2 h-6 w-6 text-white'/>
+                                    }
+                                </button>
+                            </div> : null
+            }
         </div>
     )
 }

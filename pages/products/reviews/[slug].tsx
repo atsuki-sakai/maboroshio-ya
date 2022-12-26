@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import useSWR from 'swr'
 import Link from "next/link"
 
-import { Container, LoadingView } from '@components/ui'
+import { Container, ErrorView, LoadingView } from '@components/ui'
 import { ProductReviewInfo, Review } from '@firebase/types/review'
 import { ProductReviewCard } from '@components/product'
 import { firebaseApiUrl } from '@firebase/utils'
@@ -58,10 +58,8 @@ const ProductReviews = () => {
     }, [router.isReady])
 
     if(reviewsError || productReviewInfoError){
-        if(productReviewInfoError){
-            return <Container>useSWR is fetch error: {productReviewInfoError.message}</Container>
-        }
-        return <Container>useSWR is fetch error: {reviewsError.message}</Container>
+        const errorMessage = reviewsError ? reviewsError.messge : productReviewInfoError.message
+        return <ErrorView message={errorMessage} />
     }
 
     if(!reviews || !productReviewInfo){

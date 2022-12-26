@@ -2,7 +2,7 @@
 
 import React, { useState} from 'react'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
-import { getProductsPagenation } from '@shopify/products'
+import { getAllCollections, getProductsPagenation } from '@shopify/products'
 import { PageInfo } from '@shopify/shema'
 import { MetaHead } from '@components/common'
 import { Container, Hero } from '@components/ui'
@@ -26,6 +26,7 @@ export const getStaticProps: GetStaticProps = async() =>  {
       return await getProductReviewInfo(idConverter({type: "PRODUCT"}, product.id))
     })
   )
+
 
   return {
     props: {
@@ -80,7 +81,7 @@ const Home = ({featureProductsInfo, productReviewInfos}: InferGetStaticPropsType
               {
                 featureProducts.map((product, index) => {
                   const normarizedProduct = normalizeProduct(product)
-                  return <ProductCard key={product.id} productReviewInfo={featureProductReviewInfos[index]} product={normarizedProduct} />
+                  return <ProductCard key={product.id} productReviewInfo={featureProductReviewInfos[index]} product={normarizedProduct} showBuyNow={true} />
                 })
               }
             </div>
