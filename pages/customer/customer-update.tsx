@@ -60,9 +60,9 @@ const CustomerUpdate = () => {
                     <Field id='lastName' label={"苗字"} type={"text"} autoComplete="family-name" placeHolder={"山田"} value={updateCredential.lastName} onChange={(e) => setUpdateCredential({...updateCredential, lastName: e.target.value})} />
                     <Field id="firstName" label="名前" type='text' autoComplete='given-name' placeHolder='太郎' value={updateCredential.firstName} onChange={(e) => setUpdateCredential({...updateCredential, firstName: e.target.value})} />
                     <Field id={"email"} label={"メールアドレス"} type={"email"} autoComplete={"email"} value={updateCredential.email} placeHolder={"株式会社 〇〇建設"} onChange={(e) => setUpdateCredential({...updateCredential, email: e.target.value})}/>
-                    <div className="flex items-center justify-center pt-2">
+                    <div className="flex items-center justify-center pt-3">
                         <input id='defaultAddress' type="checkbox" checked={updateCredential.acceptsMarketing} onChange={() => setUpdateCredential({...updateCredential, acceptsMarketing: !updateCredential.acceptsMarketing})} />
-                        <label className="ml-3 text-sm" htmlFor="defaultAddress">メルマガを購読する</label>
+                        <label className="ml-3 text-base font-sans " htmlFor="defaultAddress">メルマガを購読する</label>
                     </div>
                 </div>
                 <div className='w-fit mx-auto pt-8'>

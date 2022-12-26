@@ -24,7 +24,7 @@ const Field = ({ label, value, placeHolder, autoComplete = "", type = "text", id
                                 </div>: <></>
                 }
             </div>
-            <input id={id} className={`w-full h-10 text-base bg-gray-50 text-gray-500 pl-2 border rounded-md focus:outline-none`} type={type} autoComplete={autoComplete} placeholder={placeHolder} value={value} onChange={onChange} />
+            <input id={id} className={`w-full h-10 text-base bg-gray-50 text-gray-800 pl-2 border rounded-md focus:outline-none`} type={type} autoComplete={autoComplete} placeholder={placeHolder} value={value} onChange={onChange} />
         </>
     )
 }
