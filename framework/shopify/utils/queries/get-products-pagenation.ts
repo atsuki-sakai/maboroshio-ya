@@ -7,7 +7,12 @@ type PaginationType = {
 
 const getProductsPagenation = ( numProducts: number, pagination?: PaginationType) => `
     query{
-        products(${pagination ?  pagination.type === "NEXT" ? `first: ${numProducts}, after: "${pagination.cursor}"`: `last: ${numProducts}, before: "${pagination.cursor}"` : `first: ${numProducts}`} ) {
+        products(
+            ${ pagination ?  pagination.type === "NEXT"
+                                        ? `first: ${numProducts}, after: "${pagination.cursor}", reverse: true, sortKey: CREATED_AT`
+                                        : `last: ${numProducts}, before: "${pagination.cursor}" , reverse: true, sortKey: CREATED_AT`
+                            : `first: ${numProducts} , reverse: true, sortKey: CREATED_AT`}
+        ) {
             pageInfo {
                 hasNextPage
                 hasPreviousPage
@@ -41,6 +46,13 @@ const getProductsPagenation = ( numProducts: number, pagination?: PaginationType
                                 altText
                                 width
                                 height
+                            }
+                        }
+                    }
+                    variants(first: 1) {
+                        edges {
+                            node {
+                                id
                             }
                         }
                     }

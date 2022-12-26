@@ -18,6 +18,7 @@ import { ProductReviewInfo, Review } from '@firebase/types/review';
 import { truncate } from '@lib/truncate';
 import { numberToStar } from '@lib/number-to-star';
 import ProductReviewCard from '../ProductReviewCard';
+import ProductCard from '../ProductCard';
 
 interface Props {
     product: Product,
@@ -117,7 +118,7 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                             })
                         }
                     </Splide>
-                    <div className='font-serif pt-3'>
+                    <div className=' pt-3'>
                         <div className='flex items-start justify-between w-full mt-2'>
                             <div className="bg-gray-100 rounded-md w-fit px-3 py-1">
                                 <p className='text-sm text-gray-500'>
@@ -140,10 +141,8 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                             <h1 className='font-bold text-2xl my-3'>{product.name}</h1>
                             <div className='flex items-end justify-between font-sans'>
                                 <div className=''>
-                                    <div className='bg-indigo-100 w-fit rounded-md px-3 py-1'>
-                                        <p className='text-xs w-full text-start text-indigo-500'>購入数量</p>
-                                    </div>
-                                    <div className='flex items-center mt-2'>
+                                    <p className='text-xs w-full text-start text-gray-500'>購入数量</p>
+                                    <div className='flex items-center'>
                                         <div className='w-full flex items-center space-x-6'>
                                             <button className='' onClick={decrementQuantity}>
                                                 <Minus className='text-red-500 h-9 w-9'/>
@@ -164,16 +163,14 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                             <section>
                                 {product.options.map((option, index) =>
                                     <div key={index}>
-                                        <div className='bg-indigo-100 w-fit rounded-md px-3 py-1'>
-                                            <p className='text-xs text-indigo-500'>{ option.displayName }</p>
-                                        </div>
-                                        <div className='grid grid-cols-5 gap-3 py-2 w-full mt-2'>
+                                        <p className='text-xs text-gray-500'>{ option.displayName }</p>
+                                        <div className='grid grid-cols-5 gap-3 py-2 w-full'>
                                             {
                                                 option.values.map((value, index) => {
                                                     const activeChoice = choices[option.displayName.toLowerCase()]
                                                     return (
                                                         <div
-                                                            className={`text-xs ml-2 px-2 py-2 rounded-full h-11 w-11 flex justify-center items-center shadow-md transfrom duration-300 ease-in-out ${ activeChoice === value.label ? "scale-110 border border-indigo-600 text-indigo-600 bg-indigo-50" : "bg-gray-100 scale-95 text-gray-500" }`} 
+                                                            className={`text-xs ml-2 px-2 py-2 rounded-full h-11 w-11 flex justify-center items-center shadow-md transfrom duration-300 ease-in-out ${ activeChoice === value.label.toLocaleLowerCase() ? "scale-110 border border-indigo-600 text-indigo-600 bg-indigo-50" : "bg-gray-100 scale-95 text-gray-500" }`} 
                                                             key={index}
                                                             onClick={() => {
                                                                 setChoices({
@@ -195,7 +192,7 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                             </section>
                         </div>
                         <div className="p-3">
-                            <p className='text-gray-500 font-sans'>{product.description}</p>
+                            <p className='font-sans tracking-wide'>{product.description}</p>
                         </div>
                         <div className='py-6'>
                             <div className='mb-3 border-y py-2'>
@@ -203,7 +200,7 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                                 <div className='w-full flex justify-start items-center'>
                                     <div className='text-yellow-500 text-2xl'>{numberToStar(productReviewInfo?.score ?? 0)}</div>
                                     <div className='flex items-end justify-center font-sans ml-4'>
-                                        <p className='text-sm'>星５つ中の<span className='text-base'>{productReviewInfo?.score ?? 0}</span></p>
+                                        <p className='text-sm'>星５つ中の<span className='text-base font-bold'>{productReviewInfo?.score ?? 0}</span></p>
                                     </div>
                                 </div>
                                 <p className='font-sans text-xs text-gray-500'>合計<span className='text-sm'>{productReviewInfo?.numberOfTotalReview ?? 0}</span>件のレビュー</p>
@@ -242,13 +239,25 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
                                 </a>
                             </Link>
                         </div>
+                        <div className='py-3 pb-10'>
+                            <div className='border-t py-6'>
+                                <p className='text-lg font-bold'>関連する商品</p>
+                                <p className='text-xs text-gray-500 -translate-y-0.5'>この商品に興味のあるお客様におすすめの商品</p>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <ProductCard product={product} productReviewInfo={null} />
+                                <ProductCard product={product} productReviewInfo={null} />
+                                <ProductCard product={product} productReviewInfo={null} />
+                                <ProductCard product={product} productReviewInfo={null} />
+                            </div>
+                        </div>
                     </div>
                     <div className='fixed bottom-0 left-0 right-0 h-fits z-40 bg-white border-t'>
                         <div className={`mb-2`} >
                             <div className='text-center h-full pb-3 pt-0.5 flex items-end justify-between px-6'>
                                 <div className='translate-y-1'>
-                                    <p className='text-xs text-start'>販売価格</p>
-                                    <p className='text-xs text-red-500'>¥ <span className={`text-2xl font-sans font-bold tracking-wider ${product.totalInventory === 0 ? "line-through" : "" }`}>{Math.floor(variant?.price ?? 0)}</span> 税別</p>
+                                    <p className='text-xs text-start'>{truncate(product.name, 12)}</p>
+                                    <p className='text-xs text-red-500 text-start'>¥ <span className={`text-2xl font-sans font-bold tracking-wider ${product.totalInventory === 0 ? "line-through" : "" }`}>{Math.floor(variant?.price ?? 0)}</span> 税別</p>
                                 </div>
                                 <button onClick={addItem} className='w-fit h-full' disabled={isLoading || variant?.quantityAvailable === 0}>
                                     <div className={`flex items-center text-white font-bold px-6 py-2 ${variant?.quantityAvailable === 0 ? "bg-gray-500" : "bg-gradient-to-tl to-green-600 from-lime-600"} rounded-md shadow-md tracking-widest`}>

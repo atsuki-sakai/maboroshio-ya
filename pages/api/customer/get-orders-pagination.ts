@@ -4,12 +4,9 @@ import { getOrdersPaginationQuery} from "@shopify/utils/queries";
 import { NextApiRequest, NextApiResponse } from "next";
 
 type ProductsPaginationType = {
-    numOrders: number
+    first: number
     accessToken: string
-    pagination?: {
-        type: "NEXT" | "PREVIOUS",
-        cursor: string
-    }
+    cursor: string | null
 }
 
 export default async function handler( req: NextApiRequest, res: NextApiResponse ) {
@@ -18,14 +15,15 @@ export default async function handler( req: NextApiRequest, res: NextApiResponse
 
     let body = await JSON.parse(req.body) as ProductsPaginationType
     const variables = {
-        numOrders: body.numOrders,
+        first: body.first,
         accessToken: body.accessToken,
-        pagination: body.pagination && { type: body.pagination.type, cursor: body.pagination.cursor }
+        cursor: body.cursor
     }
 
     const response = await ShopifyApiFeatcher(
         {type:"STOREFRONT_API"},
-        getOrdersPaginationQuery(variables.numOrders, variables.accessToken, variables.pagination),
+        getOrdersPaginationQuery,
+        variables
     )
 
     const data = await response.json()

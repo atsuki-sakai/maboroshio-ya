@@ -14,10 +14,7 @@ const ProductReviewCard = ({review}: Props) => {
     const postDate = new Date(review.postDate._seconds * 1000)
 
     return (
-        <div className="text-sm font-sans pb-6">
-            <div className='flex justify-center pb-6'>
-                <div className='bg-gray-300 h-[1px] w-2/3 rounded-full'></div>
-            </div>
+        <div className="text-sm font-sans py-4">
             <div className='flex items-center justify-between'>
                 <div className='text-yellow-500 text-xl'>{numberToStar(review.star)}</div>
                 <p className='text-xs'>投稿者: <span className='font-bold text-sm'>{ truncate(review.customerName, 10)}</span></p>
@@ -36,6 +33,9 @@ const ProductReviewCard = ({review}: Props) => {
                 {
                     review.comment.length > 120 ? <div className='w-full flex justify-end'><button className='text-blue-500 text-xs underline' onClick={() => setShowMore(!showMore)}>{showMore ? "閉じる": "詳しく読む"}</button></div> : null
                 }
+            </div>
+            <div className='flex justify-center pt-6'>
+                <div className='bg-gray-300 h-[1px] w-2/3 rounded-full'></div>
             </div>
         </div>
     )

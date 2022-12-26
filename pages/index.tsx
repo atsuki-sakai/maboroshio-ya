@@ -13,10 +13,9 @@ import { LoadCircle } from '@components/icon'
 import { getProductReviewInfo } from '@firebase/firestore/review'
 import type { Product } from "@shopify/types/product"
 import idConverter from '@lib/id-converter'
-import { ProductReviewInfo } from '@firebase/types/review'
-import useSWR from 'swr'
+import { ProductReviewInfo } from '@shopify/types/review'
 
-const numFeatureProducts = 20
+const numFeatureProducts = 10
 
 export const getStaticProps: GetStaticProps = async() =>  {
 
@@ -78,6 +77,7 @@ const Home = ({featureProductsInfo, productReviewInfos}: InferGetStaticPropsType
         </div>
         <div>
           <div className='px-8 py-12'>
+            <p className='font-bold text-lg mb-3'>最新商品</p>
             <div className='grid grid-cols-2 md:grid-cols-3 gap-8 items-center justify-center'>
               {
                 featureProducts.map((product, index) => {

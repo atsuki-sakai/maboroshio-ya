@@ -2,21 +2,16 @@
 import { Order } from "@shopify/shema"
 import { generateApiUrl } from "@shopify/utils"
 
-type PaginationType = {
-    type: "NEXT" | "PREVIOUS",
-    cursor: string
-}
-
-const getOrdersPagenation = async(numOrders: number, accessToken: string, pagination?: PaginationType) => {
+const getOrdersPagenation = async(numOrders: number, accessToken: string, cursor?: string) => {
 
     const getOrdersPaginationApiUrl = generateApiUrl({type: "GET_ORDERS_PAGINATION"})
     const response = await fetch(getOrdersPaginationApiUrl, {
         method: "POST",
         mode: "no-cors",
         body: JSON.stringify({
-            numOrders: numOrders,
+            first: numOrders,
             accessToken: accessToken,
-            pagination: pagination
+            cursor: cursor ? cursor : null
         })
     })
     const { data, error } = await response.json();

@@ -47,7 +47,7 @@ const MyPage = () => {
 
         try{
             setIsFetching(true)
-            const newOrdersInfo = await getOrdersPagenation(numberOfOrders, getCustomerAccessToken()!, {type: "NEXT", cursor: ordersPagination?.endCursor!})
+            const newOrdersInfo = await getOrdersPagenation(numberOfOrders, getCustomerAccessToken()!, ordersPagination?.endCursor! )
             setOrders(orders?.concat(newOrdersInfo.edges.map((order: any) => order.node)))
             setOrdersPagination(newOrdersInfo.pageInfo)
         }catch(e: any){

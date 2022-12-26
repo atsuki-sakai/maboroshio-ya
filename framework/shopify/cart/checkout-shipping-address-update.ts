@@ -1,24 +1,11 @@
 
-import { Checkout, CheckoutShippingAddressUpdateV2Payload, MutationCheckoutShippingLineUpdateArgs } from "@shopify/shema"
+import { Checkout, CheckoutShippingAddressUpdateV2Payload, MailingAddress, MutationCheckoutShippingLineUpdateArgs } from "@shopify/shema"
 import { generateApiUrl } from "@shopify/utils"
 import { add } from "cheerio/lib/api/traversing"
 
 
-type Address =  {
-        address1: string
-        address2: string
-        city: string
-        company: string
-        country: string
-        firstName: string
-        lastName: string
-        phone: string
-        province: string
-        zip: string
-    }
 
-
-const checkoutShippingAddressUpdate = async(checkoutId: string, address?: Address ): Promise<Checkout> => {
+const checkoutShippingAddressUpdate = async(checkoutId: string, address?: MailingAddress ): Promise<Checkout> => {
 
     const checkoutShippingAddressUpdateApiUrl = generateApiUrl({type: "CHECKOUT_SHIPPING_ADDRESS_UPDATE"})
 

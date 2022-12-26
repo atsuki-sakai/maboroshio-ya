@@ -15,7 +15,7 @@ const LoadingView = () => {
 
     return (
         <Container>
-            <div className='h-[480px] w-full flex items-center justify-center'>
+            <div className='h-screen w-full flex items-center justify-center'>
                 <Lottie options={defaultOptions} height={80} width={80} />
             </div>
         </Container>

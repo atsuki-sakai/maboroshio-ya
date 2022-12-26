@@ -71,8 +71,9 @@ const ProductReviews = () => {
     if(reviews.length === 0){
         return <Container>
                     <div className='px-8'>
-                        <h1 className='font-bold text-xl font-sans'>カスタマーレビュー</h1>
-                        <div className='flex items-center justify-between'>
+                        <div className='border-b'>
+                            <h1 className='font-bold text-xl font-sans'>カスタマーレビュー</h1>
+                            <div className='flex items-center justify-between'>
                             <div>
                                 <div className='w-full flex justify-start items-end mt-3 mb-1'>
                                     <div className='text-yellow-500 text-lg'>{numberToStar(productReviewInfo?.score ?? 0)}</div>
@@ -97,6 +98,7 @@ const ProductReviews = () => {
                                 </a>
                             </Link>
                         </div>
+                        </div>
                         <div className='flex justify-center items-center w-full h-[420px]'>
                             <p className='text-center text-gray-500'>レビューはまだありません...</p>
                         </div>
@@ -107,31 +109,33 @@ const ProductReviews = () => {
     return (
         <Container>
             <div className='px-8'>
-                <h1 className='font-bold text-xl font-sans'>カスタマーレビュー</h1>
-                <div className='flex items-center justify-between'>
-                    <div>
-                        <div className='w-full flex justify-start items-end mt-3 mb-1'>
-                            <div className='text-yellow-500 text-lg'>{numberToStar(productReviewInfo?.score ?? 0)}</div>
-                            <div className='ml-3'>
-                                <span className='text-sm'>
-                                    星5つ中の{productReviewInfo?.score}
-                                </span>
+                <div className='border-b'>
+                    <h1 className='font-bold text-xl font-sans'>カスタマーレビュー</h1>
+                    <div className='flex items-center justify-between'>
+                        <div>
+                            <div className='w-full flex justify-start items-end mt-3 mb-1'>
+                                <div className='text-yellow-500 text-lg'>{numberToStar(productReviewInfo?.score ?? 0)}</div>
+                                <div className='ml-3'>
+                                    <span className='text-sm'>
+                                        星5つ中の<span className='text-base font-bold'>{productReviewInfo?.score}</span>
+                                    </span>
+                                </div>
                             </div>
+                            <p className='text-xs mb-5 text-gray-500'>
+                                合計{productReviewInfo?.numberOfTotalReview ?? 0}件の評価
+                            </p>
                         </div>
-                        <p className='text-xs mb-5 text-gray-500'>
-                            合計{productReviewInfo?.numberOfTotalReview ?? 0}件の評価
-                        </p>
+                        <Link
+                            href={`/products/post-review/${productSlug}`}
+                            passHref
+                        >
+                            <a>
+                                <div className='flex justify-center items-center'>
+                                    <p className='text-xs text-blue-500 underline'>レビューを書く</p>
+                                </div>
+                            </a>
+                        </Link>
                     </div>
-                    <Link
-                        href={`/products/post-review/${productSlug}`}
-                        passHref
-                    >
-                        <a>
-                            <div className='flex justify-center items-center'>
-                                <p className='text-xs text-blue-500 underline'>レビューを書く</p>
-                            </div>
-                        </a>
-                    </Link>
                 </div>
                 <div className='space-y-5'>
                     {

@@ -9,20 +9,7 @@ import { checkoutShippingAddressUpdate } from "@shopify/cart"
 
 import { motion } from 'framer-motion';
 import type { LineItem } from '@shopify/types/cart';
-
-
-type Address =  {
-    address1: string
-    address2: string
-    city: string
-    company: string
-    country: string
-    firstName: string
-    lastName: string
-    phone: string
-    province: string
-    zip: string
-}
+import { MailingAddress } from '@shopify/shema';
 
 const Cart = () => {
 
@@ -39,7 +26,7 @@ const Cart = () => {
 
     const setupCheckoutShippingAddress = async() => {
         if(loggedCustomer?.defaultAddress){
-            const updateAddress: Address = {
+            const updateAddress: Partial<MailingAddress> = {
                 address1: loggedCustomer.defaultAddress.address1 ?? "",
                 address2: loggedCustomer.defaultAddress.address2 ?? "",
                 city: loggedCustomer.defaultAddress.city ?? "",
@@ -51,7 +38,7 @@ const Cart = () => {
                 province: loggedCustomer.defaultAddress.province ?? "",
                 zip: loggedCustomer.defaultAddress.zip ?? ""
             }
-            await checkoutShippingAddressUpdate(getCheckoutId()!, updateAddress);
+            await checkoutShippingAddressUpdate(getCheckoutId()!, updateAddress as MailingAddress);
         }
     }
 

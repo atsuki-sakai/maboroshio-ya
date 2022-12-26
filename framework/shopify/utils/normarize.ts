@@ -66,23 +66,29 @@ const normarizeProductOption = ({ id, name: displayName, values }: ProductOption
 const normarizedProductVariants = ({ edges }: ProductVariantConnection) => {
     return edges.map(({node}) => {
         const { id, selectedOptions, sku, title, price, compareAtPrice, quantityAvailable } = node
-
-        return {
-            id,
-            sku: sku || id,
-            name: title,
-            price: price.amount,
-            listPrice: compareAtPrice,
-            quantityAvailable: quantityAvailable,
-            requiresShipping: true,
-            options: selectedOptions.map(({name, value}: SelectedOption) => {
-                const option = normarizeProductOption({
-                    id,
-                    name,
-                    values: [value]
+        // 今すぐ買うボタンのためにvariantIdのみを取得する場合
+        if(!title && !selectedOptions && !sku && !price && !compareAtPrice && !quantityAvailable){
+            return {
+                id
+            }
+        }else{
+            return {
+                id,
+                sku: sku || id,
+                name: title,
+                price: price.amount,
+                listPrice: compareAtPrice,
+                quantityAvailable: quantityAvailable,
+                requiresShipping: true,
+                options: selectedOptions.map(({name, value}: SelectedOption) => {
+                    const option = normarizeProductOption({
+                        id,
+                        name,
+                        values: [value]
+                    })
+                    return option;
                 })
-                return option;
-            })
+            }
         }
     })
 }
