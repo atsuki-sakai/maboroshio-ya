@@ -8,11 +8,7 @@ type PaginationType = {
 const getProductsPagenation = ( numProducts: number, pagination?: PaginationType) => `
     query{
         products(
-            ${ pagination ?  pagination.type === "NEXT"
-                                        ? `first: ${numProducts}, after: "${pagination.cursor}", reverse: true, sortKey: CREATED_AT`
-                                        : `last: ${numProducts}, before: "${pagination.cursor}" , reverse: true, sortKey: CREATED_AT`
-                            : `first: ${numProducts} , reverse: true, sortKey: CREATED_AT`}
-        ) {
+            ${ pagination ?  pagination.type === "NEXT" ? `first: ${numProducts}, after: "${pagination.cursor}", reverse: true, sortKey: CREATED_AT` : `last: ${numProducts}, before: "${pagination.cursor}" , reverse: true, sortKey: CREATED_AT` : `first: ${numProducts} , reverse: true, sortKey: CREATED_AT`}) {
             pageInfo {
                 hasNextPage
                 hasPreviousPage
@@ -52,6 +48,7 @@ const getProductsPagenation = ( numProducts: number, pagination?: PaginationType
                     variants(first: 1) {
                         edges {
                             node {
+                                id
                                 title
                                 sku
                                 quantityAvailable
