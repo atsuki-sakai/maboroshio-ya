@@ -43,8 +43,6 @@ const Home = ({featureProductsInfo, productReviewInfos}: InferGetStaticPropsType
   const [ featureProductReviewInfos, setFeatureProductReviewInfos ] = useState<ProductReviewInfo[]>(productReviewInfos)
   const [ isFetching, setIsFetching ] = useState(false)
 
-  console.log(featureProductReviewInfos)
-
   const showMoreProducts = async() => {
     if(!featureProductsPagination.hasNextPage) return
     try{

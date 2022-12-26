@@ -15,8 +15,6 @@ export const getVariant = (product: Product, choices: Choices) => {
     return product.variants.find(variant =>
         variant.options.every(variantOption => {
             const optionName = variantOption.displayName.toLocaleLowerCase()
-            // console.log(choices[optionName])
-            // console.log(variantOption.values[0].label)
             return optionName in choices &&
                 choices[optionName] === variantOption.values[0].label.toLocaleLowerCase()
         })

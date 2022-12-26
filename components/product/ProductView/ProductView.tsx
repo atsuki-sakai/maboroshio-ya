@@ -41,11 +41,13 @@ const ProductView: FC<Props> = ({ product, reviews, productReviewInfo }) => {
         })
         return initialOptions
     }
+
     const [ choices, setChoices ] = useState<Choices>(initialOptions(product));
     const [isLoading, setIsLoading] = useState(false);
     const variant = getVariant(product, choices)
 
     const [ quantity, setQuantity ] = useState<number>(variant?.quantityAvailable! === 0 ? 0: 1)
+
 
     const addItem = async () => {
         setIsLoading(true)
