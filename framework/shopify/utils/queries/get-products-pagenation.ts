@@ -49,19 +49,6 @@ const getProductsPagenation = ( numProducts: number, pagination?: PaginationType
                         edges {
                             node {
                                 id
-                                title
-                                sku
-                                quantityAvailable
-                                selectedOptions {
-                                    name
-                                    value
-                                }
-                                price{
-                                    amount
-                                }
-                                compareAtPrice {
-                                    amount
-                                }
                             }
                         }
                     }

@@ -67,6 +67,11 @@ const normarizedProductVariants = ({ edges }: ProductVariantConnection) => {
     return edges.map(({node}) => {
         const { id, selectedOptions, sku, title, price, compareAtPrice, quantityAvailable } = node
         // 今すぐ買うボタンのためにvariantIdのみを取得する場合
+        if(!title && !selectedOptions){
+            return {
+                id
+            }
+        }else{
             return {
                 id,
                 sku: sku || id,
@@ -84,6 +89,7 @@ const normarizedProductVariants = ({ edges }: ProductVariantConnection) => {
                     return option;
                 })
             }
+        }
     })
 }
 
