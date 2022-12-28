@@ -3,17 +3,20 @@
 import React, { useState} from 'react'
 import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import { getAllCollections, getProductsPagenation } from '@shopify/products'
-import { PageInfo } from '@shopify/shema'
+import { Collection, PageInfo } from '@shopify/shema'
 import { MetaHead } from '@components/common'
-import { Container, Hero } from '@components/ui'
-import { ProductCard } from '@components/product'
-import { normalizeProduct } from '@shopify/utils'
+import { Container, ErrorView, Hero } from '@components/ui'
+import { CollectionSlide, ProductCard } from '@components/product'
+import { generateApiUrl, normalizeProduct } from '@shopify/utils'
 import { motion } from 'framer-motion'
 import { LoadCircle } from '@components/icon'
 import { getProductReviewInfo } from '@firebase/firestore/review'
 import type { Product } from "@shopify/types/product"
 import idConverter from '@lib/id-converter'
 import { ProductReviewInfo } from '@shopify/types/review'
+import useSWR from 'swr'
+import { SplideSlide, Splide } from '@splidejs/react-splide'
+import { truncate } from '@lib/truncate'
 
 const numFeatureProducts = 10
 
@@ -43,6 +46,31 @@ const Home = ({featureProductsInfo, productReviewInfos}: InferGetStaticPropsType
   const [ featureProductsPagination, setFeatureProductsPagination ] = useState<PageInfo>(featureProductsInfo.products.pageInfo)
   const [ featureProductReviewInfos, setFeatureProductReviewInfos ] = useState<ProductReviewInfo[]>(productReviewInfos)
   const [ isFetching, setIsFetching ] = useState(false)
+
+
+  const getCollectionByHandleApiUrl = generateApiUrl({type: "GET_COLLECTION_BY_HANDLE"})
+  const collectionHandle = "women"
+  const collection2Handle = "men"
+  const collection3Handle = "sale"
+
+  const collectionFeatcher = async(url: string, handle: string): Promise<Collection> => {
+    const response = await fetch(url, {
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify({
+        handle: handle
+      })
+    }).then((res) => {
+      return res.json()
+    }).catch((e) => {
+      throw Error(e.message)
+    })
+    return response.data.collectionByHandle
+  }
+
+  const { data: collection } = useSWR([getCollectionByHandleApiUrl, collectionHandle],collectionFeatcher )
+  const { data: collection2 } = useSWR([getCollectionByHandleApiUrl, collection2Handle],collectionFeatcher )
+  const { data: collection3 } = useSWR([getCollectionByHandleApiUrl, collection3Handle],collectionFeatcher )
 
   const showMoreProducts = async() => {
     if(!featureProductsPagination.hasNextPage) return
@@ -81,7 +109,7 @@ const Home = ({featureProductsInfo, productReviewInfos}: InferGetStaticPropsType
               {
                 featureProducts.map((product, index) => {
                   const normarizedProduct = normalizeProduct(product)
-                  return <ProductCard key={product.id} productReviewInfo={featureProductReviewInfos[index]} product={normarizedProduct} showBuyNow={true} />
+                  return <ProductCard key={product.id} productReviewInfo={featureProductReviewInfos[index]} product={normarizedProduct} />
                 })
               }
             </div>
@@ -101,7 +129,7 @@ const Home = ({featureProductsInfo, productReviewInfos}: InferGetStaticPropsType
             </div>
           </div>
         </div>
-        <div className='px-8 py-12'>
+        <div className='px-8'>
           <Hero
             text={"丹波篠山　黒枝豆"}
             subTitle={"まぼろし屋の思い"}
@@ -109,8 +137,16 @@ const Home = ({featureProductsInfo, productReviewInfos}: InferGetStaticPropsType
             imageUrl={"/images/top-bg.jpg"}
           />
         </div>
-        <div className='w-full h-[320px] flex justify-center items-center bg-blue-200'>
-          <p>コレクション商品(売れ筋の商品)</p>
+        <div className='h-full w-full px-8 py-4 space-y-12'>
+          {
+            collection ? <CollectionSlide collection={collection} />: null
+          }
+          {
+            collection2 ? <CollectionSlide collection={collection2} />: null
+          }
+          {
+            collection3 ? <CollectionSlide collection={collection3} />: null
+          }
         </div>
         <div className='w-full h-[320px] flex justify-center items-center bg-yellow-200'>
           <p>お知らせ</p>
