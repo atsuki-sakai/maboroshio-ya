@@ -38,6 +38,8 @@ const Drawer = () => {
     const { data: collections } = useSWR(getAllCollectionsApiUrl, collectionsFeacher)
 
     const [ searchText, setSearchText ] = useState<string>("")
+    const [ productType, setProductType ] = useState<string>("")
+    const [ productTag, setProductTag ] = useState<string>("")
     const [ priceRange, setPriceRange ] = useState<string>()
 
     const getTagsApiUrl = generateApiUrl({type: "GET_PRODUCT_TAGS"})
@@ -57,9 +59,9 @@ const Drawer = () => {
         return queryList.length !== 0 ? queryList.reduce((sum, value) => sum += value) : ""
     }
     const detailSearch = async() => {
-        let searchTextQuery = ""
+
         const words = searchText.split(/(\s+)/).filter( e => e.trim().length > 0)
-        searchTextQuery = wordsToQuery(words)
+        let searchTextQuery = wordsToQuery(words)
         let priceRangeQuery = ""
         if(priceRange && parseInt(priceRange) >= 1000){
             if(searchTextQuery === ""){
@@ -68,13 +70,30 @@ const Drawer = () => {
                 priceRangeQuery = ` AND (variants.price:<${parseInt(priceRange)})`
             }
         }
-        const graphQuery = searchTextQuery + priceRangeQuery
-
+        let productTypeQuery = ""
+        let productTagQuery = ""
+        if(productType){
+            if(!searchTextQuery || !priceRangeQuery){
+                productTypeQuery = `(product_type:${productType})`
+            }else{
+                productTypeQuery = ` AND (product_type:${productType})`
+            }
+        }
+        if(productTag){
+            if(!searchTextQuery || !priceRangeQuery || !productTypeQuery){
+                productTagQuery = `(tag:${productTag})`
+            }else{
+                productTagQuery = ` AND (product_type:${productTag})`
+            }
+        }
+        const graphQuery = searchTextQuery + priceRangeQuery + productTypeQuery + productTagQuery
         setPriceRange(undefined)
         setSearchText("")
+        setProductTag("")
+        setProductType("")
         router.push({
             pathname: `/products/search/query/${graphQuery}`,
-            query: { graphQuery: graphQuery }
+            query: { graphQuery: graphQuery, categoryName: `${searchText} / ${priceRange}円以下 / ${productType} / ${productTag}` }
         })
         onDrawerClose()
     }
@@ -130,7 +149,7 @@ const Drawer = () => {
                                     <div className='grid grid-cols-3 gap-3 text-xs py-2'>
                                         {
                                             types && types.length !== 0 ? types.map((type, index) => {
-                                                return <div key={index} className={` ${type.node.length > 7 ? "col-span-2" : ""} text-center border border-indigo-600 rounded-full`}><p className='text-indigo-600 font-bold'>{type.node}</p></div>
+                                                return <b key={index} className={` ${type.node.length > 7 ? "col-span-2" : ""} text-center rounded-full bg-indigo-600 shadow-md`} onClick={() => setProductType(type.node)}><p className='text-white font-bold'>{type.node}</p></b>
                                             }): <div className='whitespace-nowrap text-gray-500'>商品タイプはありません</div>
                                         }
                                     </div>
@@ -138,7 +157,7 @@ const Drawer = () => {
                                     <div className='grid grid-flow-row-dense grid-cols-3 grid-row-3 gap-3 text-xs py-2'>
                                         {
                                             tags && tags.length !== 0 ? tags.map((tag, index) => {
-                                                return  <div key={index} className={` ${tag.node.length > 7 ? "col-span-2" : ""} text-center  border border-indigo-600 rounded-full`}><p className='text-indigo-600 font-bold'>{tag.node}</p></div>
+                                                return  <button key={index} className={` ${tag.node.length > 7 ? "col-span-2" : ""} text-center  bg-indigo-600 rounded-full shadow-md`} onClick={() => setProductTag(tag.node)}><p className='text-white font-bold'>{tag.node}</p></button>
                                             }): <div className='whitespace-nowrap text-gray-500'>タグはありません</div>
                                         }
                                     </div>
@@ -150,6 +169,12 @@ const Drawer = () => {
                                                                         }
                                                                         {
                                                                             priceRange && priceRange !== "0" ?  <p className='text-xs'><span className='text-sm'>{priceRange}</span>円以下の商品</p>: null
+                                                                        }
+                                                                        {
+                                                                            productType && <p className='text-xs'>カテゴリ　<span className='text-sm'>{productType}</span></p>
+                                                                        }
+                                                                        {
+                                                                            productTag && <p className='text-xs'>タグ　<span className='text-sm'>{productTag}</span></p>
                                                                         }
                                                                     </div>: null
                                     }
@@ -217,8 +242,8 @@ const Drawer = () => {
                                                 return <div key={index} onClick={onDrawerClose}>
                                                             <Link href={`/products/collection/${collection.handle}`} passHref>
                                                                 <a>
-                                                                    <div className='bg-indigo-100 px-2 py-0.5 border border-indigo-500 rounded-full shadow-md'>
-                                                                        <p className='text-indigo-500 text-center font-bold'>
+                                                                    <div className='px-2 py-0.5 border  rounded-full bg-gray-100 shadow-md'>
+                                                                        <p className='text-center font-bold'>
                                                                             {collection.title}
                                                                         </p>
                                                                     </div>
@@ -239,8 +264,8 @@ const Drawer = () => {
                                                 passHref
                                             >
                                                 <a>
-                                                    <div className='bg-indigo-100 px-2 py-0.5 border border-indigo-500 rounded-full shadow-md'>
-                                                        <p className='text-indigo-500 text-center font-bold'>
+                                                    <div className='px-2 py-0.5 rounded-full shadow-md bg-gray-700'>
+                                                        <p className='text-white text-center font-bold'>
                                                             1000円以下から〜
                                                         </p>
                                                     </div>
@@ -254,8 +279,8 @@ const Drawer = () => {
                                                 passHref
                                             >
                                                 <a>
-                                                    <div className='bg-indigo-100 px-2 py-0.5 border border-indigo-500 rounded-full shadow-sm'>
-                                                        <p className='text-indigo-500 text-center font-bold'>
+                                                    <div className='px-2 py-0.5 rounded-full shadow-md bg-gray-700'>
+                                                        <p className='text-white text-center font-bold'>
                                                             3000円以下から〜
                                                         </p>
                                                     </div>
@@ -269,8 +294,8 @@ const Drawer = () => {
                                                 passHref
                                             >
                                                 <a>
-                                                    <div className='bg-indigo-100 px-2 py-0.5 border border-indigo-500 rounded-full shadow-sm'>
-                                                        <p className='text-indigo-500 text-center font-bold'>
+                                                    <div className='px-2 py-0.5 rounded-full shadow-md bg-gray-700'>
+                                                        <p className='text-white text-center font-bold'>
                                                             5000円以下から〜
                                                         </p>
                                                     </div>
@@ -284,8 +309,8 @@ const Drawer = () => {
                                                 passHref
                                             >
                                                 <a>
-                                                    <div className='bg-indigo-100 px-2 py-0.5 border border-indigo-500 rounded-full shadow-sm'>
-                                                        <p className='text-indigo-500 text-center font-bold'>
+                                                    <div className='px-2 py-0.5 rounded-full shadow-md bg-gray-700'>
+                                                        <p className='text-white text-center font-bold'>
                                                             1000円以上から〜
                                                         </p>
                                                     </div>
@@ -299,8 +324,8 @@ const Drawer = () => {
                                                 passHref
                                             >
                                                 <a>
-                                                    <div className='bg-indigo-100 px-2 py-0.5 border border-indigo-500 rounded-full shadow-sm'>
-                                                        <p className='text-indigo-500 text-center font-bold'>
+                                                    <div className='px-2 py-0.5 rounded-full shadow-md bg-gray-700'>
+                                                        <p className='text-white text-center font-bold'>
                                                             30000円以上から〜
                                                         </p>
                                                     </div>
@@ -314,8 +339,8 @@ const Drawer = () => {
                                                 passHref
                                             >
                                                 <a>
-                                                    <div className='bg-indigo-100 px-2 py-0.5 border border-indigo-500 rounded-full shadow-sm'>
-                                                        <p className='text-indigo-500 text-center font-bold'>
+                                                    <div className='px-2 py-0.5 rounded-full shadow-md bg-gray-700'>
+                                                        <p className='text-white text-center font-bold'>
                                                             5000円以上から〜
                                                         </p>
                                                     </div>
