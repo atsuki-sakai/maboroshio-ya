@@ -6,9 +6,8 @@ import useSWR from 'swr'
 import { Container, ErrorView, LoadingView } from '@components/ui'
 import { ProductCard } from '@components/product'
 import { ProductConnection } from '@shopify/shema'
-import { getProductTags, getProductTypes } from '@shopify/products'
-import { Search } from '@components/icon'
-import Link from 'next/link'
+import { motion } from 'framer-motion'
+import { LoadCircle } from '@components/icon'
 
 const ProductQuery = () => {
 
@@ -19,6 +18,8 @@ const ProductQuery = () => {
   console.log("query :", query)
 
   const categoryName: string | undefined = query.categoryName
+
+  const [ isFetching, setIsFetching ] = useState(false)
 
   const searchQueryProductsApiUrl = generateApiUrl({type: "SEARCH_QUERY_PRODUCTS"})
   const searchQueryProductsFetcher = async(url: string, query: string): Promise<ProductConnection> => {
@@ -34,6 +35,17 @@ const ProductQuery = () => {
       throw Error(e.message)
     })
     return response.data.products
+  }
+
+  const fetchMoreProducts = async() => {
+    
+    try{
+      setIsFetching(true)
+    }catch(e: any){
+      throw Error(e.message)
+    }finally{
+      setIsFetching(false)
+    }
   }
 
   const { data: products, error } = useSWR([searchQueryProductsApiUrl, graphQuery], router.isReady ? searchQueryProductsFetcher: null);
@@ -75,6 +87,20 @@ const ProductQuery = () => {
             products.edges.map(({node: product}) => {
               return <ProductCard key={product.id} product={normalizeProduct(product)} productReviewInfo={null} />
             })
+          }
+        </div>
+        <div className='w-full pt-5'>
+          {
+              products.pageInfo.hasNextPage ? <div className='mt-8'>
+                                                  <button className="px-3 w-full py-1 textp-center bg-green-500 rounded-md shadow-md" onClick={fetchMoreProducts} disabled={isFetching}>
+                                                      <div className='flex items-center justify-center'>
+                                                          <p className='text-white text-sm text-center w-fit'>さらに商品を表示</p>
+                                                          <motion.div className="ml-1 mr-1 -translate-y-1" initial={{ opacity:0, height:6, width:0 }} animate={{ opacity: isFetching ? 1: 0, height:12, width: isFetching ? 12: 0 }}>
+                                                              <LoadCircle className='text-white h-5 w-5 animate-spin'/>
+                                                          </motion.div>
+                                                      </div>
+                                                  </button>
+                                              </div> : <></>
           }
         </div>
       </div>

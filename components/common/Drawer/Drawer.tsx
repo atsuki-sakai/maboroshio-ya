@@ -146,38 +146,35 @@ const Drawer = () => {
                                             <label htmlFor="price-range" className='hidden'>価格帯</label>
                                         </div>
                                     <p className='text-sm font-bold pt-3'>商品タイプ</p>
-                                    <div className='grid grid-cols-3 gap-3 text-xs py-2'>
+                                    <div className='grid grid-cols-2 gap-3 text-sm py-2'>
                                         {
                                             types && types.length !== 0 ? types.map((type, index) => {
-                                                return <b key={index} className={` ${type.node.length > 7 ? "col-span-2" : ""} text-center rounded-full bg-indigo-600 shadow-md`} onClick={() => setProductType(type.node)}><p className='text-white font-bold'>{type.node}</p></b>
+                                                return <b key={index} className={` text-center rounded-full bg-indigo-600 shadow-md py-2`} onClick={() => setProductType(type.node)}><p className='text-white font-bold'>{type.node}</p></b>
                                             }): <div className='whitespace-nowrap text-gray-500'>商品タイプはありません</div>
                                         }
                                     </div>
                                     <p className='text-sm font-bold pt-3'>商品タグ</p>
-                                    <div className='grid grid-flow-row-dense grid-cols-3 grid-row-3 gap-3 text-xs py-2'>
+                                    <div className='grid grid-flow-row-dense grid-cols-2 grid-row-3 gap-3 text-sm py-2'>
                                         {
                                             tags && tags.length !== 0 ? tags.map((tag, index) => {
-                                                return  <button key={index} className={` ${tag.node.length > 7 ? "col-span-2" : ""} text-center  bg-indigo-600 rounded-full shadow-md`} onClick={() => setProductTag(tag.node)}><p className='text-white font-bold'>{tag.node}</p></button>
+                                                return  <button key={index} className={`text-center  bg-indigo-600 rounded-full shadow-md py-2`} onClick={() => setProductTag(tag.node)}><p className='text-white font-bold'>{tag.node}</p></button>
                                             }): <div className='whitespace-nowrap text-gray-500'>タグはありません</div>
                                         }
                                     </div>
-                                    {
-                                        searchText || priceRange && priceRange !== "0"  ?  <div className='border rounded-md shadow-md bg-gray-100 text-gray-500 mt-3 p-2'>
-                                                                        <p className='text-xs font-bold mb-1 text-black'>検索条件</p>
-                                                                        {
-                                                                            searchText && <p className='text-xs'>検索ワード <span className='text-sm'>{searchText}</span></p>
-                                                                        }
-                                                                        {
-                                                                            priceRange && priceRange !== "0" ?  <p className='text-xs'><span className='text-sm'>{priceRange}</span>円以下の商品</p>: null
-                                                                        }
-                                                                        {
-                                                                            productType && <p className='text-xs'>カテゴリ　<span className='text-sm'>{productType}</span></p>
-                                                                        }
-                                                                        {
-                                                                            productTag && <p className='text-xs'>タグ　<span className='text-sm'>{productTag}</span></p>
-                                                                        }
-                                                                    </div>: null
-                                    }
+                                        <div className='border rounded-md shadow-md bg-gray-100 text-gray-500 mt-3 p-2'>
+                                            {
+                                                searchText && <p className='text-xs'>検索ワード <span className='text-sm font-bold text-black'>{searchText}</span></p>
+                                            }
+                                            {
+                                                priceRange && priceRange !== "0" ?  <p className='text-xs'><span className='text-sm font-bold text-black'>{priceRange}</span>円以下の商品</p>: null
+                                            }
+                                            {
+                                                productType && <p className='text-xs'>カテゴリ　<span className='text-sm font-bold text-black'>{productType}</span></p>
+                                            }
+                                            {
+                                                productTag && <p className='text-xs'>タグ　<span className='text-sm font-bold text-black'>{productTag}</span></p>
+                                            }
+                                        </div>
                                     <div className='w-full pt-6 flex justify-center'>
                                         <button className='text-white w-fit px-3 py-1 rounded-md shadow-md bg-blue-500' onClick={detailSearch}>
                                             上記の条件で検索する
