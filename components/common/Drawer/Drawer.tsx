@@ -101,7 +101,7 @@ const Drawer = () => {
                             <div className='my-3 text-sm font-sans'>
                                 <p className='text-base font-bold mb-1'>商品検索</p>
                                 <div className='flex items-center w-full'>
-                                    <input id='search' type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} placeholder='商品キーワードで検索' className='bg-indigo-50 border shadow-sm border-indigo-300 h-10 rounded-md px-3 py-1 text-sm w-full focus:outline-none font-thin' />
+                                    <input id='search' type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} placeholder='商品キーワードで検索' className='bg-indigo-50 border shadow-sm border-indigo-300 h-10 rounded-md px-3 py-1 text-[18px] w-full focus:outline-none font-light tracking-wide' />
                                     <Link
                                         as={`/products/search/${searchText}`}
                                         href={{ pathname: `/products/search/[text]`, query:{ titleOnly: false, text: searchText } }}
