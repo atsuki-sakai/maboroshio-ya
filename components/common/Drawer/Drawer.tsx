@@ -10,14 +10,15 @@ import useSWR from 'swr';
 import { generateApiUrl } from '@shopify/utils';
 import { Collection } from "@shopify/shema"
 import { Menu, Person, Trash } from '@components/icon';
+import { getProductTags, getProductTypes } from '@shopify/products';
+import { Router, useRouter } from 'next/router';
 
 const Drawer = () => {
 
     const { isDrawerOpen, onDrawerClose } = useUI();
+    const router = useRouter()
     const { loggedCustomer } = useCustomerState()
-    const handle = (e: any) => {
-        e.preventDefault();
-    }
+    const [ showDetailSearch, setShowDetailSearch ] = useState(false)
 
     const getAllCollectionsApiUrl = generateApiUrl({type: "GET_ALL_COLLECTIONS"})
     const collectionsFeacher = async(url: string): Promise<Collection[]> => {
@@ -37,32 +38,59 @@ const Drawer = () => {
     const { data: collections } = useSWR(getAllCollectionsApiUrl, collectionsFeacher)
 
     const [ searchText, setSearchText ] = useState<string>("")
+    const [ priceRange, setPriceRange ] = useState<string>()
 
-    useEffect(() => {
-        if(isDrawerOpen){
-            document.addEventListener('touchmove', handle, { passive: false })
-            document.addEventListener('wheel', handle, { passive: false })
-        }
-        return (() => {
-            if(isDrawerOpen){
-                document.removeEventListener('touchmove', handle)
-                document.removeEventListener('wheel', handle)
+    const getTagsApiUrl = generateApiUrl({type: "GET_PRODUCT_TAGS"})
+    const getTypesApiUrl = generateApiUrl({type: "GET_PRODUCT_TYPES"})
+    const { data: tags } = useSWR(getTagsApiUrl, getProductTags)
+    const { data: types } = useSWR(getTypesApiUrl, getProductTypes)
+
+    const wordsToQuery = (words: string[], onlyTitle: boolean = false) => {
+        const queryList =  words.map((word, index) => {
+            if(index === 0){
+                return `(${onlyTitle ? `title:${word}*`: `${word}*`})`
+            }else{
+                return ` OR (${onlyTitle ? `title:${word}*`: `${word}*`})`
             }
         })
-    }, [isDrawerOpen])
+
+        return queryList.length !== 0 ? queryList.reduce((sum, value) => sum += value) : ""
+    }
+    const detailSearch = async() => {
+        let searchTextQuery = ""
+        const words = searchText.split(/(\s+)/).filter( e => e.trim().length > 0)
+        searchTextQuery = wordsToQuery(words)
+        let priceRangeQuery = ""
+        if(priceRange && parseInt(priceRange) >= 1000){
+            if(searchTextQuery === ""){
+                priceRangeQuery = `(variants.price:<${parseInt(priceRange)})`
+            }else{
+                priceRangeQuery = ` AND (variants.price:<${parseInt(priceRange)})`
+            }
+        }
+        const graphQuery = searchTextQuery + priceRangeQuery
+
+        setPriceRange(undefined)
+        setSearchText("")
+        router.push({
+            pathname: `/products/search/query/${graphQuery}`,
+            query: { graphQuery: graphQuery }
+        })
+        onDrawerClose()
+    }
 
     return (
             <motion.div
                 initial={{ x:"-100%", opacity:0.0 }}
                 animate={{ x: isDrawerOpen ? "0%" : "-100%", opacity: isDrawerOpen ? 1.0 : 0.0 }}
                 transition={{ duration:"0.6" }}
-                className="fixed top-0 left-0 z-50"
+                className="fixed top-0 left-0 right-0 bottom-0 z-50 overflow-y-auto"
             >
                 <div className={style.root}>
-                    <div className='grid grid-cols-6 font-sans'>
-                        <div className='col-span-5 bg-white overflow-hidden rounded-tr-md rounded-br-md relative p-3'>
-                            <div className='flex items-center justify-between bg-gray-700 rounded-md px-3 py-1 text-white'>
-                                <h3 className="text-lg">メニュー</h3>
+                    <div className='grid grid-cols-6 h-full font-sans'>
+                        <div className='col-span-5 bg-white rounded-tr-md rounded-br-md h-full  py-8 relative p-3'>
+                            <div className='flex items-center justify-between bg-gray-700 rounded-md  px-3 py-1 text-white'>
+                                <h3 className="dtext-lg">メニュー</h3>
                                 <div className='bg-white rounded-md' onClick={onDrawerClose}>
                                     <div className='px-3 flex items-center text-gray-700 '>
                                         <LeftArrow className='h-5 w-5'/>
@@ -70,25 +98,70 @@ const Drawer = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className='my-3  text-sm space-y-5'>
-                                <p className='text-sm translate-y-3 font-bold'>商品検索</p>
+                            <div className='my-3 text-sm font-sans'>
+                                <p className='text-base font-bold mb-1'>商品検索</p>
                                 <div className='flex items-center w-full'>
-                                    <input id='search' type="text" onChange={(e) => setSearchText(e.target.value)} placeholder='商品キーワードで検索' className='bg-indigo-50 border shadow-sm border-indigo-300 h-10 rounded-full px-3 py-1 text-sm w-full focus:outline-none font-thin' />
+                                    <input id='search' type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} placeholder='商品キーワードで検索' className='bg-indigo-50 border shadow-sm border-indigo-300 h-10 rounded-md px-3 py-1 text-sm w-full focus:outline-none font-thin' />
                                     <Link
                                         as={`/products/search/${searchText}`}
                                         href={{ pathname: `/products/search/[text]`, query:{ titleOnly: false, text: searchText } }}
                                         passHref
                                     >
                                         <a>
-                                            <div className='w-14 h-11 bg-indigo-600 rounded-xl ml-4 flex justify-center items-center shadow-md'>
+                                            <div className='w-12 h-11 bg-indigo-600 rounded-lg ml-4 flex justify-center items-center shadow-md'>
                                                 <Search className='text-white h-6 w-6'/>
                                             </div>
                                         </a>
                                     </Link>
                                 </div>
-                                <div className='h-full w-full space-y-5 font-bold bg-gray-100 p-3 rounded-md shadow-sm'>
+                                <div className='px-3 py-0.5 mt-2 mb-4 bg-indigo-100 rounded-md border border-indigo-500 shadow-md w-fit'>
+                                    <button className='text-sm text-indigo-500' onClick={() => setShowDetailSearch(!showDetailSearch)}>
+                                        { showDetailSearch ? "閉じる": "詳細で絞り込む" }
+                                    </button>
+                                </div>
+                                <div className={`${ showDetailSearch ? "border p-3 rounded-xl shadow-xl mb-8": "hidden" }`}>
+                                    <p className='text-sm font-bold'>価格帯</p>
+                                        <p className='text-sm mt-2'><span className='text-lg font-bold'>{priceRange}円</span>以下の商品</p>
+                                        <div className='w-full my-2'>
+                                            <input className='w-full' value={priceRange ?? 0} type="range" id='price-range' name='price-range' min={0} max={10000} step={1000} onInput={(e: any) => setPriceRange(e.target.value)}/>
+                                            <label htmlFor="price-range" className='hidden'>価格帯</label>
+                                        </div>
+                                    <p className='text-sm font-bold pt-3'>商品タイプ</p>
+                                    <div className='grid grid-cols-3 gap-3 text-xs py-2'>
+                                        {
+                                            types && types.length !== 0 ? types.map((type, index) => {
+                                                return <div key={index} className={` ${type.node.length > 7 ? "col-span-2" : ""} text-center border border-indigo-600 rounded-full`}><p className='text-indigo-600 font-bold'>{type.node}</p></div>
+                                            }): <div className='whitespace-nowrap text-gray-500'>商品タイプはありません</div>
+                                        }
+                                    </div>
+                                    <p className='text-sm font-bold pt-3'>商品タグ</p>
+                                    <div className='grid grid-flow-row-dense grid-cols-3 grid-row-3 gap-3 text-xs py-2'>
+                                        {
+                                            tags && tags.length !== 0 ? tags.map((tag, index) => {
+                                                return  <div key={index} className={` ${tag.node.length > 7 ? "col-span-2" : ""} text-center  border border-indigo-600 rounded-full`}><p className='text-indigo-600 font-bold'>{tag.node}</p></div>
+                                            }): <div className='whitespace-nowrap text-gray-500'>タグはありません</div>
+                                        }
+                                    </div>
+                                    {
+                                        searchText || priceRange && priceRange !== "0"  ?  <div className='border rounded-md shadow-md bg-gray-100 text-gray-500 mt-3 p-2'>
+                                                                        <p className='text-xs font-bold mb-1 text-black'>検索条件</p>
+                                                                        {
+                                                                            searchText && <p className='text-xs'>検索ワード <span className='text-sm'>{searchText}</span></p>
+                                                                        }
+                                                                        {
+                                                                            priceRange && priceRange !== "0" ?  <p className='text-xs'><span className='text-sm'>{priceRange}</span>円以下の商品</p>: null
+                                                                        }
+                                                                    </div>: null
+                                    }
+                                    <div className='w-full pt-6 flex justify-center'>
+                                        <button className='text-white w-fit px-3 py-1 rounded-md shadow-md bg-blue-500' onClick={detailSearch}>
+                                            上記の条件で検索する
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className='h-full w-full space-y-3 font-bold bg-gradient-to-tr from-amber-500 to-yellow-400 text-white  p-3 rounded-md shadow-lg'>
                                     <div onClick={onDrawerClose}>
-                                        <Link href={` ${loggedCustomer ? "/customer/login" : "/customer/my-page"} `} passHref>
+                                        <Link href={` ${ loggedCustomer ? "/customer/my-page" : "/customer/login"} `} passHref>
                                             <a>
                                                 <div className='flex items-center'>
                                                     <Person/>
@@ -136,16 +209,16 @@ const Drawer = () => {
                                         </Link>
                                     </div>
                                 </div>
-                                <div className='py-3'>
-                                    <p className='text-sm font-bold'>商品コレクション</p>
+                                <div className='py-3 mt-3'>
+                                    <p className='text-base font-bold'>商品コレクション</p>
                                     <div className='grid grid-cols-3 gap-x-5 gap-y-4 mt-4 text-xs'>
                                         {
                                             collections && collections.map((collection, index) => {
                                                 return <div key={index} onClick={onDrawerClose}>
                                                             <Link href={`/products/collection/${collection.handle}`} passHref>
                                                                 <a>
-                                                                    <div className='bg-yellow-100 px-2 py-0.5 rounded-full shadow-sm'>
-                                                                        <p className='text-yellow-500 text-center font-bold'>
+                                                                    <div className='bg-indigo-100 px-2 py-0.5 border border-indigo-500 rounded-full shadow-md'>
+                                                                        <p className='text-indigo-500 text-center font-bold'>
                                                                             {collection.title}
                                                                         </p>
                                                                     </div>
@@ -156,8 +229,8 @@ const Drawer = () => {
                                         }
                                     </div>
                                 </div>
-                                <div className="pb-3">
-                                    <p className='text-sm font-bold'>価格帯で選ぶ</p>
+                                <div className="pb-3 mt-3">
+                                    <p className='text-base font-bold'>価格帯で選ぶ</p>
                                     <div className='grid grid-cols-3 gap-2 mt-3 text-xs'>
                                         <div>
                                             <Link
@@ -166,8 +239,8 @@ const Drawer = () => {
                                                 passHref
                                             >
                                                 <a>
-                                                    <div className='bg-yellow-100 px-2 py-0.5 rounded-full shadow-sm'>
-                                                        <p className='text-yellow-500 text-center font-bold'>
+                                                    <div className='bg-indigo-100 px-2 py-0.5 border border-indigo-500 rounded-full shadow-md'>
+                                                        <p className='text-indigo-500 text-center font-bold'>
                                                             1000円以下から〜
                                                         </p>
                                                     </div>
@@ -181,8 +254,8 @@ const Drawer = () => {
                                                 passHref
                                             >
                                                 <a>
-                                                    <div className='bg-yellow-100 px-2 py-0.5 rounded-full shadow-sm'>
-                                                        <p className='text-yellow-500 text-center font-bold'>
+                                                    <div className='bg-indigo-100 px-2 py-0.5 border border-indigo-500 rounded-full shadow-sm'>
+                                                        <p className='text-indigo-500 text-center font-bold'>
                                                             3000円以下から〜
                                                         </p>
                                                     </div>
@@ -196,8 +269,8 @@ const Drawer = () => {
                                                 passHref
                                             >
                                                 <a>
-                                                    <div className='bg-yellow-100 px-2 py-0.5 rounded-full shadow-sm'>
-                                                        <p className='text-yellow-500 text-center font-bold'>
+                                                    <div className='bg-indigo-100 px-2 py-0.5 border border-indigo-500 rounded-full shadow-sm'>
+                                                        <p className='text-indigo-500 text-center font-bold'>
                                                             5000円以下から〜
                                                         </p>
                                                     </div>
@@ -211,8 +284,8 @@ const Drawer = () => {
                                                 passHref
                                             >
                                                 <a>
-                                                    <div className='bg-yellow-100 px-2 py-0.5 rounded-full shadow-sm'>
-                                                        <p className='text-yellow-500 text-center font-bold'>
+                                                    <div className='bg-indigo-100 px-2 py-0.5 border border-indigo-500 rounded-full shadow-sm'>
+                                                        <p className='text-indigo-500 text-center font-bold'>
                                                             1000円以上から〜
                                                         </p>
                                                     </div>
@@ -226,8 +299,8 @@ const Drawer = () => {
                                                 passHref
                                             >
                                                 <a>
-                                                    <div className='bg-yellow-100 px-2 py-0.5 rounded-full shadow-sm'>
-                                                        <p className='text-yellow-500 text-center font-bold'>
+                                                    <div className='bg-indigo-100 px-2 py-0.5 border border-indigo-500 rounded-full shadow-sm'>
+                                                        <p className='text-indigo-500 text-center font-bold'>
                                                             30000円以上から〜
                                                         </p>
                                                     </div>
@@ -241,8 +314,8 @@ const Drawer = () => {
                                                 passHref
                                             >
                                                 <a>
-                                                    <div className='bg-yellow-100 px-2 py-0.5 rounded-full shadow-sm'>
-                                                        <p className='text-yellow-500 text-center font-bold'>
+                                                    <div className='bg-indigo-100 px-2 py-0.5 border border-indigo-500 rounded-full shadow-sm'>
+                                                        <p className='text-indigo-500 text-center font-bold'>
                                                             5000円以上から〜
                                                         </p>
                                                     </div>
@@ -253,7 +326,7 @@ const Drawer = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className='col-span-1 bg-black bg-opacity-70 h-screen' onClick={onDrawerClose}>
+                        <div className='col-span-1 bg-black bg-opacity-70 h-full' onClick={onDrawerClose}>
                         </div>
                     </div>
                 </div>

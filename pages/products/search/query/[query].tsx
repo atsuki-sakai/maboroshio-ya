@@ -20,10 +20,6 @@ const ProductQuery = () => {
 
   const categoryName: string | undefined = query.categoryName
 
-  const [ searchText, setSearchText ] = useState<string>("")
-  const [ priceRange, setPriceRange ] = useState("")
-
-
   const searchQueryProductsApiUrl = generateApiUrl({type: "SEARCH_QUERY_PRODUCTS"})
   const searchQueryProductsFetcher = async(url: string, query: string): Promise<ProductConnection> => {
     const response = await fetch(url, {
@@ -41,12 +37,6 @@ const ProductQuery = () => {
   }
 
   const { data: products, error } = useSWR([searchQueryProductsApiUrl, graphQuery], router.isReady ? searchQueryProductsFetcher: null);
-
-  const getTagsApiUrl = generateApiUrl({type: "GET_PRODUCT_TAGS"})
-  const getTypesApiUrl = generateApiUrl({type: "GET_PRODUCT_TYPES"})
-  const { data: tags } = useSWR(getTagsApiUrl, getProductTags)
-  const { data: types } = useSWR(getTypesApiUrl, getProductTypes)
-
   useEffect(() => {
   }, [ router.isReady ])
 
@@ -66,11 +56,6 @@ const ProductQuery = () => {
                     categoryName && <p className='text-lg font-bold'>{categoryName}</p>
                   }
                   <p className='my-12 text-center text-gray-500'>検索条件と一致する商品は見つかりませんでした。</p>
-                  <Link href={"/products/search/detail"} passHref>
-                    <a className='text-sm text-blue-500'>
-                      さらに商品を検索する
-                    </a>
-                  </Link>
                 </div>
               </div>
             </Container>

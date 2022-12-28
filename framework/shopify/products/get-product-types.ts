@@ -11,7 +11,9 @@ const getProductTypes = async(url: string): Promise<StringEdge[]> => {
     if(error){
         throw Error(error.message)
     }
-    return data.productTypes.edges.map((value: StringEdge) => value)
+    const strEdges: StringEdge[] = data.productTypes.edges.map((value: StringEdge) => value);
+    const formatEdges = strEdges.filter((value: StringEdge) => value.node !== "")
+    return formatEdges
 }
 
 export default getProductTypes
