@@ -2,7 +2,7 @@
 
 const getProductTypes = `
     query {
-        productTypes(first: 6){
+        productTypes(first: 10){
             edges{
                 cursor
                 node

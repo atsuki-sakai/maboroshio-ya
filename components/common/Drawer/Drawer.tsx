@@ -93,7 +93,7 @@ const Drawer = () => {
         setProductType("")
         router.push({
             pathname: `/products/search/query/${graphQuery}`,
-            query: { graphQuery: graphQuery, categoryName: `${searchText} / ${priceRange}円以下 / ${productType} / ${productTag}` }
+            query: { graphQuery: graphQuery, categoryName: `${searchText && `${searchText}`}${priceRange && priceRange !== "0" ? ` / ${priceRange}円以下` : ``}${productType && ` / ${productType}` } ${productTag && ` / ${productTag}`}` }
         })
         onDrawerClose()
     }

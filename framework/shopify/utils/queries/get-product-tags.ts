@@ -2,7 +2,7 @@
 
 const getProductTags = `
 query {
-    productTags(first: 6){
+    productTags(first: 10){
         edges{
             cursor
             node
