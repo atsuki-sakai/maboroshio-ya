@@ -123,7 +123,7 @@ const Cart = () => {
                             </div>
                             <div className='w-full mt-1 flex items-center justify-end'>
                                 {
-                                    applicableAmount > 0 ? <p className='text-xs text-gray-500'>送料は次のステップで計算されます</p> : <></>
+                                    applicableAmount > 0 ? <p className='text-sm text-gray-500'>送料は次のステップで計算されます</p> : <></>
                                 }
                             </div>
                             <button className='flex justify-center mt-6 w-full bg-gradient-to-tr to-green-500 from-lime-400 py-2 rounded-md' onClick={ pushCheckoutWeburl } disabled={isEmptyCart || isLoading}>
@@ -141,13 +141,13 @@ const Cart = () => {
                                         isEmptyCart
                                         ? <div className='px-3 py-1 bg-gray-100 rounded-md'>
                                             <div className='pt-3 text-center'>
-                                                <p className='text-base text-start mb-3'>こちらの商品に<br/>興味はありませんか？</p>
+                                                <p className='text-base text-start font-bold mb-3'>こちらの商品に<br/>興味はありませんか？</p>
                                                 {
                                                     collection ? <CollectionSlide collection={collection}/>: null
                                                 }
                                             </div>
                                             <div className='pt-16 text-center'>
-                                                <p className='text-base text-start mb-3'>この商品はよく売れています。</p>
+                                                <p className='text-base text-start font-bold mb-3'>この商品はよく売れています。</p>
                                                 {
                                                     collection2 ? <CollectionSlide collection={collection2}/>: null
                                                 }

@@ -7,7 +7,7 @@ import { ProductReviewInfo } from '@firebase/types/review'
 import { numberToStar } from '@lib/number-to-star'
 import { Cart, LoadCircle } from '@components/icon'
 import { checkoutLineItemsAdd, checkoutShippingAddressUpdate, createCheckout } from '@shopify/cart'
-import { useCustomerState } from '@components/context'
+import { useCustomerState, useUI } from '@components/context'
 import { MailingAddress } from '@shopify/shema'
 import { checkoutCustomerAssociate, getCustomerAccessToken } from '@shopify/customer'
 
@@ -21,6 +21,7 @@ const placeholderImage = "/images/product-image-placeholder.svg"
 
 const ProductCard = ({product, productReviewInfo, showBuyNow = false} : Props) => {
 
+    const { onCartClose } = useUI()
     const { loggedCustomer } = useCustomerState()
     const [ isLoading, setIsLoading ] = useState(false)
 
@@ -42,7 +43,7 @@ const ProductCard = ({product, productReviewInfo, showBuyNow = false} : Props) =
     }
 
     return (
-        <div key={product.id} className="rounded-md overflow-hidden">
+        <div key={product.id} className="rounded-md overflow-hidden" onClick={onCartClose}>
             <Link href={`/products/${product.slug}`} passHref>
                 <a>
                     {

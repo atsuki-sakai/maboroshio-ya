@@ -8,15 +8,12 @@ import { normalizeProduct } from '@shopify/utils'
 import useSWR from 'swr'
 import { firebaseApiUrl } from '@firebase/utils'
 import idConverter from '@lib/id-converter'
-import { getProductReviewInfo } from '@firebase/firestore/review'
-import { LoadingView } from '@components/ui'
 
 interface Props {
     collection?: Collection
 }
 
 const CollectionSlide = ({collection}: Props) => {
-
 
     const products = collection?.products.edges.map(({node: product}) => normalizeProduct(product))
     const getProductReviewInfosApiUrl = firebaseApiUrl({type: "GET_PRODUCT_REVIEW_INFO"})
