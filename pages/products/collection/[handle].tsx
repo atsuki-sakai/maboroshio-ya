@@ -72,12 +72,8 @@ const CollectionPage = () => {
 
     const { data: collection, error } = useSWR<Collection, Error>([getCollectionByHandleApiUrl, collectionHandle], router.isReady ? collectionFetcher: null)
     const { data: infos, error: infosError } = useSWR([getProuctReviewInfoApiUrl, collection?.products.edges.map(({node: product}) => product.id)], collection ? productReveiwInfos: null)
-
-    console.log(infos)
     useEffect(() => {
 
-
-        console.log('update', collection?.products.edges.map(({node: product}) => product))
     }, [router.isReady, collection])
 
     if(error || infosError){

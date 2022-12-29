@@ -5,7 +5,7 @@ import { generateApiUrl, normalizeProduct } from '@shopify/utils'
 import useSWR from 'swr'
 import { Container, ErrorView, LoadingView } from '@components/ui'
 import { ProductCard } from '@components/product'
-import { ProductConnection } from '@shopify/shema'
+import { Product, ProductConnection } from '@shopify/shema'
 import { motion } from 'framer-motion'
 import { LoadCircle } from '@components/icon'
 
@@ -48,19 +48,21 @@ const ProductQuery = () => {
     }
   }
 
-  const { data: products, error } = useSWR([searchQueryProductsApiUrl, graphQuery], router.isReady ? searchQueryProductsFetcher: null);
+  const { data: productsConnect, error } = useSWR([searchQueryProductsApiUrl, graphQuery], router.isReady ? searchQueryProductsFetcher: null);
+
   useEffect(() => {
+
   }, [ router.isReady ])
 
   if(error){
     return <ErrorView message={error.message} />
   }
 
-  if(!products){
+  if(!productsConnect){
     return <LoadingView/>
   }
 
-  if(products.edges.length === 0){
+  if(productsConnect.edges.length === 0){
     return  <Container>
               <div className='px-12 pb-12'>
                 <div className='py-20'>
@@ -80,18 +82,18 @@ const ProductQuery = () => {
           categoryName && <p className='text-lg font-bold'>{categoryName}</p>
         }
         <div className='w-full flex justify-end mb-4'>
-          <p className='text-sm'><span className='text-lg text-gray-800'>{products.edges.length}</span>点の商品がヒット</p>
+          <p className='text-sm'><span className='text-lg text-gray-800'>{productsConnect.edges.length}</span>点の商品がヒット</p>
         </div>
         <div className='grid grid-cols-2 gap-3'>
           {
-            products.edges.map(({node: product}) => {
+            productsConnect.edges.map(({node: product}) => {
               return <ProductCard key={product.id} product={normalizeProduct(product)} productReviewInfo={null} />
             })
           }
         </div>
         <div className='w-full pt-5'>
           {
-              products.pageInfo.hasNextPage ? <div className='mt-8'>
+              productsConnect.pageInfo.hasNextPage ? <div className='mt-8'>
                                                   <button className="px-3 w-full py-1 textp-center bg-green-500 rounded-md shadow-md" onClick={fetchMoreProducts} disabled={isFetching}>
                                                       <div className='flex items-center justify-center'>
                                                           <p className='text-white text-sm text-center w-fit'>さらに商品を表示</p>

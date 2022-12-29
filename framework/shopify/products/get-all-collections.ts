@@ -4,7 +4,7 @@ import { generateApiUrl } from "@shopify/utils"
 const getAllCollections = async(limit: number): Promise<Collection[]> => {
 
     const getAllCollectionsApiUrl = generateApiUrl({type: "GET_ALL_COLLECTIONS"})
-    console.log(getAllCollectionsApiUrl)
+
     const response = await fetch(getAllCollectionsApiUrl, {
         method: "POST",
         mode: "no-cors",
@@ -18,8 +18,6 @@ const getAllCollections = async(limit: number): Promise<Collection[]> => {
     if(error){
         throw Error(error.message)
     }
-
-    console.log(data.collections)
 
     return data.collections.edges.map((edge: any) => edge.node)
 }

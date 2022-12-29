@@ -21,8 +21,6 @@ const placeholderImage = "/images/product-image-placeholder.svg"
 
 const ProductCard = ({product, productReviewInfo, showBuyNow = false} : Props) => {
 
-    console.log("info: ", productReviewInfo)
-
     const { loggedCustomer } = useCustomerState()
     const [ isLoading, setIsLoading ] = useState(false)
 

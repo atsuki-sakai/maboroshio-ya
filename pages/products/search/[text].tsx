@@ -37,7 +37,7 @@ const SearchProduct = () => {
   }
 
   const { data: productConnection, error } = useSWR([searchWordsProductsApiUrl, titleOnly, searchWord], searchProductsFeatcher)
-    console.log(productConnection)
+
   useEffect(() => {
 
   },[router.isReady])
