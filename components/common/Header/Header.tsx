@@ -49,7 +49,7 @@ const Header = () => {
                 <div className={style.mobile_container}>
                     <div className={style.mobile_menu}>
                         <button onClick={onDrawerOpen}>
-                            <Menu/>
+                            <Menu className='h-10 w-10'/>
                         </button>
                         <button className='invisible'>
                             <Menu/>
@@ -65,23 +65,17 @@ const Header = () => {
                     </div>
                     <div className={style.mobile_menu}>
                         {
-                            loggedCustomer !== undefined  ? 
-                                            <div className='relative'>
-                                                <div className='absolute -top-1 -left-2 h-2 w-2 bg-green-400 rounded-full'></div>
-                                                <Link href='/customer/my-page' passHref>
-                                                    <a>
-                                                        <MyPage/>
-                                                    </a>
-                                                </Link>
-                                            </div>
-                                            : <Link href='/customer/login' passHref>
-                                                <a>
-                                                    <Person/>
-                                                </a>
-                                            </Link>
+                            <div className='relative'>
+                                <div className={`absolute -top-1 -left-2 h-2 w-2 ${ !loggedCustomer ? "bg-green-500": "" } rounded-full`}></div>
+                                <Link href='/customer/my-page' passHref>
+                                    <a>
+                                        <Person className={`h-8 w-8`}/>
+                                    </a>
+                                </Link>
+                            </div>
                         }
                         <button onClick={onCartOpen}>
-                            <Cart/>
+                            <Cart className='h-8 w-8'/>
                         </button>
                     </div>
                 </div>

@@ -112,7 +112,7 @@ const Drawer = () => {
             >
                 <div className={style.root}>
                     <div className='grid grid-cols-6 h-full font-sans'>
-                        <div className='col-span-5 bg-white rounded-tr-md rounded-br-md h-full  py-8 relative p-3'>
+                        <div className='col-span-5 bg-white rounded-tr-md rounded-br-md h-full  py-8 relative p-4'>
                             <div className='flex items-center justify-between bg-gray-700 rounded-md  px-3 py-1 text-white'>
                                 <h3 className="dtext-lg">メニュー</h3>
                                 <div className='bg-white rounded-md' onClick={onDrawerClose}>
@@ -123,82 +123,81 @@ const Drawer = () => {
                                 </div>
                             </div>
                             <div className='my-3 text-sm font-sans'>
-                                <p className='text-base font-bold mb-1'>商品検索</p>
-                                <div className='flex items-center w-full'>
-                                    <input id='search' type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} placeholder='商品キーワードで検索' className='bg-indigo-50 border shadow-sm border-indigo-300 h-10 rounded-md px-3 py-1 text-[18px] w-full focus:outline-none font-light tracking-wide' />
+                                <div className='flex items-center w-full pt-3'>
+                                    <input id='search' type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} placeholder='商品キーワードで検索' className='bg-gray-50 border shadow-sm  h-10 rounded-md px-3 py-1 text-[17px] w-full focus:outline-none tracking-wide' />
                                     <Link
                                         as={`/products/search/${searchText}`}
                                         href={{ pathname: `/products/search/[text]`, query:{ titleOnly: false, text: searchText } }}
                                         passHref
                                     >
                                         <a>
-                                            <div className='w-12 h-11 bg-indigo-600 rounded-lg ml-4 flex justify-center items-center shadow-md' onClick={onDrawerClose}>
+                                            <div className='w-10 h-10 bg-indigo-500 rounded-lg ml-4 flex justify-center items-center shadow-md' onClick={onDrawerClose}>
                                                 <Search className='text-white h-6 w-6'/>
                                             </div>
                                         </a>
                                     </Link>
                                 </div>
-                                <div className='px-3 py-0.5 mt-2 mb-4 bg-indigo-100 rounded-md border border-indigo-500 shadow-md w-fit'>
-                                    <button className='text-sm text-indigo-500' onClick={() => setShowDetailSearch(!showDetailSearch)}>
-                                        { showDetailSearch ? "閉じる": "詳細で絞り込む" }
+                                <div className='pt-3'>
+                                    <button className='text-sm text-indigo-500 underline' onClick={() => setShowDetailSearch(!showDetailSearch)}>
+                                        { showDetailSearch ? "閉じる": "商品を詳しく絞り込む" }
                                     </button>
                                 </div>
-                                <div className={`${ showDetailSearch ? "border p-3 rounded-xl shadow-xl mb-8": "hidden" }`}>
+                                <div className={`${ showDetailSearch ? "border p-3 rounded-xl shadow-md mb-8 mt-6": "hidden" }`}>
                                     <p className='text-base font-bold'>価格帯</p>
-                                        <p className='text-sm mt-2'><span className='text-lg font-bold'>{priceRange ? `${priceRange}円` : `未入力`}</span>{ priceRange ? "以下の商品": "" }</p>
+                                        <p className='text-sm mt-2'><span className={` ${priceRange ? "text-lg font-bold": "text-sm text-gray-500"}`}>{priceRange ? `${priceRange}円` : `指定無し`}</span>{ priceRange ? "以下の商品": "" }</p>
                                         <div className='w-full my-2'>
                                             <input className='w-full' value={priceRange ?? 0} type="range" id='price-range' name='price-range' min={1000} max={10000} step={1000} onInput={(e: any) => setPriceRange(e.target.value)}/>
                                             <label htmlFor="price-range" className='hidden'>価格帯</label>
                                         </div>
                                     <p className='text-base font-bold pt-3'>商品カテゴリ</p>
-                                    <div className='grid grid-cols-2 gap-5 text-base py-2'>
+                                    <div className='grid grid-cols-2 gap-3 text-base py-4'>
                                         {
                                             types && types.length !== 0 ? types.map((type, index) => {
-                                                return <b key={index} className={` text-start font-light`} onClick={() => setProductType(type.node)}><p className={` ${type.node === productType ? "text-green-500 underline" : "text-black"} `}>{type.node}</p></b>
-                                            }): <div className='whitespace-nowrap text-gray-500'>商品タイプはありません</div>
+                                                return <button key={index} className={`text-start transform duration-300 ease-in-out ${type.node === productType ? "text-blue-500 font-bold" : "text-gray-500 scale-95"}`} onClick={() => setProductType(type.node)}><p className={``}>{type.node}</p></button>
+                                            }): <div className='whitespace-nowrap text-gray-500'>商品カテゴリはありません</div>
                                         }
                                     </div>
                                     <p className='text-base font-bold pt-3'>商品タグ</p>
                                     <div className='grid grid-flow-row-dense grid-cols-2 grid-row-3 gap-5 text-base py-2'>
                                         {
                                             tags && tags.length !== 0 ? tags.map((tag, index) => {
-                                                return  <button key={index} className={`text-center ${ tag.node === productTag ? "bg-green-500": "bg-gray-700" } rounded-md shadow-md py-2 px-1`} onClick={() => setProductTag(tag.node)}><p className='text-white font-bold'>{tag.node}</p></button>
-                                            }): <div className='whitespace-nowrap text-gray-500'>タグはありません</div>
+                                                return  <button key={index} className={`text-center transform duration-300 ease-out ${ tag.node === productTag ? "bg-blue-500 text-white font-bold": "bg-gray-100 border text-gray-400 scale-95" } rounded-xl shadow-md py-2 px-1`} onClick={() => setProductTag(tag.node)}><p>{tag.node}</p></button>
+                                            }): <div className='whitespace-nowrap text-gray-500'>商品タグはありません</div>
                                         }
                                     </div>
                                     {
-                                        !productTag && !productType && !searchText && !priceRange ? null : <div className='border rounded-md shadow-md bg-gray-100 text-gray-500 mt-3 p-2'>
-                                                                                                                <p className='text-sm font-bold'>検索条件</p>
+                                        !productTag && !productType && !searchText && !priceRange ? null : <div className='border rounded-md shadow-md bg-gray-100 space-y-1 text-gray-500 mt-3 p-2'>
+                                                                                                                <p className='text-base'>検索条件</p>
                                                                                                                 {
-                                                                                                                    searchText && <p className='text-xs'>検索ワード <span className='text-sm font-bold text-black'>{searchText}</span></p>
+                                                                                                                    searchText && <p className='text-sm'>検索ワード <span className='text-base font-bold text-black'>{searchText}</span></p>
                                                                                                                 }
                                                                                                                 {
                                                                                                                     priceRange && priceRange !== "0" ?  <p className='text-xs'><span className='text-sm font-bold text-black'>{priceRange}</span>円以下の商品</p>: null
                                                                                                                 }
                                                                                                                 {
-                                                                                                                    productType && <p className='text-xs'>カテゴリ　<span className='text-sm font-bold text-black'>{productType}</span></p>
+                                                                                                                    productType && <p className='text-sm'>商品カテゴリ　<span className='text-base font-bold text-black'>{productType}</span></p>
                                                                                                                 }
                                                                                                                 {
-                                                                                                                    productTag && <p className='text-xs'>タグ　<span className='text-sm font-bold text-black'>{productTag}</span></p>
+                                                                                                                    productTag && <p className='text-sm'>商品タグ　<span className='text-base font-bold text-black'>{productTag}</span></p>
                                                                                                                 }
                                                                                                             </div>
                                     }
                                     <div className='w-full pt-6 flex justify-center'>
-                                        <button className='text-white text-base w-fit px-3 py-1 rounded-md shadow-md bg-blue-500' onClick={detailSearch} disabled={!productTag && !productType && !searchText && !priceRange}>
+                                        <button className={`text-white text-base w-fit px-3 py-1 rounded-md shadow-md ${!productTag && !productType && !searchText && !priceRange ? "bg-gray-500" : "bg-blue-500" }`} onClick={detailSearch} disabled={!productTag && !productType && !searchText && !priceRange}>
                                             {
                                                 !productTag && !productType && !searchText && !priceRange ? "商品を絞り込んで下さい" : "上記の条件で検索"
                                             }
                                         </button>
                                     </div>
                                 </div>
-                                <div className='h-full w-full space-y-3 font-bold bg-gradient-to-tr from-amber-500 to-yellow-400 text-white  p-3 rounded-md shadow-lg'>
+                                <div className='h-full w-full space-y-3 font-medium mt-6 bg-gradient-to-tr from-green-500 to-lime-400 text-white text-lg p-3 rounded-md shadow-lg'>
                                     <div onClick={onDrawerClose}>
                                         <Link href={` ${ loggedCustomer ? "/customer/my-page" : "/customer/login"} `} passHref>
                                             <a>
                                                 <div className='flex items-center'>
                                                     <Person/>
                                                     <p className='pl-1'>
-                                                        { loggedCustomer ? "マイページ" : "会員登録する" }
+                                                        { loggedCustomer ? "マイページ" : "会員登録" }
                                                     </p>
                                                 </div>
                                             </a>
@@ -241,16 +240,19 @@ const Drawer = () => {
                                         </Link>
                                     </div>
                                 </div>
+                                <div className='pt-8'>
+                                    <div className='bg-gray-300 h-[1px] w-2/3 mx-auto'></div>
+                                </div>
                                 <div className='py-3 mt-3'>
                                     <button className='w-full focus:outline-none active:outline-none' onClick={() => setShowCollections(!showCollections)}>
                                         {
                                             showCollections ?   <div className='flex items-center justify-between'>
-                                                                    <p className='text-base font-bold'>閉じる</p>
-                                                                    <Close/>
+                                                                    <p className='text-base'>閉じる</p>
+                                                                    <Close className='h-7 w-7'/>
                                                                 </div>
                                                             : <div className='flex items-center justify-between'>
                                                                 <p className='text-base font-bold'>商品コレクション</p>
-                                                                <ChevronDown/>
+                                                                <ChevronDown className='h-7 w-7'/>
                                                             </div>
                                         }
                                     </button>
@@ -273,9 +275,12 @@ const Drawer = () => {
                                         }
                                     </div>
                                 </div>
+                                <div className='pt-2 pb-4'>
+                                    <div className='bg-gray-300 h-[1px] w-2/3 mx-auto'></div>
+                                </div>
                                 <div className="pb-3 mt-3">
                                     <p className='text-base font-bold'>価格帯で選ぶ</p>
-                                    <div className='grid grid-cols-2 gap-4 mt-3 text-xs'>
+                                    <div className='grid grid-cols-2 gap-4 mt-4 text-sm'>
                                         <div>
                                             <Link
                                                 as={`/products/search/query/${"max-of-price-1000"}`}
@@ -284,7 +289,7 @@ const Drawer = () => {
                                             >
                                                 <a>
                                                     <div className='px-1 py-2 rounded-md shadow-md bg-gray-700'>
-                                                        <p className='text-white text-center font-bold'>
+                                                        <p className='text-white text-center'>
                                                             1000円以下から〜
                                                         </p>
                                                     </div>
@@ -299,7 +304,7 @@ const Drawer = () => {
                                             >
                                                 <a>
                                                     <div className='px-1 py-2 rounded-md shadow-md bg-gray-700'>
-                                                        <p className='text-white text-center font-bold'>
+                                                        <p className='text-white text-center'>
                                                             3000円以下から〜
                                                         </p>
                                                     </div>
@@ -314,7 +319,7 @@ const Drawer = () => {
                                             >
                                                 <a>
                                                     <div className='px-1 py-2 rounded-md shadow-md bg-gray-700'>
-                                                        <p className='text-white text-center font-bold'>
+                                                        <p className='text-white text-center'>
                                                             5000円以下から〜
                                                         </p>
                                                     </div>
@@ -329,7 +334,7 @@ const Drawer = () => {
                                             >
                                                 <a>
                                                     <div className='px-1 py-2 rounded-md shadow-md bg-gray-700'>
-                                                        <p className='text-white text-center font-bold'>
+                                                        <p className='text-white text-center'>
                                                             1000円以上から〜
                                                         </p>
                                                     </div>
@@ -344,8 +349,8 @@ const Drawer = () => {
                                             >
                                                 <a>
                                                     <div className='px-1 py-2 rounded-md shadow-md bg-gray-700'>
-                                                        <p className='text-white text-center font-bold'>
-                                                            30000円以上から〜
+                                                        <p className='text-white text-center'>
+                                                            3000円以上から〜
                                                         </p>
                                                     </div>
                                                 </a>
@@ -359,7 +364,7 @@ const Drawer = () => {
                                             >
                                                 <a>
                                                     <div className='px-1 py-2 rounded-md shadow-md bg-gray-700'>
-                                                        <p className='text-white text-center font-bold'>
+                                                        <p className='text-white text-center'>
                                                             5000円以上から〜
                                                         </p>
                                                     </div>

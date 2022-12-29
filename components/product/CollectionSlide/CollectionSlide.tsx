@@ -2,15 +2,47 @@
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import React from 'react'
 import ProductCard from '../ProductCard'
-import type { Collection } from '@shopify/shema'
+import type { Collection, Product } from '@shopify/shema'
 import { truncate } from '@lib/truncate'
 import { normalizeProduct } from '@shopify/utils'
+import useSWR from 'swr'
+import { firebaseApiUrl } from '@firebase/utils'
+import idConverter from '@lib/id-converter'
+import { getProductReviewInfo } from '@firebase/firestore/review'
+import { LoadingView } from '@components/ui'
 
 interface Props {
     collection?: Collection
 }
 
 const CollectionSlide = ({collection}: Props) => {
+
+
+    const products = collection?.products.edges.map(({node: product}) => normalizeProduct(product))
+    const getProductReviewInfosApiUrl = firebaseApiUrl({type: "GET_PRODUCT_REVIEW_INFO"})
+
+    const getProductReviewInfosFetcher = async(url: string, products: Product[]) => {
+        const productReviewInfos = await Promise.all(
+            products.map( async(product) => {
+                const response = await fetch(url, {
+                    method: "POST",
+                    mode: "no-cors",
+                    body: JSON.stringify({
+                        productId: idConverter({type: "PRODUCT"}, product.id)
+                    })
+                })
+                const data = await response.json()
+                return data.productReviewInfo
+            })
+        )
+        console.log(productReviewInfos)
+        return productReviewInfos
+    }
+    const { data: productInfos } = useSWR([getProductReviewInfosApiUrl, products], collection ? getProductReviewInfosFetcher: null)
+
+    if(!productInfos){
+        return <div className='py-16 px-8'>Loading</div>
+    }
     return (
         <>
             {
@@ -26,7 +58,7 @@ const CollectionSlide = ({collection}: Props) => {
                         {
                             collection.products.edges.map(({node: product}, index) => {
                                 return  <SplideSlide key={index}>
-                                            <ProductCard product={normalizeProduct(product)} productReviewInfo={null}/>
+                                            <ProductCard product={normalizeProduct(product)} productReviewInfo={productInfos[index]}/>
                                         </SplideSlide>
                             })
                         }

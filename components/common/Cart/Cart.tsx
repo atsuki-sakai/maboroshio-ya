@@ -1,7 +1,7 @@
 
 import React, {useState } from 'react'
 import { useUI, useCart, useCustomerState } from '@components/context'
-import { AlertDialog } from '@components/ui';
+import { AlertDialog, LoadingView } from '@components/ui';
 import CartCard  from '@components/common/Cart/CartCard';
 import { Check, LoadCircle, RightArrow } from '@components/icon';
 import { getCheckout, getCheckoutId } from '@shopify/cart';
@@ -9,7 +9,10 @@ import { checkoutShippingAddressUpdate } from "@shopify/cart"
 
 import { motion } from 'framer-motion';
 import type { LineItem } from '@shopify/types/cart';
-import { MailingAddress } from '@shopify/shema';
+import { Collection, MailingAddress } from '@shopify/shema';
+import { generateApiUrl, normalizeProduct } from '@shopify/utils';
+import useSWR from 'swr';
+import { CollectionSlide, ProductCard } from '@components/product';
 
 const Cart = () => {
 
@@ -20,6 +23,8 @@ const Cart = () => {
     const [ isLoading, setIsLoading ] = useState(false)
     const [ errorMessage, setErrorMessage] = useState("")
 
+
+    const isEmptyCart = cart.lineItems.length === 0
     const applicableAmount = 10000 - cart.lineItemsSubtotalPrice
 
     const cartTotalQuantity = () => cart.lineItems.map((item: LineItem) => item.quantity).reduce((sum, element) => sum + element, 0)
@@ -41,6 +46,28 @@ const Cart = () => {
             await checkoutShippingAddressUpdate(getCheckoutId()!, updateAddress as MailingAddress);
         }
     }
+
+
+    const womenCollection = "women"
+    const menCollection = "men"
+
+    const getCollectionByHandleApiUrl = generateApiUrl({type: "GET_COLLECTION_BY_HANDLE"})
+    const collectionFeacher = async(url: string, handle: string): Promise<Collection> => {
+        const response = await fetch(url, {
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify({
+                handle: handle
+            })
+        }).then((res) => {
+            return res.json()
+        }).catch((e) => {
+            throw Error(e.message)
+        })
+        return response.data.collectionByHandle
+    }
+    const { data: collection } = useSWR([getCollectionByHandleApiUrl, womenCollection], isEmptyCart ? collectionFeacher: null)
+    const { data: collection2 } = useSWR([getCollectionByHandleApiUrl, menCollection], isEmptyCart ? collectionFeacher: null)
 
     const pushCheckoutWeburl = async() => {
         try{
@@ -86,23 +113,23 @@ const Cart = () => {
                                     }
                                 </div>
                                 <div className='grid grid-cols-7 items-end justify-between mt-2 py-2 px-2 rounded-md bg-gray-100'>
-                                    <div className="col-span-4 text-gray-500 text-sm font-noto">
-                                        合計 <span className="font-sans text-black text-3xl">¥{Math.floor(cart.lineItemsSubtotalPrice)}</span>
+                                    <div className="col-span-4 text-black text-sm font-noto">
+                                        合計 <span className="font-sans  text-3xl">¥{Math.floor(cart.lineItemsSubtotalPrice)}</span>
                                     </div>
                                     <div className='col-span-3'>
-                                        <p className='text-sm text-end text-gray-500'><span className='text-lg font-semibold text-black'>{cartTotalQuantity()}</span> 点の商品</p>
+                                        <p className='text-sm text-end text-black'><span className='text-lg font-semibold'>{cartTotalQuantity()}</span> 点の商品</p>
                                     </div>
                                 </div>
                             </div>
                             <div className='w-full mt-1 flex items-center justify-end'>
                                 {
-                                    applicableAmount > 0 ? <p className='text-xs text-blue-600 bg-blue-100 w-fit rounded-md px-3 py-1'>送料は次のステップで計算されます</p> : <></>
+                                    applicableAmount > 0 ? <p className='text-xs text-gray-500'>送料は次のステップで計算されます</p> : <></>
                                 }
                             </div>
-                            <button className='flex justify-center mt-3 w-full bg-gradient-to-tr to-green-500 from-lime-400 py-2 rounded-md' onClick={ pushCheckoutWeburl } disabled={cart.lineItems.length === 0 || isLoading}>
+                            <button className='flex justify-center mt-6 w-full bg-gradient-to-tr to-green-500 from-lime-400 py-2 rounded-md' onClick={ pushCheckoutWeburl } disabled={isEmptyCart || isLoading}>
                                 <div className='flex items-center justify-between'>
                                     <p className='text-white text-lg font-bold text-center tracking-wider'>
-                                        {cart.lineItems.length === 0 ? "カートは空です": isLoading ? "決済処理中" : "商品を購入する"}
+                                        {isEmptyCart ? "カートは空です": isLoading ? "決済処理中" : "商品を購入する"}
                                     </p>
                                     <motion.div className="ml-2 -translate-y-1.5" initial={{ opacity:0, height:12, width:0 }} animate={{ opacity: isLoading ? 1: 0, height:12, width: isLoading ? 12: 0 }}>
                                     <LoadCircle className='text-white h-6 w-6 animate-spin'/>
@@ -111,9 +138,20 @@ const Cart = () => {
                             </button>
                             <div className='overflow-y-auto my-5 p-1'>
                                     {
-                                        cart.lineItems.length === 0
-                                        ? <div>
-                                            <p className='py-6 text-center font-bold text-gray-400'>カート内に商品はありません</p>
+                                        isEmptyCart
+                                        ? <div className='px-3 py-1 bg-gray-100 rounded-md'>
+                                            <div className='pt-3 text-center'>
+                                                <p className='text-base text-start mb-3'>こちらの商品に<br/>興味はありませんか？</p>
+                                                {
+                                                    collection ? <CollectionSlide collection={collection}/>: null
+                                                }
+                                            </div>
+                                            <div className='pt-16 text-center'>
+                                                <p className='text-base text-start mb-3'>この商品はよく売れています。</p>
+                                                {
+                                                    collection2 ? <CollectionSlide collection={collection2}/>: null
+                                                }
+                                            </div>
                                         </div>
                                         : cart.lineItems.map((item: LineItem) => {
                                             return <CartCard key={item.id} item={item}/>
