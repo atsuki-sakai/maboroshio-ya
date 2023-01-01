@@ -7,7 +7,7 @@
 const searcQueryProducts = (query: string): string => {
     return `
         {
-            products(first: 10, query: "${query}", sortKey: PRICE){
+            products(first: 10, query: "${query}", reverse: true){
                 pageInfo {
                     hasNextPage
                     hasPreviousPage

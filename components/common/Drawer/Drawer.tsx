@@ -1,386 +1,560 @@
-
-import React, { useEffect, useState } from 'react'
-import Link from 'next/link';
-import { useCustomerState, useUI } from '@components/context'
-import { motion } from 'framer-motion';
-import style from "./Drawer.module.css"
-import LeftArrow from '@components/icon/LeftArrow';
-import Search from '@components/icon/Search';
-import useSWR from 'swr';
-import { generateApiUrl } from '@shopify/utils';
-import { Collection } from "@shopify/shema"
-import { ChevronDown, Close, Menu, Person, RightArrow, Trash } from '@components/icon';
-import { getProductTags, getProductTypes } from '@shopify/products';
-import { Router, useRouter } from 'next/router';
-import { truncate } from '@lib/truncate';
-import { ProductCard } from '@components/product';
+import React, { useState } from "react";
+import Link from "next/link";
+import { useCustomerState, useUI } from "@components/context";
+import { motion } from "framer-motion";
+import style from "./Drawer.module.css";
+import LeftArrow from "@components/icon/LeftArrow";
+import Search from "@components/icon/Search";
+import useSWR from "swr";
+import { generateApiUrl } from "@shopify/utils";
+import { Collection } from "@shopify/shema";
+import { ChevronDown, Close, Menu, Person, Trash } from "@components/icon";
+import { getProductTags, getProductTypes } from "@shopify/products";
+import { useRouter } from "next/router";
+import { truncate } from "@lib/truncate";
 
 const Drawer = () => {
+  const { isDrawerOpen, onDrawerClose } = useUI();
+  const router = useRouter();
+  const { loggedCustomer } = useCustomerState();
+  const [showDetailSearch, setShowDetailSearch] = useState(false);
+  const [showCollections, setShowCollections] = useState(false);
 
-    const { isDrawerOpen, onDrawerClose } = useUI();
-    const router = useRouter()
-    const { loggedCustomer } = useCustomerState()
-    const [ showDetailSearch, setShowDetailSearch ] = useState(false)
-    const [ showCollections, setShowCollections ] = useState(false)
+  const getAllCollectionsApiUrl = generateApiUrl({
+    type: "GET_ALL_COLLECTIONS",
+  });
+  const collectionsFeacher = async (url: string): Promise<Collection[]> => {
+    const response = await fetch(url, {
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify({
+        limit: 6,
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .catch((e) => {
+        throw Error(e.message);
+      });
+    return response.data.collections.edges.map((edge: any) => edge.node);
+  };
+  const { data: collections } = useSWR(
+    getAllCollectionsApiUrl,
+    collectionsFeacher
+  );
 
-    const getAllCollectionsApiUrl = generateApiUrl({type: "GET_ALL_COLLECTIONS"})
-    const collectionsFeacher = async(url: string): Promise<Collection[]> => {
-        const response = await fetch(url, {
-            method: "POST",
-            mode: "no-cors",
-            body: JSON.stringify({
-                limit: 6
-            })
-        }).then((res) => {
-            return res.json()
-        }).catch((e) => {
-            throw Error(e.message)
-        })
-        return response.data.collections.edges.map((edge: any) => edge.node)
+  const [searchText, setSearchText] = useState<string>("");
+  const [productType, setProductType] = useState<string>("");
+  const [productTag, setProductTag] = useState<string>("");
+  const [priceRange, setPriceRange] = useState<string>();
+
+  const getTagsApiUrl = generateApiUrl({ type: "GET_PRODUCT_TAGS" });
+  const getTypesApiUrl = generateApiUrl({ type: "GET_PRODUCT_TYPES" });
+  const { data: tags } = useSWR(getTagsApiUrl, getProductTags);
+  const { data: types } = useSWR(getTypesApiUrl, getProductTypes);
+
+  const wordsToQuery = (words: string[], onlyTitle: boolean = false) => {
+    const queryList = words.map((word, index) => {
+      if (index === 0) {
+        return `(${onlyTitle ? `title:${word}*` : `${word}*`})`;
+      } else {
+        return ` OR (${onlyTitle ? `title:${word}*` : `${word}*`})`;
+      }
+    });
+
+    return queryList.length !== 0
+      ? queryList.reduce((sum, value) => (sum += value))
+      : "";
+  };
+
+  const detailSearch = async () => {
+    let graphQuery = "";
+    const words = searchText.split(/(\s+)/).filter((e) => e.trim().length > 0);
+
+    graphQuery = wordsToQuery(words);
+
+    if (priceRange && parseInt(priceRange) >= 1000) {
+      if (graphQuery === "") {
+        graphQuery += `(variants.price:<${parseInt(priceRange)})`;
+      } else {
+        graphQuery += ` AND (variants.price:<${parseInt(priceRange)})`;
+      }
     }
-    const { data: collections } = useSWR(getAllCollectionsApiUrl, collectionsFeacher)
-
-    const [ searchText, setSearchText ] = useState<string>("")
-    const [ productType, setProductType ] = useState<string>("")
-    const [ productTag, setProductTag ] = useState<string>("")
-    const [ priceRange, setPriceRange ] = useState<string>()
-
-    const getTagsApiUrl = generateApiUrl({type: "GET_PRODUCT_TAGS"})
-    const getTypesApiUrl = generateApiUrl({type: "GET_PRODUCT_TYPES"})
-    const { data: tags } = useSWR(getTagsApiUrl, getProductTags)
-    const { data: types } = useSWR(getTypesApiUrl, getProductTypes)
-
-    const wordsToQuery = (words: string[], onlyTitle: boolean = false) => {
-        const queryList =  words.map((word, index) => {
-            if(index === 0){
-                return `(${onlyTitle ? `title:${word}*`: `${word}*`})`
-            }else{
-                return ` OR (${onlyTitle ? `title:${word}*`: `${word}*`})`
-            }
-        })
-
-        return queryList.length !== 0 ? queryList.reduce((sum, value) => sum += value) : ""
+    if (productType) {
+      if (graphQuery === "") {
+        graphQuery += `(product_type:${productType})`;
+      } else {
+        graphQuery += ` AND (product_type:${productType})`;
+      }
     }
-    const detailSearch = async() => {
-
-        const words = searchText.split(/(\s+)/).filter( e => e.trim().length > 0)
-        let searchTextQuery = wordsToQuery(words)
-        let priceRangeQuery = ""
-        if(priceRange && parseInt(priceRange) >= 1000){
-            if(searchTextQuery === ""){
-                priceRangeQuery = `(variants.price:<${parseInt(priceRange)})`
-            }else{
-                priceRangeQuery = ` AND (variants.price:<${parseInt(priceRange)})`
-            }
-        }
-        let productTypeQuery = ""
-        let productTagQuery = ""
-        if(productType){
-            if(!searchTextQuery || !priceRangeQuery){
-                productTypeQuery = `(product_type:${productType})`
-            }else{
-                productTypeQuery = ` AND (product_type:${productType})`
-            }
-        }
-        if(productTag){
-            if(!searchTextQuery || !priceRangeQuery || !productTypeQuery){
-                productTagQuery = `(tag:${productTag})`
-            }else{
-                productTagQuery = ` AND (product_type:${productTag})`
-            }
-        }
-        const graphQuery = searchTextQuery + priceRangeQuery + productTypeQuery + productTagQuery
-        setPriceRange("")
-        setSearchText("")
-        setProductTag("")
-        setProductType("")
-        router.push({
-            pathname: `/products/search/query/${graphQuery}`,
-            query: { graphQuery: graphQuery, categoryName: `${searchText && `${searchText}`}${priceRange && priceRange !== "0" ? ` / ${priceRange}円以下` : ``}${productType && ` / ${productType}` } ${productTag && ` / ${productTag}`}` }
-        })
-        onDrawerClose()
+    if (productTag) {
+      if (graphQuery === "") {
+        graphQuery += `(tag:${productTag})`;
+      } else {
+        graphQuery += ` AND (product_type:${productTag})`;
+      }
     }
+    setPriceRange("");
+    setSearchText("");
+    setProductTag("");
+    setProductType("");
+    router.push({
+      pathname: `/products/search/query/${graphQuery}`,
+      query: {
+        graphQuery: graphQuery,
+        categoryName: `${searchText && `${searchText}`}${
+          priceRange && priceRange !== "0" ? ` / ${priceRange}円以下` : ``
+        }${productType && ` / ${productType}`} ${
+          productTag && ` / ${productTag}`
+        }`,
+      },
+    });
+    onDrawerClose();
+  };
 
-    console.log(!productTag && !productType && !searchText && !priceRange)
-
-    return (
-            <motion.div
-                initial={{ x:"-100%", opacity:0.0 }}
-                animate={{ x: isDrawerOpen ? "0%" : "-100%", opacity: isDrawerOpen ? 1.0 : 0.0 }}
-                transition={{ duration:"0.6" }}
-                className="fixed top-0 left-0 right-0 bottom-0 z-50 overflow-y-auto"
-            >
-                <div className={style.root}>
-                    <div className='grid grid-cols-6 h-full font-sans'>
-                        <div className='col-span-5 bg-white rounded-tr-md rounded-br-md h-full  py-8 relative p-4'>
-                            <div className='flex items-center justify-between bg-gray-700 rounded-md  px-3 py-1 text-white'>
-                                <h3 className="dtext-lg">メニュー</h3>
-                                <div className='bg-white rounded-md' onClick={onDrawerClose}>
-                                    <div className='px-3 flex items-center text-gray-700 '>
-                                        <LeftArrow className='h-5 w-5'/>
-                                        <span className='text-sm font-bold'>メニューを閉じる</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className='my-3 text-sm font-sans'>
-                                <div className='flex items-center w-full pt-3'>
-                                    <input id='search' type="text" value={searchText} onChange={(e) => setSearchText(e.target.value)} placeholder='商品キーワードで検索' className='bg-gray-50 border shadow-sm  h-10 rounded-md px-3 py-1 text-[17px] w-full focus:outline-none tracking-wide' />
-                                    <Link
-                                        as={`/products/search/${searchText}`}
-                                        href={{ pathname: `/products/search/[text]`, query:{ titleOnly: false, text: searchText } }}
-                                        passHref
-                                    >
-                                        <a>
-                                            <div className='w-10 h-10 bg-indigo-500 rounded-lg ml-4 flex justify-center items-center shadow-md' onClick={onDrawerClose}>
-                                                <Search className='text-white h-6 w-6'/>
-                                            </div>
-                                        </a>
-                                    </Link>
-                                </div>
-                                <div className='pt-3'>
-                                    <button className='text-sm text-indigo-500 underline' onClick={() => setShowDetailSearch(!showDetailSearch)}>
-                                        { showDetailSearch ? "閉じる": "商品を詳しく絞り込む" }
-                                    </button>
-                                </div>
-                                <div className={`${ showDetailSearch ? "border p-3 rounded-xl shadow-md mb-8 mt-6": "hidden" }`}>
-                                    <p className='text-base font-bold'>価格帯</p>
-                                        <p className='text-sm mt-2'><span className={` ${priceRange ? "text-lg font-bold": "text-sm text-gray-500"}`}>{priceRange ? `${priceRange}円` : `指定無し`}</span>{ priceRange ? "以下の商品": "" }</p>
-                                        <div className='w-full my-2'>
-                                            <input className='w-full' value={priceRange ?? 0} type="range" id='price-range' name='price-range' min={1000} max={10000} step={1000} onInput={(e: any) => setPriceRange(e.target.value)}/>
-                                            <label htmlFor="price-range" className='hidden'>価格帯</label>
-                                        </div>
-                                    <p className='text-base font-bold pt-3'>商品カテゴリ</p>
-                                    <div className='grid grid-cols-2 gap-3 text-base py-4'>
-                                        {
-                                            types && types.length !== 0 ? types.map((type, index) => {
-                                                return <button key={index} className={`text-start transform duration-300 ease-in-out ${type.node === productType ? "text-blue-500 font-bold" : "text-gray-500 scale-95"}`} onClick={() => setProductType(type.node)}><p className={``}>{type.node}</p></button>
-                                            }): <div className='whitespace-nowrap text-gray-500'>商品カテゴリはありません</div>
-                                        }
-                                    </div>
-                                    <p className='text-base font-bold pt-3'>商品タグ</p>
-                                    <div className='grid grid-flow-row-dense grid-cols-2 grid-row-3 gap-5 text-base py-2'>
-                                        {
-                                            tags && tags.length !== 0 ? tags.map((tag, index) => {
-                                                return  <button key={index} className={`text-center transform duration-300 ease-out ${ tag.node === productTag ? "bg-blue-500 text-white font-bold": "bg-gray-100 border text-gray-400 scale-95" } rounded-xl shadow-md py-2 px-1`} onClick={() => setProductTag(tag.node)}><p>{tag.node}</p></button>
-                                            }): <div className='whitespace-nowrap text-gray-500'>商品タグはありません</div>
-                                        }
-                                    </div>
-                                    {
-                                        !productTag && !productType && !searchText && !priceRange ? null : <div className='border rounded-md shadow-md bg-gray-100 space-y-1 text-gray-500 mt-3 p-2'>
-                                                                                                                <p className='text-base'>検索条件</p>
-                                                                                                                {
-                                                                                                                    searchText && <p className='text-sm'>検索ワード <span className='text-base font-bold text-black'>{searchText}</span></p>
-                                                                                                                }
-                                                                                                                {
-                                                                                                                    priceRange && priceRange !== "0" ?  <p className='text-xs'><span className='text-sm font-bold text-black'>{priceRange}</span>円以下の商品</p>: null
-                                                                                                                }
-                                                                                                                {
-                                                                                                                    productType && <p className='text-sm'>商品カテゴリ　<span className='text-base font-bold text-black'>{productType}</span></p>
-                                                                                                                }
-                                                                                                                {
-                                                                                                                    productTag && <p className='text-sm'>商品タグ　<span className='text-base font-bold text-black'>{productTag}</span></p>
-                                                                                                                }
-                                                                                                            </div>
-                                    }
-                                    <div className='w-full pt-6 flex justify-center'>
-                                        <button className={`text-white text-base w-fit px-3 py-1 rounded-md shadow-md ${!productTag && !productType && !searchText && !priceRange ? "bg-gray-500" : "bg-blue-500" }`} onClick={detailSearch} disabled={!productTag && !productType && !searchText && !priceRange}>
-                                            {
-                                                !productTag && !productType && !searchText && !priceRange ? "商品を絞り込んで下さい" : "上記の条件で検索"
-                                            }
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className='h-full w-full space-y-3 font-medium mt-6 bg-gradient-to-tr from-green-500 to-lime-400 text-white text-lg p-3 rounded-md shadow-lg'>
-                                    <div onClick={onDrawerClose}>
-                                        <Link href={` ${ loggedCustomer ? "/customer/my-page" : "/customer/login"} `} passHref>
-                                            <a>
-                                                <div className='flex items-center'>
-                                                    <Person/>
-                                                    <p className='pl-1'>
-                                                        { loggedCustomer ? "マイページ" : "会員登録" }
-                                                    </p>
-                                                </div>
-                                            </a>
-                                        </Link>
-                                    </div>
-                                    <div onClick={onDrawerClose}>
-                                        <Link href={`/`} passHref>
-                                            <a>
-                                                <div className='flex items-center'>
-                                                    <Trash/>
-                                                    <p className='pl-1'>
-                                                        まぼろし屋について
-                                                    </p>
-                                                </div>
-                                            </a>
-                                        </Link>
-                                    </div>
-                                    <div onClick={onDrawerClose}>
-                                        <Link href={`/`} passHref>
-                                            <a>
-                                                <div className='flex items-center'>
-                                                    <Menu/>
-                                                    <p className='pl-1'>
-                                                        ご利用ガイド
-                                                    </p>
-                                                </div>
-                                            </a>
-                                        </Link>
-                                    </div>
-                                    <div onClick={onDrawerClose}>
-                                        <Link href={`/`} passHref>
-                                            <a>
-                                                <div className='flex items-center'>
-                                                    <Search/>
-                                                    <p className='pl-1'>
-                                                        レシピ特集
-                                                    </p>
-                                                </div>
-                                            </a>
-                                        </Link>
-                                    </div>
-                                </div>
-                                <div className='pt-8'>
-                                    <div className='bg-gray-300 h-[1px] w-2/3 mx-auto'></div>
-                                </div>
-                                <div className='py-3 mt-3'>
-                                    <button className='w-full focus:outline-none active:outline-none' onClick={() => setShowCollections(!showCollections)}>
-                                        {
-                                            showCollections ?   <div className='flex items-center justify-between'>
-                                                                    <p className='text-base'>閉じる</p>
-                                                                    <Close className='h-7 w-7'/>
-                                                                </div>
-                                                            : <div className='flex items-center justify-between'>
-                                                                <p className='text-base font-bold'>商品コレクション</p>
-                                                                <ChevronDown className='h-7 w-7'/>
-                                                            </div>
-                                        }
-                                    </button>
-                                    <div className={`${showCollections ? "" : "hidden"} grid grid-cols-1 space-y-1.5 mt-4 text-xs`}>
-                                        {
-                                            collections && collections.map((collection, index) => {
-                                                return <div key={index} onClick={onDrawerClose}>
-                                                            <Link href={`/products/collection/${collection.handle}`} passHref>
-                                                                <a>
-                                                                    <div className=''>
-                                                                        <div className=''>
-                                                                            <p className='font-bold text-base '>{collection.title}</p>
-                                                                            <p className='text-xs text-gray-500'>{truncate(collection.description, 20)}</p>
-                                                                        </div>
-                                                                    </div>
-                                                                </a>
-                                                            </Link>
-                                                        </div>
-                                            })
-                                        }
-                                    </div>
-                                </div>
-                                <div className='pt-2 pb-4'>
-                                    <div className='bg-gray-300 h-[1px] w-2/3 mx-auto'></div>
-                                </div>
-                                <div className="pb-3 mt-3">
-                                    <p className='text-base font-bold'>価格帯で選ぶ</p>
-                                    <div className='grid grid-cols-2 gap-4 mt-4 text-sm'>
-                                        <div>
-                                            <Link
-                                                as={`/products/search/query/${"max-of-price-1000"}`}
-                                                href={{ pathname: `/products/search/query/[query]`, query: { graphQuery: `(variants.price:<1000)`, categoryName: "1000円以下の商品" }}}
-                                                passHref
-                                            >
-                                                <a>
-                                                    <div className='px-1 py-2 rounded-md shadow-md bg-gray-700'>
-                                                        <p className='text-white text-center'>
-                                                            1000円以下から〜
-                                                        </p>
-                                                    </div>
-                                                </a>
-                                            </Link>
-                                        </div>
-                                        <div>
-                                            <Link
-                                                as={`/products/search/query/${"max-of-price-3000"}`}
-                                                href={{ pathname: `/products/search/query/[query]`, query: { graphQuery: `(variants.price:<3000)`, categoryName: "3000円以下の商品" }}}
-                                                passHref
-                                            >
-                                                <a>
-                                                    <div className='px-1 py-2 rounded-md shadow-md bg-gray-700'>
-                                                        <p className='text-white text-center'>
-                                                            3000円以下から〜
-                                                        </p>
-                                                    </div>
-                                                </a>
-                                            </Link>
-                                        </div>
-                                        <div>
-                                            <Link
-                                                as={`/products/search/query/${"max-of-price-35000"}`}
-                                                href={{ pathname: `/products/search/query/[query]`, query: { graphQuery: `(variants.price:<5000)`, categoryName: "5000円以下の商品" }}}
-                                                passHref
-                                            >
-                                                <a>
-                                                    <div className='px-1 py-2 rounded-md shadow-md bg-gray-700'>
-                                                        <p className='text-white text-center'>
-                                                            5000円以下から〜
-                                                        </p>
-                                                    </div>
-                                                </a>
-                                            </Link>
-                                        </div>
-                                        <div>
-                                            <Link
-                                                as={`/products/search/query/${"under-of-price-1000"}`}
-                                                href={{ pathname: `/products/search/query/[query]`, query: { graphQuery: `(variants.price:>1000)`, categoryName: "1000円以上の商品" }}}
-                                                passHref
-                                            >
-                                                <a>
-                                                    <div className='px-1 py-2 rounded-md shadow-md bg-gray-700'>
-                                                        <p className='text-white text-center'>
-                                                            1000円以上から〜
-                                                        </p>
-                                                    </div>
-                                                </a>
-                                            </Link>
-                                        </div>
-                                        <div>
-                                            <Link
-                                                as={`/products/search/query/${"under-of-price-3000"}`}
-                                                href={{ pathname: `/products/search/query/[query]`, query: { graphQuery: `(variants.price:>3000)`, categoryName: "3000円以上の商品" }}}
-                                                passHref
-                                            >
-                                                <a>
-                                                    <div className='px-1 py-2 rounded-md shadow-md bg-gray-700'>
-                                                        <p className='text-white text-center'>
-                                                            3000円以上から〜
-                                                        </p>
-                                                    </div>
-                                                </a>
-                                            </Link>
-                                        </div>
-                                        <div>
-                                            <Link
-                                                as={`/products/search/query/${"under-of-price-5000"}`}
-                                                href={{ pathname: `/products/search/query/[query]`, query: { graphQuery: `(variants.price:>5000)`, categoryName: "5000円以上の商品" }}}
-                                                passHref
-                                            >
-                                                <a>
-                                                    <div className='px-1 py-2 rounded-md shadow-md bg-gray-700'>
-                                                        <p className='text-white text-center'>
-                                                            5000円以上から〜
-                                                        </p>
-                                                    </div>
-                                                </a>
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='col-span-1 bg-black bg-opacity-70 h-full' onClick={onDrawerClose}>
-                        </div>
-                    </div>
+  return (
+    <motion.div
+      initial={{ x: "-100%", opacity: 0.0 }}
+      animate={{
+        x: isDrawerOpen ? "0%" : "-100%",
+        opacity: isDrawerOpen ? 1.0 : 0.0,
+      }}
+      transition={{ duration: "0.6" }}
+      className="fixed top-0 left-0 right-0 bottom-0 z-50 overflow-y-auto"
+    >
+      <div className={style.root}>
+        <div className="grid grid-cols-6 h-full font-sans">
+          <div className="col-span-5 bg-white rounded-tr-md rounded-br-md h-full  py-5 relative p-4">
+            <div className="flex items-center justify-between">
+              <div className="bg-white rounded-md" onClick={onDrawerClose}>
+                <div className="flex items-center text-blue-700 ">
+                  <LeftArrow className="h-4 w-4" />
+                  <span className="text-xs">メニューを閉じる</span>
                 </div>
-            </motion.div>
-    )
-}
+              </div>
+            </div>
+            <div className="my-3 text-sm font-sans">
+              <div className="flex items-center w-full pt-3">
+                <input
+                  id="search"
+                  type="text"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  placeholder="商品キーワードで検索"
+                  className="bg-gray-50 border shadow-sm  h-10 rounded-md px-3 py-1 text-[17px] scale-95 -translate-x-1.5 w-full focus:outline-none tracking-wide"
+                />
+                <Link
+                  as={`/products/search/${searchText}`}
+                  href={{
+                    pathname: `/products/search/[text]`,
+                    query: { titleOnly: false, text: searchText },
+                  }}
+                  passHref
+                >
+                  <a>
+                    <div
+                      className="w-10 h-10 bg-gray-600 ml-2 flex justify-center rounded-md items-center shadow-md"
+                      onClick={onDrawerClose}
+                    >
+                      <Search className="text-white h-6 w-6" />
+                    </div>
+                  </a>
+                </Link>
+              </div>
 
-export default Drawer
+              <button
+                className="text-sm text-blue-600 flex justify-between w-full items-center mt-5 px-3 py-1 bg-blue-100 rounded-sm shadow-sm"
+                onClick={() => setShowDetailSearch(!showDetailSearch)}
+              >
+                <p>{showDetailSearch ? "閉じる" : "商品を詳しく絞り込む"}</p>
+                {showDetailSearch ? (
+                  <Close className="h-5 w-5 text-blue-600" />
+                ) : (
+                  <ChevronDown className="h-5 w-5 text-blue-600" />
+                )}
+              </button>
+
+              <div
+                className={`${
+                  showDetailSearch
+                    ? "border p-3 rounded-xl shadow-md mb-8 mt-6"
+                    : "hidden"
+                }`}
+              >
+                <p className="text-base font-bold">価格帯</p>
+                <p className="text-sm mt-2">
+                  <span
+                    className={` ${
+                      priceRange ? "text-lg font-bold" : "text-sm text-gray-500"
+                    }`}
+                  >
+                    {priceRange ? `${priceRange}円` : `指定無し`}
+                  </span>
+                  {priceRange ? "以下の商品" : ""}
+                </p>
+                <div className="w-full my-2">
+                  <input
+                    className="w-full"
+                    value={priceRange ?? 0}
+                    type="range"
+                    id="price-range"
+                    name="price-range"
+                    min={1000}
+                    max={10000}
+                    step={1000}
+                    onInput={(e: any) => setPriceRange(e.target.value)}
+                  />
+                  <label htmlFor="price-range" className="hidden">
+                    価格帯
+                  </label>
+                </div>
+                <p className="text-base font-bold pt-3">商品カテゴリ</p>
+                <div className="grid grid-cols-2 gap-3 text-base py-4">
+                  {types && types.length !== 0 ? (
+                    types.map((type, index) => {
+                      return (
+                        <button
+                          key={index}
+                          className={`text-start transform duration-300 ease-in-out ${
+                            type.node === productType
+                              ? "text-blue-500 font-bold"
+                              : "text-gray-500 scale-95"
+                          }`}
+                          onClick={() => setProductType(type.node)}
+                        >
+                          <p className={``}>{type.node}</p>
+                        </button>
+                      );
+                    })
+                  ) : (
+                    <div className="whitespace-nowrap text-gray-500">
+                      商品カテゴリはありません
+                    </div>
+                  )}
+                </div>
+                <p className="text-base font-bold pt-3">商品タグ</p>
+                <div className="grid grid-flow-row-dense grid-cols-2 grid-row-3 gap-5 text-base py-2">
+                  {tags && tags.length !== 0 ? (
+                    tags.map((tag, index) => {
+                      return (
+                        <button
+                          key={index}
+                          className={`text-center transform duration-300 ease-out ${
+                            tag.node === productTag
+                              ? "bg-blue-500 text-white font-bold"
+                              : "bg-gray-100 border text-gray-400 scale-95"
+                          } rounded-xl shadow-md py-2 px-1`}
+                          onClick={() => setProductTag(tag.node)}
+                        >
+                          <p>{tag.node}</p>
+                        </button>
+                      );
+                    })
+                  ) : (
+                    <div className="whitespace-nowrap text-gray-500">
+                      商品タグはありません
+                    </div>
+                  )}
+                </div>
+                {!productTag &&
+                !productType &&
+                !searchText &&
+                !priceRange ? null : (
+                  <div className="border rounded-md shadow-md bg-gray-100 space-y-1 text-gray-500 mt-3 p-2">
+                    <p className="text-base">検索条件</p>
+                    {searchText && (
+                      <p className="text-sm">
+                        検索ワード{" "}
+                        <span className="text-base font-bold text-black">
+                          {searchText}
+                        </span>
+                      </p>
+                    )}
+                    {priceRange && priceRange !== "0" ? (
+                      <p className="text-xs">
+                        <span className="text-sm font-bold text-black">
+                          {priceRange}
+                        </span>
+                        円以下の商品
+                      </p>
+                    ) : null}
+                    {productType && (
+                      <p className="text-sm">
+                        商品カテゴリ　
+                        <span className="text-base font-bold text-black">
+                          {productType}
+                        </span>
+                      </p>
+                    )}
+                    {productTag && (
+                      <p className="text-sm">
+                        商品タグ　
+                        <span className="text-base font-bold text-black">
+                          {productTag}
+                        </span>
+                      </p>
+                    )}
+                  </div>
+                )}
+                <div className="w-full pt-6 flex justify-center">
+                  <button
+                    className={`text-white text-base w-fit px-3 py-1 rounded-md shadow-md ${
+                      !productTag && !productType && !searchText && !priceRange
+                        ? "bg-gray-500"
+                        : "bg-blue-500"
+                    }`}
+                    onClick={detailSearch}
+                    disabled={
+                      !productTag && !productType && !searchText && !priceRange
+                    }
+                  >
+                    {!productTag && !productType && !searchText && !priceRange
+                      ? "商品を絞り込んで下さい"
+                      : "上記の条件で検索"}
+                  </button>
+                </div>
+              </div>
+              <div className="h-full w-full space-y-3 mt-6 bg-gradient-to-tr from-green-500 to-lime-400 text-white text-lg p-3 rounded-xl shadow-lg">
+                <div onClick={onDrawerClose}>
+                  <Link
+                    href={` ${
+                      loggedCustomer ? "/customer/my-page" : "/customer/login"
+                    } `}
+                    passHref
+                  >
+                    <a>
+                      <div className="flex items-center">
+                        <Person />
+                        <p className="pl-1">
+                          {loggedCustomer ? "マイページ" : "会員登録"}
+                        </p>
+                      </div>
+                    </a>
+                  </Link>
+                </div>
+                <div onClick={onDrawerClose}>
+                  <Link href={`/`} passHref>
+                    <a>
+                      <div className="flex items-center">
+                        <Trash />
+                        <p className="pl-1">まぼろし屋について</p>
+                      </div>
+                    </a>
+                  </Link>
+                </div>
+                <div onClick={onDrawerClose}>
+                  <Link href={`/`} passHref>
+                    <a>
+                      <div className="flex items-center">
+                        <Menu />
+                        <p className="pl-1">ご利用ガイド</p>
+                      </div>
+                    </a>
+                  </Link>
+                </div>
+                <div onClick={onDrawerClose}>
+                  <Link href={`/`} passHref>
+                    <a>
+                      <div className="flex items-center">
+                        <Search />
+                        <p className="pl-1">レシピ特集</p>
+                      </div>
+                    </a>
+                  </Link>
+                </div>
+              </div>
+              <div className="pt-8">
+                <div className="bg-gray-300 h-[1px] w-full mx-auto"></div>
+              </div>
+              <div className="py-1">
+                <button
+                  className="w-full focus:outline-none active:outline-none"
+                  onClick={() => setShowCollections(!showCollections)}
+                >
+                  {showCollections ? (
+                    <div className="flex items-center justify-between">
+                      <p className="text-base">閉じる</p>
+                      <Close className="h-7 w-7" />
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between">
+                      <p className="text-base font-bold">商品コレクション</p>
+                      <ChevronDown className="h-7 w-7" />
+                    </div>
+                  )}
+                </button>
+                <div
+                  className={`${
+                    showCollections ? "" : "hidden"
+                  } grid grid-cols-1 space-y-1.5 mt-4 text-xs mb-3`}
+                >
+                  {collections &&
+                    collections.map((collection, index) => {
+                      return (
+                        <div key={index} onClick={onDrawerClose}>
+                          <Link
+                            href={`/products/collection/${collection.handle}`}
+                            passHref
+                          >
+                            <a>
+                              <p className="font-bold text-base ">
+                                {collection.title}
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                {truncate(collection.description, 20)}
+                              </p>
+                            </a>
+                          </Link>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+              <div className="pb-4">
+                <div className="bg-gray-300 h-[1px] w-full mx-auto"></div>
+              </div>
+              <div className="pb-3 mt-3">
+                <p className="text-base font-bold">価格帯で選ぶ</p>
+                <div className="grid grid-cols-2 gap-4 mt-4 text-sm">
+                  <div>
+                    <Link
+                      as={`/products/search/query/${"max-of-price-1000"}`}
+                      href={{
+                        pathname: `/products/search/query/[query]`,
+                        query: {
+                          graphQuery: `(variants.price:<1000)`,
+                          categoryName: "1000円以下の商品",
+                        },
+                      }}
+                      passHref
+                    >
+                      <a>
+                        <div className="px-1 py-2 rounded-md shadow-md bg-gray-700">
+                          <p className="text-white text-center">
+                            1000円以下から〜
+                          </p>
+                        </div>
+                      </a>
+                    </Link>
+                  </div>
+                  <div>
+                    <Link
+                      as={`/products/search/query/${"max-of-price-3000"}`}
+                      href={{
+                        pathname: `/products/search/query/[query]`,
+                        query: {
+                          graphQuery: `(variants.price:<3000)`,
+                          categoryName: "3000円以下の商品",
+                        },
+                      }}
+                      passHref
+                    >
+                      <a>
+                        <div className="px-1 py-2 rounded-md shadow-md bg-gray-700">
+                          <p className="text-white text-center">
+                            3000円以下から〜
+                          </p>
+                        </div>
+                      </a>
+                    </Link>
+                  </div>
+                  <div>
+                    <Link
+                      as={`/products/search/query/${"max-of-price-35000"}`}
+                      href={{
+                        pathname: `/products/search/query/[query]`,
+                        query: {
+                          graphQuery: `(variants.price:<5000)`,
+                          categoryName: "5000円以下の商品",
+                        },
+                      }}
+                      passHref
+                    >
+                      <a>
+                        <div className="px-1 py-2 rounded-md shadow-md bg-gray-700">
+                          <p className="text-white text-center">
+                            5000円以下から〜
+                          </p>
+                        </div>
+                      </a>
+                    </Link>
+                  </div>
+                  <div>
+                    <Link
+                      as={`/products/search/query/${"under-of-price-1000"}`}
+                      href={{
+                        pathname: `/products/search/query/[query]`,
+                        query: {
+                          graphQuery: `(variants.price:>1000)`,
+                          categoryName: "1000円以上の商品",
+                        },
+                      }}
+                      passHref
+                    >
+                      <a>
+                        <div className="px-1 py-2 rounded-md shadow-md bg-gray-700">
+                          <p className="text-white text-center">
+                            1000円以上から〜
+                          </p>
+                        </div>
+                      </a>
+                    </Link>
+                  </div>
+                  <div>
+                    <Link
+                      as={`/products/search/query/${"under-of-price-3000"}`}
+                      href={{
+                        pathname: `/products/search/query/[query]`,
+                        query: {
+                          graphQuery: `(variants.price:>3000)`,
+                          categoryName: "3000円以上の商品",
+                        },
+                      }}
+                      passHref
+                    >
+                      <a>
+                        <div className="px-1 py-2 rounded-md shadow-md bg-gray-700">
+                          <p className="text-white text-center">
+                            3000円以上から〜
+                          </p>
+                        </div>
+                      </a>
+                    </Link>
+                  </div>
+                  <div>
+                    <Link
+                      as={`/products/search/query/${"under-of-price-5000"}`}
+                      href={{
+                        pathname: `/products/search/query/[query]`,
+                        query: {
+                          graphQuery: `(variants.price:>5000)`,
+                          categoryName: "5000円以上の商品",
+                        },
+                      }}
+                      passHref
+                    >
+                      <a>
+                        <div className="px-1 py-2 rounded-md shadow-md bg-gray-700">
+                          <p className="text-white text-center">
+                            5000円以上から〜
+                          </p>
+                        </div>
+                      </a>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="col-span-1 bg-black bg-opacity-70 h-full"
+            onClick={onDrawerClose}
+          ></div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+export default Drawer;
