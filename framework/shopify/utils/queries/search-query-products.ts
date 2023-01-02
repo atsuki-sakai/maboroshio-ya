@@ -4,10 +4,11 @@
 //query = (黒豆*) (variants.price:>3000)
 //querys = ["(黒豆*)", "(にんじん*)"]
 
-const searcQueryProducts = (query: string): string => {
+const searcQueryProducts = (query: string, cursor: string, reverse?: boolean): string => {
+    const r = reverse !== undefined ? reverse : true
     return `
         {
-            products(first: 10, query: "${query}", reverse: true){
+            products(first: 10, query: "${query}"${ cursor !== "" ? `, after:"${cursor}"` : "" }${`, reverse: ${r}` }){
                 pageInfo {
                     hasNextPage
                     hasPreviousPage

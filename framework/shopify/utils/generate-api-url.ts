@@ -9,7 +9,7 @@ type ApiPath = {
     | "CUSTOMER_ADDRESS_UPDATE" | "CUSTOMER_ADDRESS_DELETE" | "CHECKOUT_SHIPPING_ADDRESS_UPDATE" | "CHECKOUT_ATTRIBUTES_UPDATE"
     | "CUSTOMER_RECOVER" | "CUSTOMER_RESET_BY_URL" | "CUSTOMER_UPDATE" | "GET_ORDER" | "GET_PRODUCTS_PAGINATION" | "GET_ORDERS_PAGINATION"
     | "GET_PRODUCTS_PATHS" | "GET_PRODUCT" | "GET_CUSTOMER_ALL_ORDERS_ID" | "GET_ALL_COLLECTIONS" | "GET_COLLECTION_BY_HANDLE" 
-    | "SEARCH_WORDS_PRODUCTS" | "SEARCH_QUERY_PRODUCTS" | "GET_PRODUCT_TAGS" | "GET_PRODUCT_TYPES";
+    | "SEARCH_WORDS_PRODUCTS" | "SEARCH_QUERY_PRODUCTS" | "SEARCH_RESULT_LENGTH"  | "GET_PRODUCT_TAGS" | "GET_PRODUCT_TYPES";
 }
 
 
@@ -101,6 +101,9 @@ const generateApiUrl = (apiPath: ApiPath) => {
         }
         case "SEARCH_QUERY_PRODUCTS": {
             return `${HOSTING_URL}/api/products/search/search-query-products`
+        }
+        case "SEARCH_RESULT_LENGTH": {
+            return `${HOSTING_URL}/api/products/search/search-result-length`
         }
         case "GET_PRODUCT_TYPES": {
             return `${HOSTING_URL}/api/products/get-product-types`

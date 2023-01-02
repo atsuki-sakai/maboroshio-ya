@@ -19,7 +19,8 @@ const Drawer = () => {
   const { loggedCustomer } = useCustomerState();
   const [showDetailSearch, setShowDetailSearch] = useState(false);
   const [showCollections, setShowCollections] = useState(false);
-
+  const [showTag, setShowTag] = useState(false);
+  const [showType, setShowType] = useState(false);
   const getAllCollectionsApiUrl = generateApiUrl({
     type: "GET_ALL_COLLECTIONS",
   });
@@ -203,6 +204,7 @@ const Drawer = () => {
                     min={1000}
                     max={10000}
                     step={1000}
+                    color="green"
                     onInput={(e: any) => setPriceRange(e.target.value)}
                   />
                   <label htmlFor="price-range" className="hidden">
@@ -218,10 +220,14 @@ const Drawer = () => {
                           key={index}
                           className={`text-start transform duration-300 ease-in-out ${
                             type.node === productType
-                              ? "text-blue-500 font-bold"
+                              ? "text-green-600 font-bold"
                               : "text-gray-500 scale-95"
                           }`}
-                          onClick={() => setProductType(type.node)}
+                          onClick={() =>
+                            setProductType(
+                              productType === type.node ? "" : type.node
+                            )
+                          }
                         >
                           <p className={``}>{type.node}</p>
                         </button>
@@ -242,10 +248,14 @@ const Drawer = () => {
                           key={index}
                           className={`text-center transform duration-300 ease-out ${
                             tag.node === productTag
-                              ? "bg-blue-500 text-white font-bold"
+                              ? "bg-green-100 border border-green-600 text-green-600 font-bold"
                               : "bg-gray-100 border text-gray-400 scale-95"
-                          } rounded-xl shadow-md py-2 px-1`}
-                          onClick={() => setProductTag(tag.node)}
+                          } rounded-sm shadow-md py-2 px-1`}
+                          onClick={() =>
+                            setProductTag(
+                              productTag === tag.node ? "" : tag.node
+                            )
+                          }
                         >
                           <p>{tag.node}</p>
                         </button>
@@ -257,52 +267,13 @@ const Drawer = () => {
                     </div>
                   )}
                 </div>
-                {!productTag &&
-                !productType &&
-                !searchText &&
-                !priceRange ? null : (
-                  <div className="border rounded-md shadow-md bg-gray-100 space-y-1 text-gray-500 mt-3 p-2">
-                    <p className="text-base">検索条件</p>
-                    {searchText && (
-                      <p className="text-sm">
-                        検索ワード{" "}
-                        <span className="text-base font-bold text-black">
-                          {searchText}
-                        </span>
-                      </p>
-                    )}
-                    {priceRange && priceRange !== "0" ? (
-                      <p className="text-xs">
-                        <span className="text-sm font-bold text-black">
-                          {priceRange}
-                        </span>
-                        円以下の商品
-                      </p>
-                    ) : null}
-                    {productType && (
-                      <p className="text-sm">
-                        商品カテゴリ　
-                        <span className="text-base font-bold text-black">
-                          {productType}
-                        </span>
-                      </p>
-                    )}
-                    {productTag && (
-                      <p className="text-sm">
-                        商品タグ　
-                        <span className="text-base font-bold text-black">
-                          {productTag}
-                        </span>
-                      </p>
-                    )}
-                  </div>
-                )}
+
                 <div className="w-full pt-6 flex justify-center">
                   <button
                     className={`text-white text-base w-fit px-3 py-1 rounded-md shadow-md ${
                       !productTag && !productType && !searchText && !priceRange
                         ? "bg-gray-500"
-                        : "bg-blue-500"
+                        : "bg-blue-600"
                     }`}
                     onClick={detailSearch}
                     disabled={
@@ -369,7 +340,7 @@ const Drawer = () => {
               </div>
               <div className="py-1">
                 <button
-                  className="w-full focus:outline-none active:outline-none"
+                  className="w-full focus:outline-none active:outline-none px-3 py-1"
                   onClick={() => setShowCollections(!showCollections)}
                 >
                   {showCollections ? (
@@ -379,7 +350,7 @@ const Drawer = () => {
                     </div>
                   ) : (
                     <div className="flex items-center justify-between">
-                      <p className="text-base font-bold">商品コレクション</p>
+                      <p className="text-base">商品コレクション</p>
                       <ChevronDown className="h-7 w-7" />
                     </div>
                   )}
@@ -387,7 +358,7 @@ const Drawer = () => {
                 <div
                   className={`${
                     showCollections ? "" : "hidden"
-                  } grid grid-cols-1 space-y-1.5 mt-4 text-xs mb-3`}
+                  } grid grid-cols-1 space-y-1.5 mt-4 text-xs mb-3 px-3`}
                 >
                   {collections &&
                     collections.map((collection, index) => {
@@ -411,6 +382,109 @@ const Drawer = () => {
                     })}
                 </div>
               </div>
+
+              <div className="">
+                <div className="bg-gray-300 h-[1px] w-full mx-auto"></div>
+              </div>
+
+              <div className="py-1">
+                <button
+                  className="w-full focus:outline-none active:outline-none px-3 py-1"
+                  onClick={() => setShowTag(!showTag)}
+                >
+                  {showTag ? (
+                    <div className="flex items-center justify-between">
+                      <p className="text-base">閉じる</p>
+                      <Close className="h-7 w-7" />
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between">
+                      <p className="text-base">商品タグ</p>
+                      <ChevronDown className="h-7 w-7" />
+                    </div>
+                  )}
+                </button>
+                <div
+                  className={`${
+                    showTag ? "" : "hidden"
+                  } grid grid-cols-1 space-y-1.5 mt-4 text-xs mb-3 px-3`}
+                >
+                  {tags &&
+                    tags.map((tag, index) => {
+                      return (
+                        <div key={index} onClick={onDrawerClose}>
+                          <button
+                            onClick={() => {
+                              router.push({
+                                pathname: `/products/search/query/${tag.node.toLowerCase()}`,
+                                query: {
+                                  graphQuery: tag.node.toLowerCase(),
+                                  categoryName: tag.node,
+                                },
+                              });
+                            }}
+                          >
+                            <p className="font-bold text-base py-1">
+                              {tag.node}
+                            </p>
+                          </button>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+
+              <div className="">
+                <div className="bg-gray-300 h-[1px] w-full mx-auto"></div>
+              </div>
+
+              <div className="py-1">
+                <button
+                  className="w-full focus:outline-none active:outline-none px-3 py-1"
+                  onClick={() => setShowType(!showType)}
+                >
+                  {showType ? (
+                    <div className="flex items-center justify-between">
+                      <p className="text-base">閉じる</p>
+                      <Close className="h-7 w-7" />
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between">
+                      <p className="text-base">商品タイプ</p>
+                      <ChevronDown className="h-7 w-7" />
+                    </div>
+                  )}
+                </button>
+                <div
+                  className={`${
+                    showType ? "" : "hidden"
+                  } grid grid-cols-1 space-y-1.5 mt-4 text-xs mb-3 px-3`}
+                >
+                  {types &&
+                    types.map((type, index) => {
+                      return (
+                        <div key={index} onClick={onDrawerClose}>
+                          <button
+                            onClick={() => {
+                              router.push({
+                                pathname: `/products/search/query/${type.node.toLowerCase()}`,
+                                query: {
+                                  graphQuery: type.node.toLowerCase(),
+                                  categoryName: type.node,
+                                },
+                              });
+                            }}
+                          >
+                            <p className="font-bold text-base py-1">
+                              {type.node}
+                            </p>
+                          </button>
+                        </div>
+                      );
+                    })}
+                </div>
+              </div>
+
               <div className="pb-4">
                 <div className="bg-gray-300 h-[1px] w-full mx-auto"></div>
               </div>

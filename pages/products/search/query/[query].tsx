@@ -4,9 +4,11 @@ import { generateApiUrl, normalizeProduct } from "@shopify/utils";
 import useSWR from "swr";
 import { Container, ErrorView, LoadingView } from "@components/ui";
 import { ProductCard } from "@components/product";
-import { Product, ProductConnection } from "@shopify/shema";
+import { ProductConnection } from "@shopify/shema";
 import { motion } from "framer-motion";
 import { LoadCircle } from "@components/icon";
+
+const fetchLength = 10;
 
 const ProductQuery = () => {
   const router = useRouter();
@@ -16,15 +18,43 @@ const ProductQuery = () => {
 
   const categoryName: string | undefined = query.categoryName;
 
+  const [cursor, setCursor] = useState("");
+  const [prevCursor, setPrevCursor] = useState("");
   const [isFetching, setIsFetching] = useState(false);
 
   const searchQueryProductsApiUrl = generateApiUrl({
     type: "SEARCH_QUERY_PRODUCTS",
   });
+
+  const searchResultLengthApiUrl = generateApiUrl({
+    type: "SEARCH_RESULT_LENGTH",
+  });
   const searchQueryProductsFetcher = async (
     url: string,
-    query: string
+    query: string,
+    cursor: string
   ): Promise<ProductConnection> => {
+    const response = await fetch(url, {
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify({
+        query: query,
+        cursor: cursor,
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .catch((e) => {
+        throw Error(e.message);
+      });
+    return response.data.products;
+  };
+
+  const searchResultLengthFetcher = async (
+    url: string,
+    query: string
+  ): Promise<number> => {
     const response = await fetch(url, {
       method: "POST",
       mode: "no-cors",
@@ -38,7 +68,9 @@ const ProductQuery = () => {
       .catch((e) => {
         throw Error(e.message);
       });
-    return response.data.products;
+    return response.data.products.edges.length
+      ? response.data.products.edges.length
+      : 0;
   };
 
   const fetchMoreProducts = async () => {
@@ -52,12 +84,25 @@ const ProductQuery = () => {
   };
 
   const { data: productsConnect, error } = useSWR(
-    [searchQueryProductsApiUrl, graphQuery],
+    [searchQueryProductsApiUrl, graphQuery, cursor],
     router.isReady ? searchQueryProductsFetcher : null
   );
 
+  const { data: resultLength } = useSWR(
+    [searchResultLengthApiUrl, graphQuery],
+    router.isReady ? searchResultLengthFetcher : null
+  );
+
+  const [pageIndex, setPageIndex] = useState(1);
+  const [resultPageLength, setResultPageLength] = useState(
+    resultLength && resultLength / fetchLength
+  );
+
+  console.log(resultPageLength);
+
   useEffect(() => {}, [router.isReady]);
 
+  console.log("reload");
   if (error) {
     return <ErrorView message={error.message} />;
   }
@@ -89,9 +134,7 @@ const ProductQuery = () => {
         {categoryName && <p className="text-lg font-bold">{categoryName}</p>}
         <div className="w-full flex justify-end mb-4">
           <p className="text-sm">
-            <span className="text-lg text-gray-800">
-              {productsConnect.edges.length}
-            </span>
+            <span className="text-lg text-gray-800">{resultLength ?? 0}</span>
             点の商品がヒット
           </p>
         </div>
@@ -107,34 +150,27 @@ const ProductQuery = () => {
           })}
         </div>
         <div className="w-full pt-5">
-          {productsConnect.pageInfo.hasNextPage ? (
-            <div className="mt-8">
+          {
+            <div className="mt-8 flex items-center justify-around">
+              {prevCursor !== "" ? (
+                <button
+                  onClick={() => {
+                    setCursor(prevCursor!);
+                  }}
+                >
+                  戻る
+                </button>
+              ) : null}
               <button
-                className="px-3 w-full py-1 textp-center bg-green-500 rounded-md shadow-md"
-                onClick={fetchMoreProducts}
-                disabled={isFetching}
+                onClick={() => {
+                  setPrevCursor(productsConnect.pageInfo.startCursor!);
+                  setCursor(productsConnect.pageInfo.endCursor!);
+                }}
               >
-                <div className="flex items-center justify-center">
-                  <p className="text-white text-sm text-center w-fit">
-                    さらに商品を表示
-                  </p>
-                  <motion.div
-                    className="ml-1 mr-1 -translate-y-1"
-                    initial={{ opacity: 0, height: 6, width: 0 }}
-                    animate={{
-                      opacity: isFetching ? 1 : 0,
-                      height: 12,
-                      width: isFetching ? 12 : 0,
-                    }}
-                  >
-                    <LoadCircle className="text-white h-5 w-5 animate-spin" />
-                  </motion.div>
-                </div>
+                次へ
               </button>
             </div>
-          ) : (
-            <></>
-          )}
+          }
         </div>
       </div>
     </Container>
