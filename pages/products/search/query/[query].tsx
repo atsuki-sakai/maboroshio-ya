@@ -21,7 +21,7 @@ const ProductQuery = () => {
 
   const [actionType, setActionType] = useState<"NEXT" | "PREV">("NEXT");
   const [cursor, setCursor] = useState("");
-  const [isFetching, setIsFetching] = useState(false);
+  const [reverse, setReverse] = useState(false);
 
   const searchResultLengthApiUrl = generateApiUrl({
     type: "SEARCH_RESULT_LENGTH",
@@ -59,7 +59,6 @@ const ProductQuery = () => {
   };
 
   const url = `${HOSTING_URL}/api/products/search/cursor=*${cursor}&query=*${graphQuery}&type=*${actionType}`;
-  console.log("url: ", url);
   const { data: productsConnect, error } = useSWR(
     url,
     router.isReady ? fetcher : null
@@ -72,13 +71,12 @@ const ProductQuery = () => {
 
   useEffect(() => {
     console.log("*************************");
-    setCursor("");
-    console.log("useEffect");
-    console.log("connect: ", productsConnect);
-    console.log("pageinfo: ", productsConnect?.pageInfo);
-    console.log("query: ", graphQuery);
-    console.log("cursor: ", cursor);
-  }, [router.isReady, productsConnect]);
+    return () => {
+      console.log("#######################");
+      setCursor("");
+      setActionType("NEXT");
+    };
+  }, [router.isReady, graphQuery]);
 
   if (error) {
     return <ErrorView message={error.message} />;
@@ -115,6 +113,13 @@ const ProductQuery = () => {
             点の商品がヒット
           </p>
         </div>
+        {/* <div className="flex justify-end">
+          <div>
+            <button onClick={() => setReverse(!reverse)}>
+              {reverse ? "値段が高い順" : "値段が安い順"}
+            </button>
+          </div>
+        </div> */}
         <div className="grid grid-cols-2 gap-3">
           {productsConnect.edges.map(({ node: product }) => {
             return (
