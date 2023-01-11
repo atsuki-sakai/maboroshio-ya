@@ -5,10 +5,10 @@
 //querys = ["(黒豆*)", "(にんじん*)"]
 
 const searcQueryProducts = (query: string, cursor: string, type: "PREV"| "NEXT",reverse?: boolean): string => {
-    const r = reverse !== undefined ? reverse : true
+    const r = reverse !== undefined ? reverse : false
     return `
         {
-            products(${type === "NEXT" ? "first": "last"}: 10, query: "${query}"${ cursor !== "" ?  type === "NEXT" ? `, after:"${cursor}"`: `, before:"${cursor}"` : "" }${`, reverse: ${r}` }){
+            products(${type === "NEXT" ? "first": "last"}:10, query:"${query}"${ cursor !== "" ?  type === "NEXT" ? `, after:"${cursor}"`: `, before:"${cursor}"` : "" }${`, sortKey:PRICE, reverse:${r}` }){
                 pageInfo {
                     hasNextPage
                     hasPreviousPage

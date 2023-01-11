@@ -58,8 +58,10 @@ const ProductQuery = () => {
     return data.data.products;
   };
 
+  const url = `${HOSTING_URL}/api/products/search/cursor=*${cursor}&query=*${graphQuery}&type=*${actionType}`;
+  console.log("url: ", url);
   const { data: productsConnect, error } = useSWR(
-    `${HOSTING_URL}/api/products/search/cursor=${cursor}&query=${graphQuery}&type=${actionType}`,
+    url,
     router.isReady ? fetcher : null
   );
 
@@ -68,7 +70,15 @@ const ProductQuery = () => {
     router.isReady ? searchResultLengthFetcher : null
   );
 
-  useEffect(() => {}, [router.isReady]);
+  useEffect(() => {
+    console.log("*************************");
+    setCursor("");
+    console.log("useEffect");
+    console.log("connect: ", productsConnect);
+    console.log("pageinfo: ", productsConnect?.pageInfo);
+    console.log("query: ", graphQuery);
+    console.log("cursor: ", cursor);
+  }, [router.isReady, productsConnect]);
 
   if (error) {
     return <ErrorView message={error.message} />;
