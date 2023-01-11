@@ -4,9 +4,10 @@ import { generateApiUrl, normalizeProduct } from "@shopify/utils";
 import useSWR from "swr";
 import { Container, ErrorView, LoadingView } from "@components/ui";
 import { ProductCard } from "@components/product";
-import { ProductConnection } from "@shopify/shema";
+import { PageConnection, Product, ProductConnection } from "@shopify/shema";
 import { motion } from "framer-motion";
 import { LoadCircle } from "@components/icon";
+import { HOSTING_URL } from "@shopify/const";
 
 const fetchLength = 10;
 
@@ -18,38 +19,13 @@ const ProductQuery = () => {
 
   const categoryName: string | undefined = query.categoryName;
 
+  const [actionType, setActionType] = useState<"NEXT" | "PREV">("NEXT");
   const [cursor, setCursor] = useState("");
-  const [prevCursor, setPrevCursor] = useState("");
   const [isFetching, setIsFetching] = useState(false);
-
-  const searchQueryProductsApiUrl = generateApiUrl({
-    type: "SEARCH_QUERY_PRODUCTS",
-  });
 
   const searchResultLengthApiUrl = generateApiUrl({
     type: "SEARCH_RESULT_LENGTH",
   });
-  const searchQueryProductsFetcher = async (
-    url: string,
-    query: string,
-    cursor: string
-  ): Promise<ProductConnection> => {
-    const response = await fetch(url, {
-      method: "POST",
-      mode: "no-cors",
-      body: JSON.stringify({
-        query: query,
-        cursor: cursor,
-      }),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .catch((e) => {
-        throw Error(e.message);
-      });
-    return response.data.products;
-  };
 
   const searchResultLengthFetcher = async (
     url: string,
@@ -73,19 +49,18 @@ const ProductQuery = () => {
       : 0;
   };
 
-  const fetchMoreProducts = async () => {
-    try {
-      setIsFetching(true);
-    } catch (e: any) {
-      throw Error(e.message);
-    } finally {
-      setIsFetching(false);
-    }
+  const fetcher = async (url: string): Promise<ProductConnection> => {
+    const response = await fetch(url, {
+      method: "POST",
+      mode: "no-cors",
+    });
+    const { data } = await response.json();
+    return data.data.products;
   };
 
   const { data: productsConnect, error } = useSWR(
-    [searchQueryProductsApiUrl, graphQuery, cursor],
-    router.isReady ? searchQueryProductsFetcher : null
+    `${HOSTING_URL}/api/products/search/cursor=${cursor}&query=${graphQuery}&type=${actionType}`,
+    router.isReady ? fetcher : null
   );
 
   const { data: resultLength } = useSWR(
@@ -93,16 +68,8 @@ const ProductQuery = () => {
     router.isReady ? searchResultLengthFetcher : null
   );
 
-  const [pageIndex, setPageIndex] = useState(1);
-  const [resultPageLength, setResultPageLength] = useState(
-    resultLength && resultLength / fetchLength
-  );
-
-  console.log(resultPageLength);
-
   useEffect(() => {}, [router.isReady]);
 
-  console.log("reload");
   if (error) {
     return <ErrorView message={error.message} />;
   }
@@ -152,23 +119,26 @@ const ProductQuery = () => {
         <div className="w-full pt-5">
           {
             <div className="mt-8 flex items-center justify-around">
-              {prevCursor !== "" ? (
+              {productsConnect.pageInfo.hasPreviousPage ? (
                 <button
                   onClick={() => {
-                    setCursor(prevCursor!);
+                    setActionType("PREV");
+                    setCursor(productsConnect.pageInfo.startCursor!);
                   }}
                 >
-                  戻る
+                  前へ
                 </button>
               ) : null}
-              <button
-                onClick={() => {
-                  setPrevCursor(productsConnect.pageInfo.startCursor!);
-                  setCursor(productsConnect.pageInfo.endCursor!);
-                }}
-              >
-                次へ
-              </button>
+              {productsConnect.pageInfo.hasNextPage ? (
+                <button
+                  onClick={() => {
+                    setActionType("NEXT");
+                    setCursor(productsConnect.pageInfo.endCursor!);
+                  }}
+                >
+                  次へ
+                </button>
+              ) : null}
             </div>
           }
         </div>
