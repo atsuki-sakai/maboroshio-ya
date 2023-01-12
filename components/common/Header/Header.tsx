@@ -4,7 +4,7 @@ import { Marquee } from "@components/ui";
 import { useUI, useScrollY, useCustomerState } from "@components/context";
 import style from "./Header.module.css";
 import cn from "classnames";
-import { Cart, Menu, Person, MyPage, Search } from "@components/icon";
+import { Cart, Menu, Person, Search } from "@components/icon";
 
 const Header = () => {
   const { onDrawerOpen, onCartOpen } = useUI();

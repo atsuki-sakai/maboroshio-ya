@@ -4,12 +4,8 @@ import { generateApiUrl, normalizeProduct } from "@shopify/utils";
 import useSWR from "swr";
 import { Container, ErrorView, LoadingView } from "@components/ui";
 import { ProductCard } from "@components/product";
-import { PageConnection, Product, ProductConnection } from "@shopify/shema";
-import { motion } from "framer-motion";
-import { LoadCircle } from "@components/icon";
+import { ProductConnection } from "@shopify/shema";
 import { HOSTING_URL } from "@shopify/const";
-
-const fetchLength = 10;
 
 const ProductQuery = () => {
   const router = useRouter();
@@ -22,6 +18,7 @@ const ProductQuery = () => {
   const [actionType, setActionType] = useState<"NEXT" | "PREV">("NEXT");
   const [cursor, setCursor] = useState("");
   const [reverse, setReverse] = useState(false);
+  const [limit, setLimit] = useState(20);
 
   const searchResultLengthApiUrl = generateApiUrl({
     type: "SEARCH_RESULT_LENGTH",
@@ -58,7 +55,8 @@ const ProductQuery = () => {
     return data.data.products;
   };
 
-  const url = `${HOSTING_URL}/api/products/search/cursor=*${cursor}&query=*${graphQuery}&type=*${actionType}`;
+  const parameters = `cursor=*${cursor}&query=*${graphQuery}&type=*${actionType}&reverse=*${reverse}&limit=*${limit}`;
+  const url = `${HOSTING_URL}/api/products/search/${parameters}`;
   const { data: productsConnect, error } = useSWR(
     url,
     router.isReady ? fetcher : null
@@ -70,9 +68,7 @@ const ProductQuery = () => {
   );
 
   useEffect(() => {
-    console.log("*************************");
     return () => {
-      console.log("#######################");
       setCursor("");
       setActionType("NEXT");
     };
@@ -107,19 +103,26 @@ const ProductQuery = () => {
     <Container>
       <div className="px-8 mb-12">
         {categoryName && <p className="text-lg font-bold">{categoryName}</p>}
-        <div className="w-full flex justify-end mb-4">
+        <div className="w-full flex justify-start mb-2">
           <p className="text-sm">
             <span className="text-lg text-gray-800">{resultLength ?? 0}</span>
             点の商品がヒット
           </p>
         </div>
-        {/* <div className="flex justify-end">
-          <div>
-            <button onClick={() => setReverse(!reverse)}>
-              {reverse ? "値段が高い順" : "値段が安い順"}
+        <div className="flex justify-around">
+          <div className="bg-blue-100 px-3 py-0.5 rounded-md">
+            <button
+              className="text-blue-600 text-sm"
+              onClick={() => {
+                setCursor("");
+                setActionType("NEXT");
+                setReverse(!reverse);
+              }}
+            >
+              {reverse ? "値段が安い順" : "値段が高い順"}
             </button>
           </div>
-        </div> */}
+        </div>
         <div className="grid grid-cols-2 gap-3">
           {productsConnect.edges.map(({ node: product }) => {
             return (
@@ -136,9 +139,14 @@ const ProductQuery = () => {
             <div className="mt-8 flex items-center justify-around">
               {productsConnect.pageInfo.hasPreviousPage ? (
                 <button
+                  className="bg-indigo-600 text-indigo-100 px-5 py-0.5 rounded-sm"
                   onClick={() => {
                     setActionType("PREV");
                     setCursor(productsConnect.pageInfo.startCursor!);
+                    window.scrollTo({
+                      top: 0,
+                      behavior: "smooth",
+                    });
                   }}
                 >
                   前へ
@@ -146,9 +154,14 @@ const ProductQuery = () => {
               ) : null}
               {productsConnect.pageInfo.hasNextPage ? (
                 <button
+                  className="bg-green-600 text-green-100 px-5 py-0.5 rounded-sm"
                   onClick={() => {
                     setActionType("NEXT");
                     setCursor(productsConnect.pageInfo.endCursor!);
+                    window.scrollTo({
+                      top: 0,
+                      behavior: "smooth",
+                    });
                   }}
                 >
                   次へ

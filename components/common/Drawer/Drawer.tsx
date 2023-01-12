@@ -131,7 +131,7 @@ const Drawer = () => {
               <div className="bg-white rounded-md" onClick={onDrawerClose}>
                 <div className="flex items-center text-blue-700 ">
                   <LeftArrow className="h-4 w-4" />
-                  <span className="text-xs">メニューを閉じる</span>
+                  <span className="text-sm">メニューを閉じる</span>
                 </div>
               </div>
             </div>
@@ -165,7 +165,7 @@ const Drawer = () => {
               </div>
 
               <button
-                className="text-sm text-blue-600 flex justify-between w-full items-center mt-5 px-3 py-1 bg-blue-100 rounded-sm shadow-sm"
+                className="text-sm text-blue-600 flex justify-between w-full items-center mt-5 px-3 py-1 bg-blue-100 rounded-md shadow-sm"
                 onClick={() => setShowDetailSearch(!showDetailSearch)}
               >
                 <p>{showDetailSearch ? "閉じる" : "商品を詳しく絞り込む"}</p>
@@ -504,7 +504,10 @@ const Drawer = () => {
                       passHref
                     >
                       <a>
-                        <div className="px-1 py-2 rounded-md shadow-md bg-gray-700">
+                        <div
+                          onClick={onDrawerClose}
+                          className="px-1 py-2 rounded-md shadow-md bg-gray-700"
+                        >
                           <p className="text-white text-center">
                             1000円以下から〜
                           </p>
@@ -525,7 +528,10 @@ const Drawer = () => {
                       passHref
                     >
                       <a>
-                        <div className="px-1 py-2 rounded-md shadow-md bg-gray-700">
+                        <div
+                          onClick={onDrawerClose}
+                          className="px-1 py-2 rounded-md shadow-md bg-gray-700"
+                        >
                           <p className="text-white text-center">
                             3000円以下から〜
                           </p>
@@ -546,7 +552,10 @@ const Drawer = () => {
                       passHref
                     >
                       <a>
-                        <div className="px-1 py-2 rounded-md shadow-md bg-gray-700">
+                        <div
+                          onClick={onDrawerClose}
+                          className="px-1 py-2 rounded-md shadow-md bg-gray-700"
+                        >
                           <p className="text-white text-center">
                             5000円以下から〜
                           </p>
@@ -567,7 +576,10 @@ const Drawer = () => {
                       passHref
                     >
                       <a>
-                        <div className="px-1 py-2 rounded-md shadow-md bg-gray-700">
+                        <div
+                          onClick={onDrawerClose}
+                          className="px-1 py-2 rounded-md shadow-md bg-gray-700"
+                        >
                           <p className="text-white text-center">
                             1000円以上から〜
                           </p>
@@ -588,7 +600,10 @@ const Drawer = () => {
                       passHref
                     >
                       <a>
-                        <div className="px-1 py-2 rounded-md shadow-md bg-gray-700">
+                        <div
+                          onClick={onDrawerClose}
+                          className="px-1 py-2 rounded-md shadow-md bg-gray-700"
+                        >
                           <p className="text-white text-center">
                             3000円以上から〜
                           </p>
@@ -609,7 +624,10 @@ const Drawer = () => {
                       passHref
                     >
                       <a>
-                        <div className="px-1 py-2 rounded-md shadow-md bg-gray-700">
+                        <div
+                          onClick={onDrawerClose}
+                          className="px-1 py-2 rounded-md shadow-md bg-gray-700"
+                        >
                           <p className="text-white text-center">
                             5000円以上から〜
                           </p>

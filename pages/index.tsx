@@ -1,21 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
-import { getAllCollections, getProductsPagenation } from "@shopify/products";
+import { getProductsPagenation } from "@shopify/products";
 import { Collection, PageInfo } from "@shopify/shema";
 import { MetaHead } from "@components/common";
-import { Container, ErrorView, Hero } from "@components/ui";
+import { Container, Hero } from "@components/ui";
 import { CollectionSlide, ProductCard } from "@components/product";
 import { generateApiUrl, normalizeProduct } from "@shopify/utils";
-import { motion } from "framer-motion";
-import { LoadCircle } from "@components/icon";
 import { getProductReviewInfo } from "@firebase/firestore/review";
 import type { Product } from "@shopify/types/product";
 import idConverter from "@lib/id-converter";
 import { ProductReviewInfo } from "@shopify/types/review";
 import useSWR from "swr";
-import { SplideSlide, Splide } from "@splidejs/react-splide";
-import { truncate } from "@lib/truncate";
-import { HOSTING_URL } from "@shopify/const";
 
 const numFeatureProducts = 10;
 
@@ -138,48 +133,26 @@ const Home = ({
         </div>
         <div>
           <div className="px-8 py-12">
-            <p className="font-bold text-lg mb-3">最新商品</p>
+            <p className="font-bold text-lg mb-3">売れ筋ランキング</p>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-8 items-center justify-center">
               {featureProducts.map((product, index) => {
                 const normarizedProduct = normalizeProduct(product);
                 return (
-                  <ProductCard
-                    key={product.id}
-                    productReviewInfo={featureProductReviewInfos[index]}
-                    product={normarizedProduct}
-                  />
+                  <div key={product.id} className="relative">
+                    <div className="absolute top-0 left-0 h-7 w-7 bg-yellow-600 rounded-full border shadow-sm z-20">
+                      <div className="h-full w-full flex justify-center items-center">
+                        <p className="text-white text-center font-bold">
+                          {index + 1}
+                        </p>
+                      </div>
+                    </div>
+                    <ProductCard
+                      productReviewInfo={featureProductReviewInfos[index]}
+                      product={normarizedProduct}
+                    />
+                  </div>
                 );
               })}
-            </div>
-            <div className="flex items-center justify-between my-6">
-              {featureProductsPagination.hasNextPage ? (
-                <div className="mt-8 w-full">
-                  <button
-                    className="px-3 w-full shadow-md py-1 textp-center bg-green-500 rounded-md"
-                    onClick={showMoreProducts}
-                    disabled={isFetching}
-                  >
-                    <div className="flex items-center justify-center">
-                      <p className="text-white text-sm text-center w-fit font-bold">
-                        さらに商品を表示する
-                      </p>
-                      <motion.div
-                        className="ml-1 mr-1 -translate-y-1"
-                        initial={{ opacity: 0, height: 6, width: 0 }}
-                        animate={{
-                          opacity: isFetching ? 1 : 0,
-                          height: 12,
-                          width: isFetching ? 12 : 0,
-                        }}
-                      >
-                        <LoadCircle className="text-white h-5 w-5 animate-spin" />
-                      </motion.div>
-                    </div>
-                  </button>
-                </div>
-              ) : (
-                <></>
-              )}
             </div>
           </div>
         </div>

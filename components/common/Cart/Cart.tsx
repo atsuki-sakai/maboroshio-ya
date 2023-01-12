@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useUI, useCart, useCustomerState } from "@components/context";
-import { AlertDialog, LoadingView } from "@components/ui";
+import { AlertDialog } from "@components/ui";
 import CartCard from "@components/common/Cart/CartCard";
 import { Check, LoadCircle, RightArrow } from "@components/icon";
 import { getCheckout, getCheckoutId } from "@shopify/cart";
@@ -9,9 +9,9 @@ import { checkoutShippingAddressUpdate } from "@shopify/cart";
 import { motion } from "framer-motion";
 import type { LineItem } from "@shopify/types/cart";
 import { Collection, MailingAddress } from "@shopify/shema";
-import { generateApiUrl, normalizeProduct } from "@shopify/utils";
+import { generateApiUrl } from "@shopify/utils";
 import useSWR from "swr";
-import { CollectionSlide, ProductCard } from "@components/product";
+import { CollectionSlide } from "@components/product";
 
 const Cart = () => {
   const { isCartOpen, onCartClose } = useUI();
@@ -132,7 +132,7 @@ const Cart = () => {
                   className="flex items-center text-gray-800 px-3 py-1"
                   onClick={onCartClose}
                 >
-                  <span className="text-xs text-blue-700">カートを閉じる</span>
+                  <span className="text-sm text-blue-700">カートを閉じる</span>
                   <RightArrow className="h-4 w-4 text-blue-700" />
                 </button>
               </div>
